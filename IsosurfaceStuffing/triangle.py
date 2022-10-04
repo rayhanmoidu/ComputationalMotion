@@ -25,16 +25,22 @@ class Triangle():
             return True
         return False
 
-    def wrapVertexToCutpoint(self, originalVertex: point, cutpoint: cutpoint):
-        if self.point1.x == originalVertex.x and self.point1.y == originalVertex.y:
-            self.point1.x = cutpoint.x
-            self.point1.y = cutpoint.y
-        if self.point2.x == originalVertex.x and self.point2.y == originalVertex.y:
-            self.point2.x = cutpoint.x
-            self.point2.y = cutpoint.y
-        if self.point3.x == originalVertex.x and self.point3.y == originalVertex.y:
-            self.point3.x = cutpoint.x
-            self.point3.y = cutpoint.y
+    def wrapVertexToCutpoint(self, originalVertexX: float, originalVertexY: float, cutpoint: cutpoint):
+        print("wrapping", originalVertexX, originalVertexY)
+        if self.point1.x == originalVertexX and self.point1.y == originalVertexY:
+            print("found")
+            self.point1 = point.Point(cutpoint.x, cutpoint.y)
+            # self.point1.x += (cutpoint.x - self.point1.x)
+            # self.point1.y += (cutpoint.y - self.point1.y)
+            return
+        elif self.point2.x == originalVertexX and self.point2.y == originalVertexY:
+            print("found")
+            self.point2 = point.Point(cutpoint.x, cutpoint.y)
+            return
+        elif self.point3.x == originalVertexX and self.point3.y == originalVertexY:
+            print("found")
+            self.point3 = point.Point(cutpoint.x, cutpoint.y)
+            return
 
     def removeCutpoint(self, cutpoint: cutpoint):
         for testCutpoint in self.cutpoints:

@@ -11,6 +11,7 @@ import triangle
 import random
 import decimal
 import math
+import copy
 
 # next steps
 # correct the function for distance to equilateral
@@ -285,23 +286,25 @@ def distanceBetweenTwoPoints(point1: point.Point, point2: point.Point):
 
 def trimCutPoints():
     for triangle in perimeterTriangles:
+        print("wah wah")
         points = [triangle.point1, triangle.point2, triangle.point3]
         for curPoint in points:
+            # print("wah wah")
             if (isVertexInsideIsosurface(curPoint.x, curPoint.y)==-1):
                 trianglesSharingVertex = []
                 for tri in perimeterTriangles:
                     if tri.doesContainVertex(curPoint):
                         trianglesSharingVertex.append(tri)
-                print("HELLO HELLO")
+                # print("HELLO HELLO")
                 cutPointsToConsider = []
                 for tri in trianglesSharingVertex:
                     potentialCutpoints = tri.cutpoints
                     for potentialCutpoint in potentialCutpoints:
                         if (potentialCutpoint.isContainedByVertex(curPoint)):
-                            print(potentialCutpoint.x, potentialCutpoint.y)
+                            # print(potentialCutpoint.x, potentialCutpoint.y)
                             cutPointsToConsider.append(potentialCutpoint)
 
-                print(len(cutPointsToConsider), len(trianglesSharingVertex), curPoint.x, curPoint.y)
+                # print(len(cutPointsToConsider), len(trianglesSharingVertex), curPoint.x, curPoint.y)
                 # cutPointsToConsider = triangle.cutpoints
                 
                 lowestDistance = inf 
@@ -309,18 +312,19 @@ def trimCutPoints():
                 for i in range(0, len(cutPointsToConsider)):
                     if (distanceBetweenTwoPoints(curPoint, point.Point(cutPointsToConsider[i].x, cutPointsToConsider[i].y)) < lowestDistance):
                         lowestDistanceIndex = i
-                
+                        lowestDistance = distanceBetweenTwoPoints(curPoint, point.Point(cutPointsToConsider[i].x, cutPointsToConsider[i].y))
+                # print("woah")
                 if lowestDistanceIndex!=-1:
                     cutPointToWarpTo = cutPointsToConsider[lowestDistanceIndex]
 
                     for tri in trianglesSharingVertex:
-                        tri.wrapVertexToCutpoint(curPoint, cutPointToWarpTo)
+                        tri.wrapVertexToCutpoint(curPoint.x, curPoint.y, cutPointToWarpTo)
+
                 
-                # HMMMM WHY DOES THIS NOT WORK?
-                # for cutPointToRemove in cutPointsToConsider:
-                #     for tritri in perimeterTriangles:
-                #         if tritri.doesContainCutpoint(cutPointToRemove):
-                #             tritri.removeCutpoint(cutPointToRemove)
+                for cutPointToRemove in cutPointsToConsider:
+                    for tritri in perimeterTriangles:
+                        if tritri.doesContainCutpoint(cutPointToRemove):
+                            tritri.removeCutpoint(cutPointToRemove)
 
 
 
