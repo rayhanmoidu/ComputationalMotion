@@ -28,6 +28,9 @@ triangles = []
 trianglesToConsider = []
 perimeterTriangles = []
 
+def distanceFromIsoSurface(x, y):
+    return distanceFromCircle(x, y)
+
 def createNewEquilateralTriangles(curX, curY, key, orientation):
     if curX <screenWidth and curY<screenHeight:
         point1 = point.Point(curX, curY)
@@ -114,7 +117,7 @@ def createNewIscocelesTriangles(curX, curY, key, orientation):
 
 
 def setupTriangles():
-    createNewIscocelesTriangles(0, 0, "all", "normal")
+    createNewEquilateralTriangles(0, 0, "all", "normal")
 
 def drawTriangle(tri: triangle.Triangle):
     glBegin(GL_QUADS)
@@ -132,13 +135,30 @@ def drawTriangles():
         glColor3f(colorkey1, colorkey2, colorkey3)
         drawTriangle(tri)
 
-def isInsideCircleForDrawing(x, y):
-    computedVal = (x-circleOffset)*(x-circleOffset) + (y-circleOffset)*(y-circleOffset)
-    threshold = 200
-    radiusSquared = circleRadius*circleRadius
-    if computedVal > radiusSquared-threshold and computedVal < radiusSquared+threshold:
-        return True
-    return False
+def distanceFromCircle(x, y):
+    length = math.sqrt((x-250)*(x-250) + (y-250)*(y-250))
+    return length - circleRadius
+
+def distanceFromEquilateralTriangle(x, y):
+    k = math.sqrt(10000)
+
+    newX = abs(x-250) - 1
+    newY = (y-250) + 1/k
+
+    if (newX + k*newY > 0):
+        newX = (newX - k*newY) / 2
+        newY = (-k*newX - newY) / 2
+    
+    newX = newX - min(max( newX , -2 ), 0 )
+
+    length = math.sqrt(newX*newX + newY*newY)
+
+    if newY>=0:
+        return -length
+    else:
+        return length
+
+
 
 def isVertexInsideCircle(x, y):
     computedVal = (x-circleOffset)*(x-circleOffset) + (y-circleOffset)*(y-circleOffset)
@@ -150,10 +170,11 @@ def isVertexInsideCircle(x, y):
     return -1
 
 
-def drawCircle():
+def drawIsosurface():
+    threshold = 1
     for i in range(1, 500):
         for j in range(1, 500):
-            if (isInsideCircleForDrawing(i, j)):
+            if (distanceFromIsoSurface(i, j)> -threshold and distanceFromIsoSurface(i, j) < threshold):
                 glBegin(GL_QUADS)
                 glVertex2f(i, j) # Coordinates for the bottom left point
                 glVertex2f(i+1, j) # Coordinates for the bottom left point
@@ -171,6 +192,49 @@ def filterTriangles():
             trianglesToConsider.append(triangle)
             if isInside1==-1 or isInside2==-1 or isInside3==-1:
                 perimeterTriangles.append(triangle)
+
+def idealFindCutPointsHelper(posVertex: point.Point, negVertex: point.Point):
+    
+    retValX = 0
+    retValY = 0
+
+    x1 = negVertex.x
+    x2 = posVertex.x
+    y1 = negVertex.y
+    y2 = posVertex.y
+
+    if x2-x1==0:
+        retValX = x1
+        if (y2>y1):
+            retValY = y1 + distanceFromIsoSurface(x1, y1)
+        else:
+            retValY = y1 - distanceFromIsoSurface(x1, y1)
+    elif y2-y1==0:
+        retValY = y1
+        if (x2>x1):
+            retValX = x1 + distanceFromIsoSurface(x1, y1)
+        else:
+            retValX = x1 - distanceFromIsoSurface(x1, y1)
+    else:
+        theta = abs(math.atan((y2-y1) / (x2-x1)))
+        
+        d1 = distanceFromIsoSurface(x1, y1)
+        a = d1*math.cos(theta)
+        b = d1*math.sin(theta)
+
+        if (y2 > y1):
+            retValY = y1+b
+        else:
+            retValY = y1-b
+
+        if (x2>x1):
+            retValX = x1+a
+        else:
+            retValX = x1-a
+    
+    return point.Point(retValX, retValY)
+
+
 
 
 def findCutPoints():
@@ -197,70 +261,88 @@ def findCutPoints():
         for posVertex in positiveVertices:
             for negVertex in negativeVertices:
 
-                slope=0
+                xToPlot = 0
+                yToPlot = 0
 
-                x1=0
-                x2=0
-                y1=0
-                y2=0
+                ################## IDEAL
 
-                # undefined slope
-                if posVertex.x - negVertex.x==0:
-                    x1 = posVertex.x
-                    x2 = posVertex.x
+                xToPlot = idealFindCutPointsHelper(posVertex, negVertex).x
+                yToPlot = idealFindCutPointsHelper(posVertex, negVertex).y
 
-                    a = 1
-                    b = -2*circleOffset
-                    c = circleOffset*circleOffset + (x1-circleOffset)*(x1-circleOffset) - circleRadius*circleRadius
-
-                    discriminant = b*b - 4*a*c
-
-                    if (2*a*c!=0 and discriminant>=0):
-                        y1 = ((-1)*b + math.sqrt(discriminant)) / (2*a)
-                        y2 = ((-1)*b - math.sqrt(discriminant)) / (2*a)
-                    
-                # defined slope
-                if (posVertex.x - negVertex.x)!=0:
-                    slope = (posVertex.y - negVertex.y) / (posVertex.x - negVertex.x)
-                    yIntercept = posVertex.y - (slope*posVertex.x)
-
-                    # (x-d)^2 + (y-h)^2 = r^2
-                    # y = mx + b
-
-                    # a = 1 + m^2
-                    a = 1 + (slope*slope)
-                    # b = -2d + 2m(b-h)
-                    b = (-2 * circleOffset) + (2 * slope * (yIntercept - circleOffset))
-                    # c = -r^2 + d^2 + (b-h)^2
-                    c = circleOffset*circleOffset + (yIntercept-circleOffset)*(yIntercept-circleOffset) - circleRadius*circleRadius
-
-                    discriminant = b*b - 4*a*c
-
-                    if (2*a*c!=0 and discriminant>=0):
-                        x1 = ((-1)*b + math.sqrt(discriminant)) / (2*a)
-                        x2 = ((-1)*b - math.sqrt(discriminant)) / (2*a)
-
-                    y1 = slope*x1 + yIntercept
-                    y2 = slope*x2 + yIntercept
-
-
-                if (x1 >= posVertex.x and x1 <= negVertex.x) or (x1 >= negVertex.x and x1 <= posVertex.x):
-                    if (y1 >= posVertex.y and y1 <= negVertex.y) or (y1 >= negVertex.y and y1 <= posVertex.y):
-                        glBegin(GL_QUADS)
-                        glVertex2f(x1-2, y1-2) # Coordinates for the bottom left point
-                        glVertex2f(x1+2, y1-2) # Coordinates for the bottom left point
-                        glVertex2f(x1+2, y1+2) # Coordinates for the bottom left point
-                        glVertex2f(x1-2, y1+2) # Coordinates for the bottom left point
-                        glEnd()
+                glBegin(GL_QUADS)
+                glVertex2f(xToPlot-2, yToPlot-2) # Coordinates for the bottom left point
+                glVertex2f(xToPlot+2, yToPlot-2) # Coordinates for the bottom left point
+                glVertex2f(xToPlot+2, yToPlot+2) # Coordinates for the bottom left point
+                glVertex2f(xToPlot-2, yToPlot+2) # Coordinates for the bottom left point
+                glEnd()
                 
-                if (x2 >= posVertex.x and x2 <= negVertex.x) or (x2 >= negVertex.x and x2 <= posVertex.x):
-                    if (y2 >= posVertex.y and y2 <= negVertex.y) or (y2 >= negVertex.y and y2 <= posVertex.y):
-                        glBegin(GL_QUADS)
-                        glVertex2f(x2-2, y2-2) # Coordinates for the bottom left point
-                        glVertex2f(x2+2, y2-2) # Coordinates for the bottom left point
-                        glVertex2f(x2+2, y2+2) # Coordinates for the bottom left point
-                        glVertex2f(x2-2, y2+2) # Coordinates for the bottom left point
-                        glEnd()
+
+                ################## CURRENT
+
+                # slope=0
+
+                # x1=0
+                # x2=0
+                # y1=0
+                # y2=0
+
+                # # undefined slope
+                # if posVertex.x - negVertex.x==0:
+                #     x1 = posVertex.x
+                #     x2 = posVertex.x
+
+                #     a = 1
+                #     b = -2*circleOffset
+                #     c = circleOffset*circleOffset + (x1-circleOffset)*(x1-circleOffset) - circleRadius*circleRadius
+
+                #     discriminant = b*b - 4*a*c
+
+                #     if (2*a*c!=0 and discriminant>=0):
+                #         y1 = ((-1)*b + math.sqrt(discriminant)) / (2*a)
+                #         y2 = ((-1)*b - math.sqrt(discriminant)) / (2*a)
+                    
+                # # defined slope
+                # if (posVertex.x - negVertex.x)!=0:
+                #     slope = (posVertex.y - negVertex.y) / (posVertex.x - negVertex.x)
+                #     yIntercept = posVertex.y - (slope*posVertex.x)
+
+                #     # (x-d)^2 + (y-h)^2 = r^2
+                #     # y = mx + b
+
+                #     # a = 1 + m^2
+                #     a = 1 + (slope*slope)
+                #     # b = -2d + 2m(b-h)
+                #     b = (-2 * circleOffset) + (2 * slope * (yIntercept - circleOffset))
+                #     # c = -r^2 + d^2 + (b-h)^2
+                #     c = circleOffset*circleOffset + (yIntercept-circleOffset)*(yIntercept-circleOffset) - circleRadius*circleRadius
+
+                #     discriminant = b*b - 4*a*c
+
+                #     if (2*a*c!=0 and discriminant>=0):
+                #         x1 = ((-1)*b + math.sqrt(discriminant)) / (2*a)
+                #         x2 = ((-1)*b - math.sqrt(discriminant)) / (2*a)
+
+                #     y1 = slope*x1 + yIntercept
+                #     y2 = slope*x2 + yIntercept
+
+
+                # if (x1 >= posVertex.x and x1 <= negVertex.x) or (x1 >= negVertex.x and x1 <= posVertex.x):
+                #     if (y1 >= posVertex.y and y1 <= negVertex.y) or (y1 >= negVertex.y and y1 <= posVertex.y):
+                #         glBegin(GL_QUADS)
+                #         glVertex2f(x1-2, y1-2) # Coordinates for the bottom left point
+                #         glVertex2f(x1+2, y1-2) # Coordinates for the bottom left point
+                #         glVertex2f(x1+2, y1+2) # Coordinates for the bottom left point
+                #         glVertex2f(x1-2, y1+2) # Coordinates for the bottom left point
+                #         glEnd()
+                
+                # if (x2 >= posVertex.x and x2 <= negVertex.x) or (x2 >= negVertex.x and x2 <= posVertex.x):
+                #     if (y2 >= posVertex.y and y2 <= negVertex.y) or (y2 >= negVertex.y and y2 <= posVertex.y):
+                #         glBegin(GL_QUADS)
+                #         glVertex2f(x2-2, y2-2) # Coordinates for the bottom left point
+                #         glVertex2f(x2+2, y2-2) # Coordinates for the bottom left point
+                #         glVertex2f(x2+2, y2+2) # Coordinates for the bottom left point
+                #         glVertex2f(x2-2, y2+2) # Coordinates for the bottom left point
+                #         glEnd()
 
 
 def iterate():
@@ -277,7 +359,7 @@ def showScreen():
     iterate()
     drawTriangles()
     glColor3f(1.0, 0, 3.0)
-    drawCircle()
+    drawIsosurface()
     glColor3f(3.0, 3.0, 1.0)
     findCutPoints()
     glutSwapBuffers()
