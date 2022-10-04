@@ -12,7 +12,9 @@ import decimal
 import math
 
 # next steps
-# convert this into cpp
+# correct the function for distance to equilateral
+# make sure that once that works, cut points are good
+# figure out a better way to find the cutpoints
 
 
 screenWidth = 500
@@ -140,38 +142,46 @@ def distanceFromCircle(x, y):
     return length - circleRadius
 
 def distanceFromEquilateralTriangle(x, y):
-    k = math.sqrt(10000)
+    k = math.sqrt(2)
 
-    newX = abs(x-250) - 1
-    newY = (y-250) + 1/k
+    newX = abs(x-250) - 250
+    newY = (y-250) + 250/k
 
     if (newX + k*newY > 0):
-        newX = (newX - k*newY) / 2
-        newY = (-k*newX - newY) / 2
+        newX = (newX - k*newY) / 500
+        newY = (-k*newX - newY) / 500
     
-    newX = newX - min(max( newX , -2 ), 0 )
+    newX = newX - min(max( newX , -500 ), 0 )
 
     length = math.sqrt(newX*newX + newY*newY)
 
     if newY>=0:
         return -length
+    elif newY==0:
+        return 0
     else:
         return length
 
 
 
-def isVertexInsideCircle(x, y):
-    computedVal = (x-circleOffset)*(x-circleOffset) + (y-circleOffset)*(y-circleOffset)
-    radiusSquared = circleRadius*circleRadius
-    if computedVal==radiusSquared:
+def isVertexInsideIsosurface(x, y):
+    if (distanceFromIsoSurface(x, y)==0):
         return 0
-    if computedVal<radiusSquared:
+    elif distanceFromIsoSurface(x, y)>0:
+        return -1
+    else:
         return 1
-    return -1
+    # computedVal = (x-circleOffset)*(x-circleOffset) + (y-circleOffset)*(y-circleOffset)
+    # radiusSquared = circleRadius*circleRadius
+    # if computedVal==radiusSquared:
+    #     return 0
+    # if computedVal<radiusSquared:
+    #     return 1
+    # return -1
 
 
 def drawIsosurface():
-    threshold = 1
+    threshold = 0.5
     for i in range(1, 500):
         for j in range(1, 500):
             if (distanceFromIsoSurface(i, j)> -threshold and distanceFromIsoSurface(i, j) < threshold):
@@ -185,16 +195,56 @@ def drawIsosurface():
 
 def filterTriangles():
     for triangle in triangles:
-        isInside1 = isVertexInsideCircle(triangle.point1.x, triangle.point1.y)
-        isInside2 = isVertexInsideCircle(triangle.point2.x, triangle.point2.y)
-        isInside3 = isVertexInsideCircle(triangle.point3.x, triangle.point3.y)
+        isInside1 = isVertexInsideIsosurface(triangle.point1.x, triangle.point1.y)
+        isInside2 = isVertexInsideIsosurface(triangle.point2.x, triangle.point2.y)
+        isInside3 = isVertexInsideIsosurface(triangle.point3.x, triangle.point3.y)
         if isInside1==1 or isInside2==1 or isInside3==1:
             trianglesToConsider.append(triangle)
             if isInside1==-1 or isInside2==-1 or isInside3==-1:
                 perimeterTriangles.append(triangle)
 
-def idealFindCutPointsHelper(posVertex: point.Point, negVertex: point.Point):
+# def idealFindCutPointsHelper(posVertex: point.Point, negVertex: point.Point):
     
+#     retValX = 0
+#     retValY = 0
+
+#     x1 = negVertex.x
+#     x2 = posVertex.x
+#     y1 = negVertex.y
+#     y2 = posVertex.y
+
+#     if x2-x1==0:
+#         retValX = x1
+#         if (y2>y1):
+#             retValY = y1 + distanceFromIsoSurface(x1, y1)
+#         else:
+#             retValY = y1 - distanceFromIsoSurface(x1, y1)
+#     elif y2-y1==0:
+#         retValY = y1
+#         if (x2>x1):
+#             retValX = x1 + distanceFromIsoSurface(x1, y1)
+#         else:
+#             retValX = x1 - distanceFromIsoSurface(x1, y1)
+#     else:
+#         theta = abs(math.atan((y2-y1) / (x2-x1)))
+        
+#         d1 = distanceFromIsoSurface(x1, y1)
+#         a = d1*math.cos(theta)
+#         b = d1*math.sin(theta)
+
+#         if (y2 > y1):
+#             retValY = y1+b
+#         else:
+#             retValY = y1-b
+
+#         if (x2>x1):
+#             retValX = x1+a
+#         else:
+#             retValX = x1-a
+    
+#     return point.Point(retValX, retValY)
+
+def moreIdealFindCutPointsHelper(posVertex: point.Point, negVertex: point.Point):
     retValX = 0
     retValY = 0
 
@@ -203,45 +253,25 @@ def idealFindCutPointsHelper(posVertex: point.Point, negVertex: point.Point):
     y1 = negVertex.y
     y2 = posVertex.y
 
-    if x2-x1==0:
-        retValX = x1
-        if (y2>y1):
-            retValY = y1 + distanceFromIsoSurface(x1, y1)
-        else:
-            retValY = y1 - distanceFromIsoSurface(x1, y1)
-    elif y2-y1==0:
-        retValY = y1
-        if (x2>x1):
-            retValX = x1 + distanceFromIsoSurface(x1, y1)
-        else:
-            retValX = x1 - distanceFromIsoSurface(x1, y1)
-    else:
-        theta = abs(math.atan((y2-y1) / (x2-x1)))
-        
-        d1 = distanceFromIsoSurface(x1, y1)
-        a = d1*math.cos(theta)
-        b = d1*math.sin(theta)
+    dx = x2 - x1
+    dy = y2 - y1
 
-        if (y2 > y1):
-            retValY = y1+b
-        else:
-            retValY = y1-b
+    a = abs(distanceFromIsoSurface(x1, y1))
+    b = abs(distanceFromIsoSurface(x2, y2))
+    cutPointPercentage = a / (a + b)
 
-        if (x2>x1):
-            retValX = x1+a
-        else:
-            retValX = x1-a
-    
+    retValX = x1 + cutPointPercentage*dx
+    retValY = y1 + cutPointPercentage*dy
+
     return point.Point(retValX, retValY)
-
 
 
 
 def findCutPoints():
     for tri in perimeterTriangles:
-        isInside1 = isVertexInsideCircle(tri.point1.x, tri.point1.y)
-        isInside2 = isVertexInsideCircle(tri.point2.x, tri.point2.y)
-        isInside3 = isVertexInsideCircle(tri.point3.x, tri.point3.y)
+        isInside1 = isVertexInsideIsosurface(tri.point1.x, tri.point1.y)
+        isInside2 = isVertexInsideIsosurface(tri.point2.x, tri.point2.y)
+        isInside3 = isVertexInsideIsosurface(tri.point3.x, tri.point3.y)
 
         negativeVertices = []
         positiveVertices = []
@@ -266,8 +296,11 @@ def findCutPoints():
 
                 ################## IDEAL
 
-                xToPlot = idealFindCutPointsHelper(posVertex, negVertex).x
-                yToPlot = idealFindCutPointsHelper(posVertex, negVertex).y
+                newCutPoint = moreIdealFindCutPointsHelper(posVertex, negVertex)
+                tri.cutpoints.append(newCutPoint)
+
+                xToPlot = newCutPoint.x
+                yToPlot = newCutPoint.y
 
                 glBegin(GL_QUADS)
                 glVertex2f(xToPlot-2, yToPlot-2) # Coordinates for the bottom left point
@@ -362,6 +395,7 @@ def showScreen():
     drawIsosurface()
     glColor3f(3.0, 3.0, 1.0)
     findCutPoints()
+    lalacore()
     glutSwapBuffers()
 
 glutInit()
