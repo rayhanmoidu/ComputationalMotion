@@ -121,7 +121,7 @@ def createNewIscocelesTriangles(curX, curY, key, orientation):
 
 
 def setupTriangles():
-    createNewIscocelesTriangles(0, 0, "all", "normal")
+    createNewEquilateralTriangles(0, 0, "all", "normal")
 
 def drawTriangle(tri: triangle.Triangle):
     glBegin(GL_QUADS)
@@ -251,20 +251,16 @@ def findCutPoints():
 
         for posVertex in positiveVertices:
             for negVertex in negativeVertices:
-
-                xToPlot = 0
-                yToPlot = 0
-
                 newCutPoint = moreIdealFindCutPointsHelper(posVertex, negVertex)
                 newCutPointObj = Cutpoint(newCutPoint.x, newCutPoint.y, posVertex, negVertex)
                 tri.cutpoints.append(newCutPointObj)
 
-                xToPlot = newCutPoint.x
-                yToPlot = newCutPoint.y
-
-                cutpoints.append(newCutPointObj)
+                # cutpoints.append(newCutPointObj)
 
 def plotCutPoints():
+    for triangle in perimeterTriangles:
+        cutpoints.extend(triangle.cutpoints)
+
     for cutpoint in cutpoints:
         xToPlot = cutpoint.x
         yToPlot = cutpoint.y
@@ -275,34 +271,57 @@ def plotCutPoints():
         glVertex2f(xToPlot-2, yToPlot+2) # Coordinates for the bottom left point
         glEnd()
 
+        # xToPlot = 40.0 
+        # yToPlot = 277.1281292110203
+        # glBegin(GL_QUADS)
+        # glVertex2f(xToPlot-2, yToPlot-2) # Coordinates for the bottom left point
+        # glVertex2f(xToPlot+2, yToPlot-2) # Coordinates for the bottom left point
+        # glVertex2f(xToPlot+2, yToPlot+2) # Coordinates for the bottom left point
+        # glVertex2f(xToPlot-2, yToPlot+2) # Coordinates for the bottom left point
+        # glEnd()
+
 def distanceBetweenTwoPoints(point1: point.Point, point2: point.Point):
     return math.sqrt((point2.x - point1.x)*(point2.x - point1.x) + (point2.y - point1.y)*(point2.y - point1.y))
 
 def trimCutPoints():
     for triangle in perimeterTriangles:
-        if (isVertexInsideIsosurface(triangle.point1.x, triangle.point1.y)==-1):
-            trianglesSharingVertex = []
-            for tri in perimeterTriangles:
-                if tri.doesContainVertex(triangle.point1):
-                    trianglesSharingVertex.append(tri)
-            
-            print(len(trianglesSharingVertex))
-            cutPointsToConsider = []
-            for tri in trianglesSharingVertex:
-                cutPointsToConsider.extend(tri.cutpoints)
-            
-            lowestDistance = inf 
-            lowestDistanceIndex = -1
-            for i in range(0, len(cutPointsToConsider)):
-                if (distanceBetweenTwoPoints(triangle.point1, point.Point(cutPointsToConsider[i].x, cutPointsToConsider[i].y)) < lowestDistance):
-                    lowestDistanceIndex = i
-            
-            cutPointToWarpTo = cutPointsToConsider[lowestDistanceIndex]
+        points = [triangle.point1, triangle.point2, triangle.point3]
+        for curPoint in points:
+            if (isVertexInsideIsosurface(curPoint.x, curPoint.y)==-1):
+                trianglesSharingVertex = []
+                for tri in perimeterTriangles:
+                    if tri.doesContainVertex(curPoint):
+                        trianglesSharingVertex.append(tri)
+                print("HELLO HELLO")
+                cutPointsToConsider = []
+                for tri in trianglesSharingVertex:
+                    potentialCutpoints = tri.cutpoints
+                    for potentialCutpoint in potentialCutpoints:
+                        if (potentialCutpoint.isContainedByVertex(curPoint)):
+                            print(potentialCutpoint.x, potentialCutpoint.y)
+                            cutPointsToConsider.append(potentialCutpoint)
 
-            for tri in trianglesSharingVertex:
-                tri.wrapVertexToCutpoint(triangle.point1, cutPointToWarpTo)
+                print(len(cutPointsToConsider), len(trianglesSharingVertex), curPoint.x, curPoint.y)
+                # cutPointsToConsider = triangle.cutpoints
+                
+                lowestDistance = inf 
+                lowestDistanceIndex = -1
+                for i in range(0, len(cutPointsToConsider)):
+                    if (distanceBetweenTwoPoints(curPoint, point.Point(cutPointsToConsider[i].x, cutPointsToConsider[i].y)) < lowestDistance):
+                        lowestDistanceIndex = i
+                
+                if lowestDistanceIndex!=-1:
+                    cutPointToWarpTo = cutPointsToConsider[lowestDistanceIndex]
 
-            # warp all trianglews sharing the vertex to the cutpoint, remove any cutpoints along the vertex
+                    for tri in trianglesSharingVertex:
+                        tri.wrapVertexToCutpoint(curPoint, cutPointToWarpTo)
+                
+                # HMMMM WHY DOES THIS NOT WORK?
+                # for cutPointToRemove in cutPointsToConsider:
+                #     for tritri in perimeterTriangles:
+                #         if tritri.doesContainCutpoint(cutPointToRemove):
+                #             tritri.removeCutpoint(cutPointToRemove)
+
 
 
 def iterate():
@@ -319,13 +338,13 @@ def showScreen():
     iterate()
 
     findCutPoints()
-    # trimCutPoints()
+    trimCutPoints()
     drawTriangles()
     glColor3f(1.0, 0, 3.0)
     drawIsosurface()
     glColor3f(3.0, 3.0, 1.0)
     plotCutPoints()
-    
+
     glutSwapBuffers()
 
 glutInit()

@@ -35,3 +35,8 @@ class Triangle():
         if self.point3.x == originalVertex.x and self.point3.y == originalVertex.y:
             self.point3.x = cutpoint.x
             self.point3.y = cutpoint.y
+
+    def removeCutpoint(self, cutpoint: cutpoint):
+        for testCutpoint in self.cutpoints:
+            if (testCutpoint.x == cutpoint.x and testCutpoint.y == cutpoint.y):
+                self.cutpoints.remove(testCutpoint)
