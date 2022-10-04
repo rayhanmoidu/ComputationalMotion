@@ -1,10 +1,11 @@
-from cmath import sqrt
+from cmath import inf, sqrt
 from operator import truediv
 from pickle import FALSE
 import OpenGL
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
+from cutpoint import Cutpoint
 import point
 import triangle
 import random
@@ -29,6 +30,7 @@ vertices = []
 triangles = []
 trianglesToConsider = []
 perimeterTriangles = []
+cutpoints = []
 
 def distanceFromIsoSurface(x, y):
     return distanceFromCircle(x, y)
@@ -119,7 +121,7 @@ def createNewIscocelesTriangles(curX, curY, key, orientation):
 
 
 def setupTriangles():
-    createNewEquilateralTriangles(0, 0, "all", "normal")
+    createNewIscocelesTriangles(0, 0, "all", "normal")
 
 def drawTriangle(tri: triangle.Triangle):
     glBegin(GL_QUADS)
@@ -203,47 +205,6 @@ def filterTriangles():
             if isInside1==-1 or isInside2==-1 or isInside3==-1:
                 perimeterTriangles.append(triangle)
 
-# def idealFindCutPointsHelper(posVertex: point.Point, negVertex: point.Point):
-    
-#     retValX = 0
-#     retValY = 0
-
-#     x1 = negVertex.x
-#     x2 = posVertex.x
-#     y1 = negVertex.y
-#     y2 = posVertex.y
-
-#     if x2-x1==0:
-#         retValX = x1
-#         if (y2>y1):
-#             retValY = y1 + distanceFromIsoSurface(x1, y1)
-#         else:
-#             retValY = y1 - distanceFromIsoSurface(x1, y1)
-#     elif y2-y1==0:
-#         retValY = y1
-#         if (x2>x1):
-#             retValX = x1 + distanceFromIsoSurface(x1, y1)
-#         else:
-#             retValX = x1 - distanceFromIsoSurface(x1, y1)
-#     else:
-#         theta = abs(math.atan((y2-y1) / (x2-x1)))
-        
-#         d1 = distanceFromIsoSurface(x1, y1)
-#         a = d1*math.cos(theta)
-#         b = d1*math.sin(theta)
-
-#         if (y2 > y1):
-#             retValY = y1+b
-#         else:
-#             retValY = y1-b
-
-#         if (x2>x1):
-#             retValX = x1+a
-#         else:
-#             retValX = x1-a
-    
-#     return point.Point(retValX, retValY)
-
 def moreIdealFindCutPointsHelper(posVertex: point.Point, negVertex: point.Point):
     retValX = 0
     retValY = 0
@@ -294,88 +255,54 @@ def findCutPoints():
                 xToPlot = 0
                 yToPlot = 0
 
-                ################## IDEAL
-
                 newCutPoint = moreIdealFindCutPointsHelper(posVertex, negVertex)
-                tri.cutpoints.append(newCutPoint)
+                newCutPointObj = Cutpoint(newCutPoint.x, newCutPoint.y, posVertex, negVertex)
+                tri.cutpoints.append(newCutPointObj)
 
                 xToPlot = newCutPoint.x
                 yToPlot = newCutPoint.y
 
-                glBegin(GL_QUADS)
-                glVertex2f(xToPlot-2, yToPlot-2) # Coordinates for the bottom left point
-                glVertex2f(xToPlot+2, yToPlot-2) # Coordinates for the bottom left point
-                glVertex2f(xToPlot+2, yToPlot+2) # Coordinates for the bottom left point
-                glVertex2f(xToPlot-2, yToPlot+2) # Coordinates for the bottom left point
-                glEnd()
-                
+                cutpoints.append(newCutPointObj)
 
-                ################## CURRENT
+def plotCutPoints():
+    for cutpoint in cutpoints:
+        xToPlot = cutpoint.x
+        yToPlot = cutpoint.y
+        glBegin(GL_QUADS)
+        glVertex2f(xToPlot-2, yToPlot-2) # Coordinates for the bottom left point
+        glVertex2f(xToPlot+2, yToPlot-2) # Coordinates for the bottom left point
+        glVertex2f(xToPlot+2, yToPlot+2) # Coordinates for the bottom left point
+        glVertex2f(xToPlot-2, yToPlot+2) # Coordinates for the bottom left point
+        glEnd()
 
-                # slope=0
+def distanceBetweenTwoPoints(point1: point.Point, point2: point.Point):
+    return math.sqrt((point2.x - point1.x)*(point2.x - point1.x) + (point2.y - point1.y)*(point2.y - point1.y))
 
-                # x1=0
-                # x2=0
-                # y1=0
-                # y2=0
+def trimCutPoints():
+    for triangle in perimeterTriangles:
+        if (isVertexInsideIsosurface(triangle.point1.x, triangle.point1.y)==-1):
+            trianglesSharingVertex = []
+            for tri in perimeterTriangles:
+                if tri.doesContainVertex(triangle.point1):
+                    trianglesSharingVertex.append(tri)
+            
+            print(len(trianglesSharingVertex))
+            cutPointsToConsider = []
+            for tri in trianglesSharingVertex:
+                cutPointsToConsider.extend(tri.cutpoints)
+            
+            lowestDistance = inf 
+            lowestDistanceIndex = -1
+            for i in range(0, len(cutPointsToConsider)):
+                if (distanceBetweenTwoPoints(triangle.point1, point.Point(cutPointsToConsider[i].x, cutPointsToConsider[i].y)) < lowestDistance):
+                    lowestDistanceIndex = i
+            
+            cutPointToWarpTo = cutPointsToConsider[lowestDistanceIndex]
 
-                # # undefined slope
-                # if posVertex.x - negVertex.x==0:
-                #     x1 = posVertex.x
-                #     x2 = posVertex.x
+            for tri in trianglesSharingVertex:
+                tri.wrapVertexToCutpoint(triangle.point1, cutPointToWarpTo)
 
-                #     a = 1
-                #     b = -2*circleOffset
-                #     c = circleOffset*circleOffset + (x1-circleOffset)*(x1-circleOffset) - circleRadius*circleRadius
-
-                #     discriminant = b*b - 4*a*c
-
-                #     if (2*a*c!=0 and discriminant>=0):
-                #         y1 = ((-1)*b + math.sqrt(discriminant)) / (2*a)
-                #         y2 = ((-1)*b - math.sqrt(discriminant)) / (2*a)
-                    
-                # # defined slope
-                # if (posVertex.x - negVertex.x)!=0:
-                #     slope = (posVertex.y - negVertex.y) / (posVertex.x - negVertex.x)
-                #     yIntercept = posVertex.y - (slope*posVertex.x)
-
-                #     # (x-d)^2 + (y-h)^2 = r^2
-                #     # y = mx + b
-
-                #     # a = 1 + m^2
-                #     a = 1 + (slope*slope)
-                #     # b = -2d + 2m(b-h)
-                #     b = (-2 * circleOffset) + (2 * slope * (yIntercept - circleOffset))
-                #     # c = -r^2 + d^2 + (b-h)^2
-                #     c = circleOffset*circleOffset + (yIntercept-circleOffset)*(yIntercept-circleOffset) - circleRadius*circleRadius
-
-                #     discriminant = b*b - 4*a*c
-
-                #     if (2*a*c!=0 and discriminant>=0):
-                #         x1 = ((-1)*b + math.sqrt(discriminant)) / (2*a)
-                #         x2 = ((-1)*b - math.sqrt(discriminant)) / (2*a)
-
-                #     y1 = slope*x1 + yIntercept
-                #     y2 = slope*x2 + yIntercept
-
-
-                # if (x1 >= posVertex.x and x1 <= negVertex.x) or (x1 >= negVertex.x and x1 <= posVertex.x):
-                #     if (y1 >= posVertex.y and y1 <= negVertex.y) or (y1 >= negVertex.y and y1 <= posVertex.y):
-                #         glBegin(GL_QUADS)
-                #         glVertex2f(x1-2, y1-2) # Coordinates for the bottom left point
-                #         glVertex2f(x1+2, y1-2) # Coordinates for the bottom left point
-                #         glVertex2f(x1+2, y1+2) # Coordinates for the bottom left point
-                #         glVertex2f(x1-2, y1+2) # Coordinates for the bottom left point
-                #         glEnd()
-                
-                # if (x2 >= posVertex.x and x2 <= negVertex.x) or (x2 >= negVertex.x and x2 <= posVertex.x):
-                #     if (y2 >= posVertex.y and y2 <= negVertex.y) or (y2 >= negVertex.y and y2 <= posVertex.y):
-                #         glBegin(GL_QUADS)
-                #         glVertex2f(x2-2, y2-2) # Coordinates for the bottom left point
-                #         glVertex2f(x2+2, y2-2) # Coordinates for the bottom left point
-                #         glVertex2f(x2+2, y2+2) # Coordinates for the bottom left point
-                #         glVertex2f(x2-2, y2+2) # Coordinates for the bottom left point
-                #         glEnd()
+            # warp all trianglews sharing the vertex to the cutpoint, remove any cutpoints along the vertex
 
 
 def iterate():
@@ -390,12 +317,15 @@ def showScreen():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
     iterate()
+
+    findCutPoints()
+    # trimCutPoints()
     drawTriangles()
     glColor3f(1.0, 0, 3.0)
     drawIsosurface()
     glColor3f(3.0, 3.0, 1.0)
-    findCutPoints()
-    lalacore()
+    plotCutPoints()
+    
     glutSwapBuffers()
 
 glutInit()
