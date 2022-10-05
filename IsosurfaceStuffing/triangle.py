@@ -9,12 +9,11 @@ class Triangle():
         self.point3 = point3
         self.cutpoints = []
 
-    def doesContainCutpoint(self, cutpoint: cutpoint):
+    def doesContainCutpoint(self, lalap: cutpoint):
         for testCutpoint in self.cutpoints:
-            if (testCutpoint.x == cutpoint.x and testCutpoint.y == cutpoint.y):
+            if (testCutpoint.x == lalap.x and testCutpoint.y == lalap.y):
                 return True
-            else:
-                return False
+        return False
     
     def doesContainVertex(self, vertex: point):
         if self.point1.x == vertex.x and self.point1.y == vertex.y:
@@ -26,19 +25,13 @@ class Triangle():
         return False
 
     def wrapVertexToCutpoint(self, originalVertexX: float, originalVertexY: float, cutpoint: cutpoint):
-        print("wrapping", originalVertexX, originalVertexY)
         if self.point1.x == originalVertexX and self.point1.y == originalVertexY:
-            print("found")
             self.point1 = point.Point(cutpoint.x, cutpoint.y)
-            # self.point1.x += (cutpoint.x - self.point1.x)
-            # self.point1.y += (cutpoint.y - self.point1.y)
             return
         elif self.point2.x == originalVertexX and self.point2.y == originalVertexY:
-            print("found")
             self.point2 = point.Point(cutpoint.x, cutpoint.y)
             return
         elif self.point3.x == originalVertexX and self.point3.y == originalVertexY:
-            print("found")
             self.point3 = point.Point(cutpoint.x, cutpoint.y)
             return
 

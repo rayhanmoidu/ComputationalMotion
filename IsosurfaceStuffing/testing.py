@@ -11,17 +11,15 @@ import triangle
 import random
 import decimal
 import math
-import copy
 
 # next steps
-# correct the function for distance to equilateral
-# make sure that once that works, cut points are good
-# figure out a better way to find the cutpoints
+# reread article and make sure about step 4 of algo
+# try with equilateral triangle
 
 
 screenWidth = 500
 screenHeight = 500
-triangleSideLength = 40
+triangleSideLength = 17
 circleRadius = 200
 circleOffset = circleRadius + ((500 - (2 * circleRadius)) / 2)
 
@@ -34,7 +32,7 @@ perimeterTriangles = []
 cutpoints = []
 
 def distanceFromIsoSurface(x, y):
-    return distanceFromCircle(x, y)
+    return distanceFromBox(x, y)
 
 def createNewEquilateralTriangles(curX, curY, key, orientation):
     if curX <screenWidth and curY<screenHeight:
@@ -144,6 +142,30 @@ def distanceFromCircle(x, y):
     length = math.sqrt((x-250)*(x-250) + (y-250)*(y-250))
     return length - circleRadius
 
+def distanceFromBox(x, y):
+    newX = x - 250
+    newY = y - 250
+
+    boxWidth = 200
+    boxHeight = 200
+
+    px = abs(newX) - boxWidth
+    py = abs(newY) - boxHeight
+
+    toSquareX = px
+    toSquareY = py
+
+    if ((px==0 and py<0) or (py==0 and px < 0)):
+        return 0
+    elif (px < 0 and py < 0):
+        return max(px, py)
+    elif px < 0:
+        return py
+    elif py < 0:
+        return px
+    else:
+        return math.sqrt(toSquareX*toSquareX + toSquareY*toSquareY)
+
 def distanceFromEquilateralTriangle(x, y):
     k = math.sqrt(2)
 
@@ -174,20 +196,13 @@ def isVertexInsideIsosurface(x, y):
         return -1
     else:
         return 1
-    # computedVal = (x-circleOffset)*(x-circleOffset) + (y-circleOffset)*(y-circleOffset)
-    # radiusSquared = circleRadius*circleRadius
-    # if computedVal==radiusSquared:
-    #     return 0
-    # if computedVal<radiusSquared:
-    #     return 1
-    # return -1
 
 
 def drawIsosurface():
     threshold = 0.5
     for i in range(1, 500):
         for j in range(1, 500):
-            if (distanceFromIsoSurface(i, j)> -threshold and distanceFromIsoSurface(i, j) < threshold):
+            if (distanceFromIsoSurface(i, j)>-threshold and distanceFromIsoSurface(i, j)<threshold):
                 glBegin(GL_QUADS)
                 glVertex2f(i, j) # Coordinates for the bottom left point
                 glVertex2f(i+1, j) # Coordinates for the bottom left point
@@ -265,6 +280,7 @@ def plotCutPoints():
     for cutpoint in cutpoints:
         xToPlot = cutpoint.x
         yToPlot = cutpoint.y
+        print("REMAINING CP", xToPlot, yToPlot)
         glBegin(GL_QUADS)
         glVertex2f(xToPlot-2, yToPlot-2) # Coordinates for the bottom left point
         glVertex2f(xToPlot+2, yToPlot-2) # Coordinates for the bottom left point
@@ -272,40 +288,24 @@ def plotCutPoints():
         glVertex2f(xToPlot-2, yToPlot+2) # Coordinates for the bottom left point
         glEnd()
 
-        # xToPlot = 40.0 
-        # yToPlot = 277.1281292110203
-        # glBegin(GL_QUADS)
-        # glVertex2f(xToPlot-2, yToPlot-2) # Coordinates for the bottom left point
-        # glVertex2f(xToPlot+2, yToPlot-2) # Coordinates for the bottom left point
-        # glVertex2f(xToPlot+2, yToPlot+2) # Coordinates for the bottom left point
-        # glVertex2f(xToPlot-2, yToPlot+2) # Coordinates for the bottom left point
-        # glEnd()
-
 def distanceBetweenTwoPoints(point1: point.Point, point2: point.Point):
     return math.sqrt((point2.x - point1.x)*(point2.x - point1.x) + (point2.y - point1.y)*(point2.y - point1.y))
 
 def trimCutPoints():
     for triangle in perimeterTriangles:
-        print("wah wah")
         points = [triangle.point1, triangle.point2, triangle.point3]
         for curPoint in points:
-            # print("wah wah")
             if (isVertexInsideIsosurface(curPoint.x, curPoint.y)==-1):
                 trianglesSharingVertex = []
                 for tri in perimeterTriangles:
                     if tri.doesContainVertex(curPoint):
                         trianglesSharingVertex.append(tri)
-                # print("HELLO HELLO")
                 cutPointsToConsider = []
                 for tri in trianglesSharingVertex:
                     potentialCutpoints = tri.cutpoints
                     for potentialCutpoint in potentialCutpoints:
                         if (potentialCutpoint.isContainedByVertex(curPoint)):
-                            # print(potentialCutpoint.x, potentialCutpoint.y)
                             cutPointsToConsider.append(potentialCutpoint)
-
-                # print(len(cutPointsToConsider), len(trianglesSharingVertex), curPoint.x, curPoint.y)
-                # cutPointsToConsider = triangle.cutpoints
                 
                 lowestDistance = inf 
                 lowestDistanceIndex = -1
@@ -313,14 +313,13 @@ def trimCutPoints():
                     if (distanceBetweenTwoPoints(curPoint, point.Point(cutPointsToConsider[i].x, cutPointsToConsider[i].y)) < lowestDistance):
                         lowestDistanceIndex = i
                         lowestDistance = distanceBetweenTwoPoints(curPoint, point.Point(cutPointsToConsider[i].x, cutPointsToConsider[i].y))
-                # print("woah")
                 if lowestDistanceIndex!=-1:
                     cutPointToWarpTo = cutPointsToConsider[lowestDistanceIndex]
+                    # print("Wrapping to ", cutPointToWarpTo.x, cutPointToWarpTo.y)
 
                     for tri in trianglesSharingVertex:
                         tri.wrapVertexToCutpoint(curPoint.x, curPoint.y, cutPointToWarpTo)
 
-                
                 for cutPointToRemove in cutPointsToConsider:
                     for tritri in perimeterTriangles:
                         if tritri.doesContainCutpoint(cutPointToRemove):
