@@ -19,9 +19,10 @@ import math
 
 screenWidth = 500
 screenHeight = 500
-triangleSideLength = 17
+triangleSideLength = 80
 circleRadius = 200
 circleOffset = circleRadius + ((500 - (2 * circleRadius)) / 2)
+alpha = 30
 
 w,h= screenWidth,screenHeight
 
@@ -30,9 +31,14 @@ triangles = []
 trianglesToConsider = []
 perimeterTriangles = []
 cutpoints = []
+anglesFrequencies = {}
+
 
 def distanceFromIsoSurface(x, y):
-    return distanceFromBox(x, y)
+    return distanceFromCircle(x, y)
+
+def setupTriangles():
+    createNewIscocelesTriangles(0, 0, "all", "normal")
 
 def createNewEquilateralTriangles(curX, curY, key, orientation):
     if curX <screenWidth and curY<screenHeight:
@@ -117,10 +123,6 @@ def createNewIscocelesTriangles(curX, curY, key, orientation):
             createNewIscocelesTriangles(point3.x, point3.y, "all", "normal")
             createNewIscocelesTriangles(point4.x, point4.y, "up", oppositekey)
     return
-
-
-def setupTriangles():
-    createNewEquilateralTriangles(0, 0, "all", "normal")
 
 def drawTriangle(tri: triangle.Triangle):
     glBegin(GL_QUADS)
@@ -221,7 +223,7 @@ def filterTriangles():
             if isInside1==-1 or isInside2==-1 or isInside3==-1:
                 perimeterTriangles.append(triangle)
 
-def moreIdealFindCutPointsHelper(posVertex: point.Point, negVertex: point.Point):
+def findCutPointAlongLine(posVertex: point.Point, negVertex: point.Point):
     retValX = 0
     retValY = 0
 
@@ -267,7 +269,7 @@ def findCutPoints():
 
         for posVertex in positiveVertices:
             for negVertex in negativeVertices:
-                newCutPoint = moreIdealFindCutPointsHelper(posVertex, negVertex)
+                newCutPoint = findCutPointAlongLine(posVertex, negVertex)
                 newCutPointObj = Cutpoint(newCutPoint.x, newCutPoint.y, posVertex, negVertex)
                 tri.cutpoints.append(newCutPointObj)
 
@@ -280,7 +282,6 @@ def plotCutPoints():
     for cutpoint in cutpoints:
         xToPlot = cutpoint.x
         yToPlot = cutpoint.y
-        print("REMAINING CP", xToPlot, yToPlot)
         glBegin(GL_QUADS)
         glVertex2f(xToPlot-2, yToPlot-2) # Coordinates for the bottom left point
         glVertex2f(xToPlot+2, yToPlot-2) # Coordinates for the bottom left point
@@ -291,7 +292,7 @@ def plotCutPoints():
 def distanceBetweenTwoPoints(point1: point.Point, point2: point.Point):
     return math.sqrt((point2.x - point1.x)*(point2.x - point1.x) + (point2.y - point1.y)*(point2.y - point1.y))
 
-def trimCutPoints():
+def warpCutPoints():
     for triangle in perimeterTriangles:
         points = [triangle.point1, triangle.point2, triangle.point3]
         for curPoint in points:
@@ -313,18 +314,110 @@ def trimCutPoints():
                     if (distanceBetweenTwoPoints(curPoint, point.Point(cutPointsToConsider[i].x, cutPointsToConsider[i].y)) < lowestDistance):
                         lowestDistanceIndex = i
                         lowestDistance = distanceBetweenTwoPoints(curPoint, point.Point(cutPointsToConsider[i].x, cutPointsToConsider[i].y))
-                if lowestDistanceIndex!=-1:
+                if lowestDistanceIndex!=-1 and lowestDistance < alpha:
+                    # print(lowestDistance)
                     cutPointToWarpTo = cutPointsToConsider[lowestDistanceIndex]
                     # print("Wrapping to ", cutPointToWarpTo.x, cutPointToWarpTo.y)
 
                     for tri in trianglesSharingVertex:
                         tri.wrapVertexToCutpoint(curPoint.x, curPoint.y, cutPointToWarpTo)
 
-                for cutPointToRemove in cutPointsToConsider:
-                    for tritri in perimeterTriangles:
-                        if tritri.doesContainCutpoint(cutPointToRemove):
-                            tritri.removeCutpoint(cutPointToRemove)
+                    for cutPointToRemove in cutPointsToConsider:
+                        for tritri in perimeterTriangles:
+                            if tritri.doesContainCutpoint(cutPointToRemove):
+                                tritri.removeCutpoint(cutPointToRemove)
+    
+def clipPerimeterTriangles():
+    newPerimeterTriangles = []
+    for tri in trianglesToConsider:
+        isInside1 = isVertexInsideIsosurface(tri.point1.x, tri.point1.y)
+        isInside2 = isVertexInsideIsosurface(tri.point2.x, tri.point2.y)
+        isInside3 = isVertexInsideIsosurface(tri.point3.x, tri.point3.y)
 
+        if isInside1 < 0 or isInside2 < 0 or isInside3 < 0:
+            newPerimeterTriangles.append(tri)
+
+    perimeterTriangles.clear()
+    perimeterTriangles.extend(newPerimeterTriangles)
+
+    for tri in perimeterTriangles:
+        isInside1 = isVertexInsideIsosurface(tri.point1.x, tri.point1.y)
+        isInside2 = isVertexInsideIsosurface(tri.point2.x, tri.point2.y)
+        isInside3 = isVertexInsideIsosurface(tri.point3.x, tri.point3.y)
+
+        negativeVertices = []
+        positiveVertices = []
+        if isInside1 < 0:
+            negativeVertices.append(tri.point1)
+        else:
+            positiveVertices.append(tri.point1)
+
+        if isInside2 < 0:
+            negativeVertices.append(tri.point2)
+        else:
+            positiveVertices.append(tri.point2)
+
+        if isInside3 < 0:
+            negativeVertices.append(tri.point3)
+        else:
+            positiveVertices.append(tri.point3)
+
+    
+        if len(negativeVertices)>=1:
+            if len(negativeVertices)==2:
+                cutPoint1 = findCutPointAlongLine(negativeVertices[0], positiveVertices[0])
+                cutPoint2 = findCutPointAlongLine(negativeVertices[1], positiveVertices[0])
+                tri.removeCutpoints()
+                trianglesToConsider.remove(tri)
+                # perimeterTriangles.remove(tri)
+                triangles.remove(tri)
+
+                newTriangle = triangle.Triangle(cutPoint1, cutPoint2, positiveVertices[0])
+                triangles.append(newTriangle)
+                trianglesToConsider.append(newTriangle)
+            elif len(negativeVertices)==1:
+                cutPoint1 = findCutPointAlongLine(negativeVertices[0], positiveVertices[0])
+                cutPoint2 = findCutPointAlongLine(negativeVertices[0], positiveVertices[1])
+                tri.removeCutpoints()
+                trianglesToConsider.remove(tri)
+                # perimeterTriangles.remove(tri)
+                triangles.remove(tri)
+
+                newTriangle1 = triangle.Triangle(cutPoint1, positiveVertices[1], positiveVertices[0])
+                newTriangle2 = triangle.Triangle(cutPoint2, positiveVertices[1], cutPoint1)
+                triangles.append(newTriangle1)
+                trianglesToConsider.append(newTriangle1)
+                triangles.append(newTriangle2)
+                trianglesToConsider.append(newTriangle2)
+
+def findAngles():
+    for tri in trianglesToConsider:
+        dx1 = (tri.point1.x)-(tri.point2.x)
+        dy1 = (tri.point1.y)-(tri.point2.y)
+        a = math.sqrt(dx1*dx1 + dy1*dy1)
+
+        dx2 = (tri.point2.x)-(tri.point3.x)
+        dy2 = (tri.point2.y)-(tri.point3.y)
+        b = math.sqrt(dx2*dx2 + dy2*dy2)
+
+        dx3 = (tri.point3.x)-(tri.point1.x)
+        dy3 = (tri.point3.y)-(tri.point1.y)
+        c = math.sqrt(dx3*dx3 + dy3*dy3)
+
+        angle1 = math.acos((b*b + c*c - a*a) / (2*b*c))
+        angle1 = angle1*180 / math.pi
+        angle2 = math.acos((b*b + a*a - c*c) / (2*b*a))
+        angle2 = angle2*180 / math.pi
+        angle3 = math.acos((c*c + a*a - b*b) / (2*c*a))
+        angle3 = angle3*180 / math.pi
+
+        if round(angle1) in anglesFrequencies.keys():
+            anglesFrequencies[round(angle1)] += 1
+        else:
+            anglesFrequencies[round(angle1)] = 1
+    
+    for key in anglesFrequencies.keys():
+        print(key, anglesFrequencies[key])
 
 
 def iterate():
@@ -341,12 +434,14 @@ def showScreen():
     iterate()
 
     findCutPoints()
-    trimCutPoints()
+    warpCutPoints()
+    clipPerimeterTriangles()
     drawTriangles()
     glColor3f(1.0, 0, 3.0)
     drawIsosurface()
     glColor3f(3.0, 3.0, 1.0)
     plotCutPoints()
+    # findAngles()
 
     glutSwapBuffers()
 

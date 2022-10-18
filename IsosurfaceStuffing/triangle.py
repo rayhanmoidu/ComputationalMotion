@@ -39,3 +39,6 @@ class Triangle():
         for testCutpoint in self.cutpoints:
             if (testCutpoint.x == cutpoint.x and testCutpoint.y == cutpoint.y):
                 self.cutpoints.remove(testCutpoint)
+
+    def removeCutpoints(self):
+        self.cutpoints = []
