@@ -11,15 +11,16 @@ import triangle
 import random
 import decimal
 import math
+import freetype
 
 # next steps
 # reread article and make sure about step 4 of algo
 # try with equilateral triangle
 
 
-screenWidth = 500
+screenWidth = 1000
 screenHeight = 500
-triangleSideLength = 80
+triangleSideLength = 60
 circleRadius = 200
 circleOffset = circleRadius + ((500 - (2 * circleRadius)) / 2)
 alpha = 30
@@ -38,7 +39,7 @@ def distanceFromIsoSurface(x, y):
     return distanceFromCircle(x, y)
 
 def setupTriangles():
-    createNewIscocelesTriangles(0, 0, "all", "normal")
+    createNewEquilateralTriangles(0, 0, "all", "normal")
 
 def createNewEquilateralTriangles(curX, curY, key, orientation):
     if curX <screenWidth and curY<screenHeight:
@@ -416,15 +417,78 @@ def findAngles():
         else:
             anglesFrequencies[round(angle1)] = 1
     
-    for key in anglesFrequencies.keys():
-        print(key, anglesFrequencies[key])
+    # for key in anglesFrequencies.keys():
+    #     print(key, anglesFrequencies[key])
+
+def plotGraph():
+    glBegin(GL_QUADS)
+    glVertex2f(525, 20) # Coordinates for the bottom left point
+    glVertex2f(530, 20) # Coordinates for the bottom left point
+    glVertex2f(530, 480) # Coordinates for the bottom left point
+    glVertex2f(525, 480) # Coordinates for the bottom left point
+    glEnd()
+
+    glBegin(GL_QUADS)
+    glVertex2f(525, 20) # Coordinates for the bottom left point
+    glVertex2f(975, 20) # Coordinates for the bottom left point
+    glVertex2f(975, 25) # Coordinates for the bottom left point
+    glVertex2f(525, 25) # Coordinates for the bottom left point
+    glEnd()
+
+    groupedFrequencies = {}
+
+    total = 0
+
+    for angle in range(1, 180):
+        curKey = math.ceil(angle / 5)
+        if angle in anglesFrequencies.keys():
+            if curKey in groupedFrequencies.keys():
+                groupedFrequencies[curKey] += anglesFrequencies[angle]
+            else:
+                groupedFrequencies[curKey] = anglesFrequencies[angle]
+
+            total += anglesFrequencies[angle]
+    
+    maxGroupedVal = -1
+    for key in groupedFrequencies.keys():
+        if groupedFrequencies[key] > maxGroupedVal:
+            maxGroupedVal = groupedFrequencies[key]
+
+    graphWidth = 450
+    graphHeight = 455
+    widthOfOneBar = graphWidth / 36
+
+    valueOfOneVerticalPixel = graphHeight / maxGroupedVal
+
+    for key in groupedFrequencies.keys():
+        curVal = groupedFrequencies[key]
+
+        startPointOfBar = 530 + widthOfOneBar*(key-1)
+        heightOfBar = valueOfOneVerticalPixel*curVal
+        colorkey1 = decimal.Decimal(random.randrange(0, 100))/100
+        colorkey2 = decimal.Decimal(random.randrange(0, 100))/100
+        colorkey3 = decimal.Decimal(random.randrange(0, 100))/100
+        glColor3f(colorkey1, colorkey2, colorkey3)
+        glBegin(GL_QUADS)
+        glVertex2f(startPointOfBar, 25) # Coordinates for the bottom left point
+        glVertex2f(startPointOfBar+(widthOfOneBar-5), 25) # Coordinates for the bottom left point
+        glVertex2f(startPointOfBar+(widthOfOneBar-5), 25+heightOfBar) # Coordinates for the bottom left point
+        glVertex2f(startPointOfBar, 25+heightOfBar) # Coordinates for the bottom left point
+        glEnd()
+
+    face = freetype.Face("arial.ttf")
+    face.set_char_size( 48*64 )
+    face.load_char('S')
+    bitmap = face.glyph.bitmap
+    print(bitmap.buffer)
+
 
 
 def iterate():
-    glViewport(0, 0, 500, 500)
+    glViewport(0, 0, 1000, 500)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    glOrtho(0.0, 500, 0.0, 500, 0.0, 1.0)
+    glOrtho(0.0, 1000, 0.0, 500, 0.0, 1.0)
     glMatrixMode (GL_MODELVIEW)
     glLoadIdentity()
 
@@ -441,7 +505,9 @@ def showScreen():
     drawIsosurface()
     glColor3f(3.0, 3.0, 1.0)
     plotCutPoints()
-    # findAngles()
+    findAngles()
+    glColor3f(3.0, 3.0, 1.0)
+    plotGraph()
 
     glutSwapBuffers()
 
@@ -449,7 +515,7 @@ glutInit()
 setupTriangles()
 filterTriangles()
 glutInitDisplayMode(GLUT_RGBA)
-glutInitWindowSize(500, 500)
+glutInitWindowSize(1000, 500)
 glutInitWindowPosition(0, 0)
 wind = glutCreateWindow("OpenGL Coding Practice")
 glutDisplayFunc(showScreen)
