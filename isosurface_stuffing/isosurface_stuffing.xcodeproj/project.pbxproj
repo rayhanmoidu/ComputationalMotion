@@ -11,6 +11,7 @@
 		A3320E382905096C0078823D /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3320E372905096C0078823D /* OpenGL.framework */; };
 		A3320E3A29050AE00078823D /* libGLEW.2.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A3320E3929050AE00078823D /* libGLEW.2.2.0.dylib */; };
 		A3320E3C29050B220078823D /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A3320E3B29050B220078823D /* libglfw.3.3.dylib */; };
+		A346C6332906235D00339D2F /* Canvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C6312906235D00339D2F /* Canvas.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +32,8 @@
 		A3320E372905096C0078823D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		A3320E3929050AE00078823D /* libGLEW.2.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.2.0.dylib; path = ../../../../../opt/homebrew/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.0.dylib; sourceTree = "<group>"; };
 		A3320E3B29050B220078823D /* libglfw.3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.3.dylib; path = ../../../../../opt/homebrew/Cellar/glfw/3.3.8/lib/libglfw.3.3.dylib; sourceTree = "<group>"; };
+		A346C6312906235D00339D2F /* Canvas.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Canvas.cpp; sourceTree = "<group>"; };
+		A346C6322906235D00339D2F /* Canvas.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Canvas.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +71,8 @@
 			isa = PBXGroup;
 			children = (
 				A3320E2F290508440078823D /* main.cpp */,
+				A346C6312906235D00339D2F /* Canvas.cpp */,
+				A346C6322906235D00339D2F /* Canvas.hpp */,
 			);
 			path = isosurface_stuffing;
 			sourceTree = "<group>";
@@ -140,6 +145,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3320E30290508440078823D /* main.cpp in Sources */,
+				A346C6332906235D00339D2F /* Canvas.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
