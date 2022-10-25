@@ -12,6 +12,13 @@
 		A3320E3A29050AE00078823D /* libGLEW.2.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A3320E3929050AE00078823D /* libGLEW.2.2.0.dylib */; };
 		A3320E3C29050B220078823D /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A3320E3B29050B220078823D /* libglfw.3.3.dylib */; };
 		A346C6332906235D00339D2F /* Canvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C6312906235D00339D2F /* Canvas.cpp */; };
+		A346C63629063EE600339D2F /* Point.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C63429063EE600339D2F /* Point.cpp */; };
+		A346C639290640E500339D2F /* Triangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C637290640E500339D2F /* Triangle.cpp */; };
+		A346C63C2906432B00339D2F /* Cutpoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C63A2906432B00339D2F /* Cutpoint.cpp */; };
+		A346C63F2906483400339D2F /* Tiling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C63D2906483400339D2F /* Tiling.cpp */; };
+		A346C64229064A3300339D2F /* EquilateralTiling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C64029064A3300339D2F /* EquilateralTiling.cpp */; };
+		A346C64829088AA100339D2F /* Isosurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C64629088AA100339D2F /* Isosurface.cpp */; };
+		A346C64B29088D0300339D2F /* CircleIsosurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C64929088D0300339D2F /* CircleIsosurface.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +41,20 @@
 		A3320E3B29050B220078823D /* libglfw.3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.3.dylib; path = ../../../../../opt/homebrew/Cellar/glfw/3.3.8/lib/libglfw.3.3.dylib; sourceTree = "<group>"; };
 		A346C6312906235D00339D2F /* Canvas.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Canvas.cpp; sourceTree = "<group>"; };
 		A346C6322906235D00339D2F /* Canvas.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Canvas.hpp; sourceTree = "<group>"; };
+		A346C63429063EE600339D2F /* Point.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Point.cpp; sourceTree = "<group>"; };
+		A346C63529063EE600339D2F /* Point.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Point.hpp; sourceTree = "<group>"; };
+		A346C637290640E500339D2F /* Triangle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Triangle.cpp; sourceTree = "<group>"; };
+		A346C638290640E500339D2F /* Triangle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Triangle.hpp; sourceTree = "<group>"; };
+		A346C63A2906432B00339D2F /* Cutpoint.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Cutpoint.cpp; sourceTree = "<group>"; };
+		A346C63B2906432B00339D2F /* Cutpoint.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Cutpoint.hpp; sourceTree = "<group>"; };
+		A346C63D2906483400339D2F /* Tiling.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Tiling.cpp; sourceTree = "<group>"; };
+		A346C63E2906483400339D2F /* Tiling.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Tiling.hpp; sourceTree = "<group>"; };
+		A346C64029064A3300339D2F /* EquilateralTiling.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EquilateralTiling.cpp; sourceTree = "<group>"; };
+		A346C64129064A3300339D2F /* EquilateralTiling.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = EquilateralTiling.hpp; sourceTree = "<group>"; };
+		A346C64629088AA100339D2F /* Isosurface.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Isosurface.cpp; sourceTree = "<group>"; };
+		A346C64729088AA100339D2F /* Isosurface.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Isosurface.hpp; sourceTree = "<group>"; };
+		A346C64929088D0300339D2F /* CircleIsosurface.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CircleIsosurface.cpp; sourceTree = "<group>"; };
+		A346C64A29088D0300339D2F /* CircleIsosurface.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CircleIsosurface.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,7 +93,21 @@
 			children = (
 				A3320E2F290508440078823D /* main.cpp */,
 				A346C6312906235D00339D2F /* Canvas.cpp */,
+				A346C63429063EE600339D2F /* Point.cpp */,
+				A346C64029064A3300339D2F /* EquilateralTiling.cpp */,
+				A346C64129064A3300339D2F /* EquilateralTiling.hpp */,
+				A346C63D2906483400339D2F /* Tiling.cpp */,
+				A346C63E2906483400339D2F /* Tiling.hpp */,
+				A346C64929088D0300339D2F /* CircleIsosurface.cpp */,
+				A346C64A29088D0300339D2F /* CircleIsosurface.hpp */,
+				A346C63A2906432B00339D2F /* Cutpoint.cpp */,
+				A346C63B2906432B00339D2F /* Cutpoint.hpp */,
+				A346C637290640E500339D2F /* Triangle.cpp */,
+				A346C638290640E500339D2F /* Triangle.hpp */,
+				A346C63529063EE600339D2F /* Point.hpp */,
 				A346C6322906235D00339D2F /* Canvas.hpp */,
+				A346C64629088AA100339D2F /* Isosurface.cpp */,
+				A346C64729088AA100339D2F /* Isosurface.hpp */,
 			);
 			path = isosurface_stuffing;
 			sourceTree = "<group>";
@@ -144,8 +179,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A346C64B29088D0300339D2F /* CircleIsosurface.cpp in Sources */,
+				A346C63629063EE600339D2F /* Point.cpp in Sources */,
 				A3320E30290508440078823D /* main.cpp in Sources */,
+				A346C63F2906483400339D2F /* Tiling.cpp in Sources */,
+				A346C64829088AA100339D2F /* Isosurface.cpp in Sources */,
 				A346C6332906235D00339D2F /* Canvas.cpp in Sources */,
+				A346C64229064A3300339D2F /* EquilateralTiling.cpp in Sources */,
+				A346C639290640E500339D2F /* Triangle.cpp in Sources */,
+				A346C63C2906432B00339D2F /* Cutpoint.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,6 +308,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				GCC_NO_COMMON_BLOCKS = YES;
 				"HEADER_SEARCH_PATHS[arch=*]" = (
 					/opt/homebrew/Cellar/glfw/3.3.8/include,
 					/opt/homebrew/Cellar/glew/2.2.0_1/include,
@@ -283,6 +326,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				GCC_NO_COMMON_BLOCKS = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/homebrew/Cellar/glew/2.2.0_1/lib,

@@ -16,7 +16,6 @@ class Canvas {
     
         void initCanvas();
         void drawTestShape();
-        int getCoordinateOnCanvas(int coordinateToTransform);
     
         // getters
         GLFWwindow* getWindow();

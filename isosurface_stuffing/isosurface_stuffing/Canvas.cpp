@@ -30,16 +30,12 @@ void Canvas::drawTestShape() {
     glColor3f(0.5f, 0.5f, 0.5f);
     
     glBegin(GL_QUADS);
-
-    glVertex3f(getCoordinateOnCanvas(100), getCoordinateOnCanvas(100), 0.0f);
-    glVertex3f(getCoordinateOnCanvas(200), getCoordinateOnCanvas(100), 0.0f);
-    glVertex3f(getCoordinateOnCanvas(200), getCoordinateOnCanvas(200), 0.0f);
-    glVertex3f(getCoordinateOnCanvas(100), getCoordinateOnCanvas(200), 0.0f);
+    
+    glVertex2f(100, 100);
+    glVertex2f(200, 100);
+    glVertex2f(200, 200);
+    glVertex2f(100, 200);
     glEnd();
-}
-
-int Canvas::getCoordinateOnCanvas(int coordinateToTransform) {
-    return coordinateToTransform*2;
 }
 
 GLFWwindow* Canvas::getWindow() {
