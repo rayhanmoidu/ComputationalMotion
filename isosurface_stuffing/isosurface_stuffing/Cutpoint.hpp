@@ -9,6 +9,8 @@ public:
     Cutpoint(float, float, Point, Point);
     bool operator == (Cutpoint &obj);
     
+    bool isContainedByVertex(Point);
+    
 private:
     Point bound1;
     Point bound2;

@@ -45,7 +45,7 @@ int main() {
     CircleIsosurface circle(200, canvas.getWidth(), canvas.getHeight(), 2);
     
     // ALGORITHM
-    Algorithm algorithmInstance(newTiling, circle);
+    Algorithm algorithmInstance(newTiling, circle, 60);
     algorithmInstance.execute();
         
     while (!glfwWindowShouldClose(window)) {

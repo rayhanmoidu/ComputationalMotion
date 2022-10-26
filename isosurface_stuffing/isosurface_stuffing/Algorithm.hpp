@@ -7,7 +7,7 @@
 
 class Algorithm {
 public:
-    Algorithm(Tiling&, Isosurface&);
+    Algorithm(Tiling&, Isosurface&, float);
     void execute();
     
     void renderProcessedTriangles();
@@ -19,6 +19,7 @@ public:
 private:
     Tiling &baseTiling;
     Isosurface &isosurface;
+    float alpha;
     
     vector<Triangle> allTriangles;
     vector<Triangle> processedTriangles;
@@ -30,11 +31,15 @@ private:
     void findCutPoints();
     // step 3
     void warpPerimeterTriangles();
-    
+    // step 4
+    void clipPerimeterTriangles();
     
     // helpers
     vector<Triangle*> getPerimeterTrianglesForProcessing();
     Cutpoint findCutpointBetweenPolarPoints(Point, Point);
+    float distanceBetweenTwoPoints(Point, Point);
+    vector<vector<Point>> sliceTrianglePointsBySign(vector<Point>);
+    void filterOutNegativeTriangles();
 };
 
 #endif /* Algorithm_hpp */

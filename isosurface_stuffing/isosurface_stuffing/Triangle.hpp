@@ -14,7 +14,7 @@ public:
     Triangle();
     bool doesContainCutpoint(Cutpoint);
     bool doesContainVertex(Point);
-    void wrapVertexToCutpoint(Point, Cutpoint);
+    void warpVertexToCutpoint(Point, Cutpoint);
     void removeCutpoint(Cutpoint);
     void removeAllCutpoints();
     void addCutpoint(Cutpoint);
@@ -24,6 +24,9 @@ public:
     
     void setPoints(Point, Point, Point);
     vector<Point> getPoints();
+    vector<Cutpoint> getCutpoints();
+    
+    bool operator == (Triangle &obj);
     
 private:
     void setColors();

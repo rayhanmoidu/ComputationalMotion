@@ -74,3 +74,58 @@ vector<Point> Triangle::getPoints() {
 void Triangle::addCutpoint(Cutpoint newCutpoint) {
     cutpoints.push_back(newCutpoint);
 }
+
+vector<Cutpoint> Triangle::getCutpoints() {
+    return cutpoints;
+}
+
+bool Triangle::doesContainVertex(Point p) {
+    return p1==p || p2==p || p3==p;
+}
+
+bool Triangle::doesContainCutpoint(Cutpoint cp) {
+    for (int i = 0; i < cutpoints.size(); i++) {
+        if (cutpoints[i]==cp) return true;
+    }
+    return false;
+}
+
+void Triangle::warpVertexToCutpoint(Point p, Cutpoint cp) {
+    if (p1==p) p1 = Point(cp.getX(), cp.getY());
+    if (p2==p) p2 = Point(cp.getX(), cp.getY());
+    if (p3==p) p3 = Point(cp.getX(), cp.getY());
+}
+
+void Triangle::removeCutpoint(Cutpoint cp) {
+    vector<Cutpoint> newCutpoints;
+    for (int i = 0; i < cutpoints.size(); i++) {
+        if (!(cutpoints[i]==cp)) {
+            newCutpoints.push_back(cutpoints[i]);
+        }
+    }
+    cutpoints = newCutpoints;
+}
+
+void Triangle::removeAllCutpoints() {
+    cutpoints = vector<Cutpoint>();
+}
+
+bool Triangle::operator == (Triangle &obj) {
+    bool doCutpointsMatch = true;
+    for (int i = 0; i < cutpoints.size(); i++) {
+        bool foundCurCutpoint = false;
+        for (int j = 0; j < obj.cutpoints.size(); j++) {
+            if (cutpoints[i]==obj.cutpoints[j]) {
+                foundCurCutpoint = true;
+            }
+        }
+        if (!foundCurCutpoint) doCutpointsMatch = false;
+    }
+    
+    bool pointsMatch1 = (p1==obj.p1) || (p1==obj.p2) || (p1==obj.p3);
+    bool pointsMatch2 = (p2==obj.p1) || (p2==obj.p2) || (p2==obj.p3);
+    bool pointsMatch3 = (p3==obj.p1) || (p3==obj.p2) || (p3==obj.p3);
+
+    
+    return (pointsMatch1 && pointsMatch2 && pointsMatch3) && doCutpointsMatch;
+}
