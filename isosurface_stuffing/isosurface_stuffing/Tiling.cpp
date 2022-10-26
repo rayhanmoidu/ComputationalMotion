@@ -8,8 +8,8 @@ Tiling::Tiling(int width, int height, int triangleSize) {
     triangleSideLength = triangleSize;
 }
 
-vector<Triangle>* Tiling::getTriangles() {
-    return &triangles;
+vector<Triangle> Tiling::getTriangles() {
+    return triangles;
 }
 
 void Tiling::render() {

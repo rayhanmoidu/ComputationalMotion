@@ -19,6 +19,7 @@
 		A346C64229064A3300339D2F /* EquilateralTiling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C64029064A3300339D2F /* EquilateralTiling.cpp */; };
 		A346C64829088AA100339D2F /* Isosurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C64629088AA100339D2F /* Isosurface.cpp */; };
 		A346C64B29088D0300339D2F /* CircleIsosurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C64929088D0300339D2F /* CircleIsosurface.cpp */; };
+		A346C64E2908BC6800339D2F /* Algorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C64C2908BC6800339D2F /* Algorithm.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -55,6 +56,8 @@
 		A346C64729088AA100339D2F /* Isosurface.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Isosurface.hpp; sourceTree = "<group>"; };
 		A346C64929088D0300339D2F /* CircleIsosurface.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CircleIsosurface.cpp; sourceTree = "<group>"; };
 		A346C64A29088D0300339D2F /* CircleIsosurface.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CircleIsosurface.hpp; sourceTree = "<group>"; };
+		A346C64C2908BC6800339D2F /* Algorithm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Algorithm.cpp; sourceTree = "<group>"; };
+		A346C64D2908BC6800339D2F /* Algorithm.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Algorithm.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +101,8 @@
 				A346C64129064A3300339D2F /* EquilateralTiling.hpp */,
 				A346C63D2906483400339D2F /* Tiling.cpp */,
 				A346C63E2906483400339D2F /* Tiling.hpp */,
+				A346C64C2908BC6800339D2F /* Algorithm.cpp */,
+				A346C64D2908BC6800339D2F /* Algorithm.hpp */,
 				A346C64929088D0300339D2F /* CircleIsosurface.cpp */,
 				A346C64A29088D0300339D2F /* CircleIsosurface.hpp */,
 				A346C63A2906432B00339D2F /* Cutpoint.cpp */,
@@ -184,6 +189,7 @@
 				A3320E30290508440078823D /* main.cpp in Sources */,
 				A346C63F2906483400339D2F /* Tiling.cpp in Sources */,
 				A346C64829088AA100339D2F /* Isosurface.cpp in Sources */,
+				A346C64E2908BC6800339D2F /* Algorithm.cpp in Sources */,
 				A346C6332906235D00339D2F /* Canvas.cpp in Sources */,
 				A346C64229064A3300339D2F /* EquilateralTiling.cpp in Sources */,
 				A346C639290640E500339D2F /* Triangle.cpp in Sources */,

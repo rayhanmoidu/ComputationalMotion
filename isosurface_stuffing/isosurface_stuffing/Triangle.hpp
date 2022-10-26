@@ -17,10 +17,13 @@ public:
     void wrapVertexToCutpoint(Point, Cutpoint);
     void removeCutpoint(Cutpoint);
     void removeAllCutpoints();
+    void addCutpoint(Cutpoint);
     
     void render();
+    void renderCutpoints();
     
     void setPoints(Point, Point, Point);
+    vector<Point> getPoints();
     
 private:
     void setColors();

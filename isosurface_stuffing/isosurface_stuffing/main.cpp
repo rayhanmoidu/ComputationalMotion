@@ -9,6 +9,7 @@
 #include <time.h>
 #include "EquilateralTiling.hpp"
 #include "CircleIsosurface.hpp"
+#include "Algorithm.hpp"
 
 const GLint WIDTH = 500, HEIGHT = 500;
 
@@ -36,18 +37,24 @@ int main() {
         return -1;
     }
     
-    cout << canvas.getWidth() << canvas.getHeight();
-    
-    EquilateralTiling newTiling(canvas.getWidth(), canvas.getHeight(), 100);
+    // TILING
+    EquilateralTiling newTiling(canvas.getWidth(), canvas.getHeight(), 80);
     newTiling.createTiling(0, 0, "all", "normal");
     
+    // ISOSURFACE
     CircleIsosurface circle(200, canvas.getWidth(), canvas.getHeight(), 2);
     
+    // ALGORITHM
+    Algorithm algorithmInstance(newTiling, circle);
+    algorithmInstance.execute();
+        
     while (!glfwWindowShouldClose(window)) {
                 
         canvas.initCanvas();
-        newTiling.render();
+        
+        algorithmInstance.renderProcessedTriangles();
         circle.render();
+        algorithmInstance.renderProcessedTriangleCutpoints();
 
         glfwSwapBuffers(window);
     }

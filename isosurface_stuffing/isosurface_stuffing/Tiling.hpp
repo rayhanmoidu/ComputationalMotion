@@ -13,9 +13,9 @@ public:
     virtual void createTiling(float, float, string, string) = 0;
     
     // getters
-    vector<Triangle>* getTriangles();
+    vector<Triangle> getTriangles();
     
-protected:    
+protected:
     vector<Triangle> triangles;
     vector<Point> vertices;
     int hBound;
