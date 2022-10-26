@@ -56,10 +56,10 @@ int main() {
                 
         canvas.initCanvas();
         
-//        algorithmInstance.renderProcessedTriangles();
+        algorithmInstance.renderProcessedTriangles();
         circle.render();
-//        algorithmInstance.renderProcessedTriangleCutpoints();
-       quadtreeTiling.render();
+        algorithmInstance.renderProcessedTriangleCutpoints();
+//       quadtreeTiling.render();
 
         glfwSwapBuffers(window);
     }
