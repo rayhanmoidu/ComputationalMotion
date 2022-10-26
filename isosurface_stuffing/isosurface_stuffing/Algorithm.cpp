@@ -31,8 +31,7 @@ void Algorithm::findTrianglesOverlayingIsosurface() {
     }
 }
 
-// TODO: ITERATIVELY INTERPOLATE HERE
-Cutpoint Algorithm::findCutpointBetweenPolarPoints(Point positiveVertex, Point negativeVertex) {
+Point Algorithm::findCutpointLocationBetweenPolarPoints(Point positiveVertex, Point negativeVertex) {
     float dx = positiveVertex.getX() - negativeVertex.getX();
     float dy = positiveVertex.getY() - negativeVertex.getY();
     
@@ -44,7 +43,7 @@ Cutpoint Algorithm::findCutpointBetweenPolarPoints(Point positiveVertex, Point n
     float cutpointX = negativeVertex.getX() + cutpointPercentageAlongSimulatedLine*dx;
     float cutpointY = negativeVertex.getY() + cutpointPercentageAlongSimulatedLine*dy;
     
-    return Cutpoint(cutpointX, cutpointY, positiveVertex, negativeVertex);
+    return Point(cutpointX, cutpointY);
 }
 
 void Algorithm::findCutPoints() {
@@ -60,7 +59,13 @@ void Algorithm::findCutPoints() {
         
         for (int posIndex = 0; posIndex < positiveVertices.size(); posIndex++) {
             for (int negIndex = 0; negIndex < negativeVertices.size(); negIndex++) {
-                Cutpoint newCutpoint = findCutpointBetweenPolarPoints(positiveVertices[posIndex], negativeVertices[negIndex]);
+                Point potentialCutpoint = positiveVertices[posIndex];
+                while (1) {
+                    potentialCutpoint = findCutpointLocationBetweenPolarPoints(potentialCutpoint, negativeVertices[negIndex]);
+                    if (abs(isosurface.signedDistanceFunction(potentialCutpoint)) < 0.5) break;
+                }
+                
+                Cutpoint newCutpoint(potentialCutpoint.getX(), potentialCutpoint.getY(), positiveVertices[posIndex], negativeVertices[negIndex]);
                 curTriangle->addCutpoint(newCutpoint);
             }
         }
@@ -144,25 +149,65 @@ void Algorithm::clipPerimeterTriangles() {
         
         if (negativeVertices.size()>=1) {
             if (negativeVertices.size()==2) {
-                Cutpoint cp1 = findCutpointBetweenPolarPoints(positiveVertices[0], negativeVertices[0]);
-                Cutpoint cp2 = findCutpointBetweenPolarPoints(positiveVertices[0], negativeVertices[1]);
+                Point p1 = findCutpointLocationBetweenPolarPoints(positiveVertices[0], negativeVertices[0]);
+                Cutpoint cp1(p1.getX(), p1.getY(), positiveVertices[0], negativeVertices[0]);
+                Point p2 = findCutpointLocationBetweenPolarPoints(positiveVertices[0], negativeVertices[1]);
+                Cutpoint cp2(p2.getX(), p2.getY(), positiveVertices[0], negativeVertices[1]);
                 
                 Triangle newTriangle = Triangle(cp1, cp2, positiveVertices[0]);
                 processedTriangles.push_back(newTriangle);
             } else if (negativeVertices.size()==1) {
-                Cutpoint cp1 = findCutpointBetweenPolarPoints(positiveVertices[0], negativeVertices[0]);
-                Cutpoint cp2 = findCutpointBetweenPolarPoints(positiveVertices[1], negativeVertices[0]);
+                Point p1 = findCutpointLocationBetweenPolarPoints(positiveVertices[0], negativeVertices[0]);
+                Cutpoint cp1(p1.getX(), p1.getY(), positiveVertices[0], negativeVertices[0]);
+                Point p2 = findCutpointLocationBetweenPolarPoints(positiveVertices[1], negativeVertices[0]);
+                Cutpoint cp2(p2.getX(), p2.getY(), positiveVertices[1], negativeVertices[0]);
                 
                 // TODO: DELAUNAY'S CONDITION
                 Triangle newTriangle1 = Triangle(cp1, positiveVertices[1], positiveVertices[0]);
                 Triangle newTriangle2 = Triangle(cp1, cp2, positiveVertices[1]);
                 
-                processedTriangles.push_back(newTriangle1);
-                processedTriangles.push_back(newTriangle2);
+                // find angle at posvertex0 and cp2
+                
+                if (doesPassDelaunaysCondition(cp1, cp2, positiveVertices[0], positiveVertices[1])) {
+                    processedTriangles.push_back(newTriangle1);
+                    processedTriangles.push_back(newTriangle2);
+                } else {
+                    newTriangle1 = Triangle(cp1, cp2, positiveVertices[0]);
+                    newTriangle2 = Triangle(positiveVertices[1], cp2, positiveVertices[0]);
+                    processedTriangles.push_back(newTriangle1);
+                    processedTriangles.push_back(newTriangle2);
+                }
             }
         }
     }
     filterOutNegativeTriangles();
+}
+
+bool Algorithm::doesPassDelaunaysCondition(Point cp1, Point cp2, Point pos1, Point pos2) {
+    float dx1 = cp1.getX() - cp2.getX();
+    float dy1 = cp1.getY() - cp2.getY();
+    float b1 = sqrt(dx1*dx1 + dy1*dy1);
+    
+    float dx2 = cp2.getX() - pos2.getX();
+    float dy2 = cp2.getY() - pos2.getY();
+    float c1 = sqrt(dx2*dx2 + dy2*dy2);
+    
+    float dx3 = cp1.getX() - pos1.getX();
+    float dy3 = cp1.getY() - pos1.getY();
+    float b2 = sqrt(dx3*dx3 + dy3*dy3);
+    
+    float dx4 = pos1.getX() - pos2.getX();
+    float dy4 = pos1.getY() - pos2.getY();
+    float c2 = sqrt(dx4*dx4 + dy4*dy4);
+    
+    float dx5 = cp1.getX() - pos2.getX();
+    float dy5 = cp1.getY() - pos2.getY();
+    float sharedSide = sqrt(dx5*dx5 + dy5*dy5);
+    
+    float angle1 = (acos((b1*b1 + c1*c1 - sharedSide*sharedSide) / (2*b1*c1))) * (180/M_PI);
+    float angle2 = (acos((b2*b2 + c2*c2 - sharedSide*sharedSide) / (2*b2*c2))) * (180/M_PI);
+    
+    return (angle1 + angle2 <= 180);
 }
 
 void Algorithm::filterOutNegativeTriangles() {

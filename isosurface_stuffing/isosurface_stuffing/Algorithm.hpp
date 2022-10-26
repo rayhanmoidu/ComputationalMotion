@@ -36,10 +36,11 @@ private:
     
     // helpers
     vector<Triangle*> getPerimeterTrianglesForProcessing();
-    Cutpoint findCutpointBetweenPolarPoints(Point, Point);
+    Point findCutpointLocationBetweenPolarPoints(Point, Point);
     float distanceBetweenTwoPoints(Point, Point);
     vector<vector<Point>> sliceTrianglePointsBySign(vector<Point>);
     void filterOutNegativeTriangles();
+    bool doesPassDelaunaysCondition(Point, Point, Point, Point);
 };
 
 #endif /* Algorithm_hpp */
