@@ -10,6 +10,7 @@
 #include "EquilateralTiling.hpp"
 #include "CircleIsosurface.hpp"
 #include "Algorithm.hpp"
+#include "Quadtree.hpp"
 
 const GLint WIDTH = 500, HEIGHT = 500;
 
@@ -47,14 +48,18 @@ int main() {
     // ALGORITHM
     Algorithm algorithmInstance(newTiling, circle, 60);
     algorithmInstance.execute();
+    
+    Quadtree quadtreeTiling(canvas.getWidth(), canvas.getHeight(), circle);
+    
         
     while (!glfwWindowShouldClose(window)) {
                 
         canvas.initCanvas();
         
-        algorithmInstance.renderProcessedTriangles();
+//        algorithmInstance.renderProcessedTriangles();
         circle.render();
-        algorithmInstance.renderProcessedTriangleCutpoints();
+//        algorithmInstance.renderProcessedTriangleCutpoints();
+       quadtreeTiling.render();
 
         glfwSwapBuffers(window);
     }
@@ -63,5 +68,10 @@ int main() {
     return 0;
 }
 
+
+// balanace the quadtree
+// quadtree tiling (introduce diagonals to make it into triangles, can either simply use the diagonal or do it like the paper did it)
+// skew the quadtree to make it into parallelograms that turn into equilateral triangles
+// provably good meshig (probably the most ideal one!)
 
 
