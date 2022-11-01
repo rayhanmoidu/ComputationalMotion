@@ -11,15 +11,19 @@
 #include "CircleIsosurface.hpp"
 #include "Algorithm.hpp"
 #include "Quadtree.hpp"
+#include "BarGraph.hpp"
 
-const GLint WIDTH = 500, HEIGHT = 500;
+const GLint WIDTH = 1000, HEIGHT = 500;
+const int triangleSideLength = 40;
+const int circleRadius = 200;
+const float alpha = 60;
+const int numBars = 18; // 180 % numBars should be 0
 
 int main() {
     glfwInit();
     char* windowTitle = "Isosurface Stuffing";
     Canvas canvas(WIDTH, HEIGHT, windowTitle);
     GLFWwindow *window = canvas.getWindow();
-    
     
     
     if (window == nullptr) {
@@ -39,17 +43,21 @@ int main() {
     }
     
     // TILING
-    EquilateralTiling newTiling(canvas.getWidth(), canvas.getHeight(), 80);
+    EquilateralTiling newTiling(canvas.getWidth() / 2, canvas.getHeight(), triangleSideLength);
     newTiling.createTiling(0, 0, "all", "normal");
     
     // ISOSURFACE
-    CircleIsosurface circle(200, canvas.getWidth(), canvas.getHeight(), 2);
+    CircleIsosurface circle(circleRadius, canvas.getWidth() / 2, canvas.getHeight(), 2);
     
     // ALGORITHM
-    Algorithm algorithmInstance(newTiling, circle, 60);
+    Algorithm algorithmInstance(newTiling, circle, alpha);
     algorithmInstance.execute();
     
-    Quadtree quadtreeTiling(canvas.getWidth(), canvas.getHeight(), circle);
+    // QUADTREE
+    Quadtree quadtreeTiling(canvas.getWidth() / 2, canvas.getHeight(), circle);
+    
+    // BARGRAPH
+    BarGraph bargraph(algorithmInstance.getProcessedTriangles(), canvas.getWidth() / 2, canvas.getHeight(), canvas.getWidth() / 2, numBars);
     
         
     while (!glfwWindowShouldClose(window)) {
@@ -59,7 +67,8 @@ int main() {
         algorithmInstance.renderProcessedTriangles();
         circle.render();
         algorithmInstance.renderProcessedTriangleCutpoints();
-//       quadtreeTiling.render();
+        bargraph.drawGraph();
+//        quadtreeTiling.render();
 
         glfwSwapBuffers(window);
     }

@@ -162,7 +162,6 @@ void Algorithm::clipPerimeterTriangles() {
                 Point p2 = findCutpointLocationBetweenPolarPoints(positiveVertices[1], negativeVertices[0]);
                 Cutpoint cp2(p2.getX(), p2.getY(), positiveVertices[1], negativeVertices[0]);
                 
-                // TODO: DELAUNAY'S CONDITION
                 Triangle newTriangle1 = Triangle(cp1, positiveVertices[1], positiveVertices[0]);
                 Triangle newTriangle2 = Triangle(cp1, cp2, positiveVertices[1]);
                 
