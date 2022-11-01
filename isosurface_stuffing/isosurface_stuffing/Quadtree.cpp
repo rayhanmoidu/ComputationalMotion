@@ -4,10 +4,11 @@
 #include <GLFW/glfw3.h>
 #include <cmath>
 
-Quadtree::Quadtree(int screenWidth, int screenHeight, Isosurface &isosurface) :
+Quadtree::Quadtree(int screenWidth, int screenHeight, int smallestGridSize, Isosurface &isosurface) :
 isosurface(isosurface) {
     hBound = screenWidth;
     vBound = screenHeight;
+    gridSizeLimit = smallestGridSize;
     root = QuadtreeNode(hBound / 2, vBound / 2, hBound);
     
     if (shouldRefine(root)) {
@@ -40,7 +41,7 @@ bool Quadtree::shouldRefine(QuadtreeNode node) {
     Point corner3(node.centerX + (node.dimension/2), node.centerY - (node.dimension/2));
     Point corner4(node.centerX - (node.dimension/2), node.centerY - (node.dimension/2));
     
-    if (node.dimension < 30) return false;
+    if (node.dimension < gridSizeLimit) return false;
     if (abs(isosurface.signedDistanceFunction(corner1)) > diagonalLength) return false;
     if (abs(isosurface.signedDistanceFunction(corner4)) > diagonalLength) return false;
     if (abs(isosurface.signedDistanceFunction(corner2)) > diagonalLength) return false;
@@ -49,6 +50,7 @@ bool Quadtree::shouldRefine(QuadtreeNode node) {
 }
 
 void Quadtree::render() {
+    glColor3f(1, 1, 1);
     renderHelper(root);
 }
 

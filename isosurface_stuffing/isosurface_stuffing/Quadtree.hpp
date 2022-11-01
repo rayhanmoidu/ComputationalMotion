@@ -41,7 +41,7 @@ struct QuadtreeNode {
 
 class Quadtree {
 public:
-    Quadtree(int, int, Isosurface&);
+    Quadtree(int, int, int, Isosurface&);
     void construct();
     void render();
     bool shouldRefine(QuadtreeNode);
@@ -50,8 +50,10 @@ public:
 private:
     void renderHelper(QuadtreeNode);
     
+    int gridSizeLimit;
     int hBound;
     int vBound;
+    
     Isosurface &isosurface;
     QuadtreeNode root;
 };

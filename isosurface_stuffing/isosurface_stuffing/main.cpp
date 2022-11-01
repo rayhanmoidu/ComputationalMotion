@@ -8,15 +8,20 @@
 #include <stdlib.h>
 #include <time.h>
 #include "EquilateralTiling.hpp"
+#include "IsoscelesTiling.hpp"
 #include "CircleIsosurface.hpp"
 #include "Algorithm.hpp"
 #include "Quadtree.hpp"
 #include "BarGraph.hpp"
+#include "RectangleIsosurface.hpp"
 
 const GLint WIDTH = 1000, HEIGHT = 500;
-const int triangleSideLength = 40;
+const int triangleSideLength = 37;
 const int circleRadius = 200;
+const int rectangleWidth = 200;
+const int rectangleHeight = 200;
 const float alpha = 60;
+const float isosurfaceRenderingThreshold = 2;
 const int numBars = 18; // 180 % numBars should be 0
 
 int main() {
@@ -43,18 +48,19 @@ int main() {
     }
     
     // TILING
-    EquilateralTiling newTiling(canvas.getWidth() / 2, canvas.getHeight(), triangleSideLength);
+    IsoscelesTiling newTiling(canvas.getWidth() / 2, canvas.getHeight(), triangleSideLength);
     newTiling.createTiling(0, 0, "all", "normal");
     
     // ISOSURFACE
-    CircleIsosurface circle(circleRadius, canvas.getWidth() / 2, canvas.getHeight(), 2);
+    CircleIsosurface circle(circleRadius, canvas.getWidth() / 2, canvas.getHeight(), isosurfaceRenderingThreshold);
+    RectangleIsosurface rectangle(rectangleWidth, rectangleHeight, canvas.getWidth() / 2, canvas.getHeight(), isosurfaceRenderingThreshold);
     
     // ALGORITHM
     Algorithm algorithmInstance(newTiling, circle, alpha);
     algorithmInstance.execute();
     
     // QUADTREE
-    Quadtree quadtreeTiling(canvas.getWidth() / 2, canvas.getHeight(), circle);
+    Quadtree quadtreeTiling(canvas.getWidth() / 2, canvas.getHeight(), 10, circle);
     
     // BARGRAPH
     BarGraph bargraph(algorithmInstance.getProcessedTriangles(), canvas.getWidth() / 2, canvas.getHeight(), canvas.getWidth() / 2, numBars);
@@ -64,11 +70,11 @@ int main() {
                 
         canvas.initCanvas();
         
-        algorithmInstance.renderProcessedTriangles();
+//        algorithmInstance.renderProcessedTriangles();
+//        algorithmInstance.renderProcessedTriangleCutpoints();
+//        bargraph.drawGraph();
+        quadtreeTiling.render();
         circle.render();
-        algorithmInstance.renderProcessedTriangleCutpoints();
-        bargraph.drawGraph();
-//        quadtreeTiling.render();
 
         glfwSwapBuffers(window);
     }

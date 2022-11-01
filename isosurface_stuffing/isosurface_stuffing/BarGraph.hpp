@@ -28,6 +28,7 @@ private:
     int angleWindowPerBar;
     
     int maxGraphValue;
+    int medianValue;
     
     const int horizontalOffset = 50;
     const int verticalOffset = 50;
