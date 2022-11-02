@@ -11,8 +11,12 @@
 #include <stdio.h>
 #include "Isosurface.hpp"
 #include <vector>
+#include <utility>
+//#include <pair>
 
 using namespace std;
+
+enum Direction { north, east, south, west };
 
 struct QuadtreeNode {
     float centerX;
@@ -37,17 +41,32 @@ struct QuadtreeNode {
     void addChild(QuadtreeNode newChild) {
         children.push_back(newChild);
     }
+    
+    bool operator == (QuadtreeNode &obj) {
+        return obj.centerY == centerY && obj.centerX == centerX && obj.dimension == dimension;
+    }
 };
 
 class Quadtree {
 public:
     Quadtree(int, int, int, Isosurface&);
-    void construct();
     void render();
-    bool shouldRefine(QuadtreeNode);
-    void constructChildren(QuadtreeNode*);
+    void test123();
     
 private:
+    bool shouldRefine(QuadtreeNode);
+    
+    void construct();
+    void constructChildren(QuadtreeNode*);
+    
+    // balancing
+    pair<Point, Point> findCellBoundsInDirection(QuadtreeNode, Direction);
+    vector<QuadtreeNode> findLeafNeighborsInDirection(QuadtreeNode, Direction);
+    vector<QuadtreeNode> neighborsHelper(Point, Point, vector<QuadtreeNode>, QuadtreeNode, Direction);
+    vector<QuadtreeNode*> getListOfLeavesHelper(QuadtreeNode*, vector<QuadtreeNode*>);
+    vector<QuadtreeNode*> getListOfLeaves();
+    void balanceQuadtree();
+        
     void renderHelper(QuadtreeNode);
     
     int gridSizeLimit;

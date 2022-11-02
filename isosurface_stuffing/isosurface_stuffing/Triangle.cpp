@@ -49,10 +49,10 @@ void Triangle::renderCutpoints() {
         
         glColor3f(1, 1, 1);
         glBegin(GL_QUADS);
-        glVertex2f(xToPlot-2, yToPlot-2);
-        glVertex2f(xToPlot+2, yToPlot-2);
-        glVertex2f(xToPlot+2, yToPlot+2);
-        glVertex2f(xToPlot-2, yToPlot+2);
+        glVertex2f(xToPlot-4, yToPlot-4);
+        glVertex2f(xToPlot+4, yToPlot-4);
+        glVertex2f(xToPlot+4, yToPlot+4);
+        glVertex2f(xToPlot-4, yToPlot+4);
         glEnd();
     }
 }

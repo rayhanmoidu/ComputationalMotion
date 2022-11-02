@@ -13,8 +13,8 @@ Algorithm::Algorithm(Tiling &baseTiling, Isosurface &isosurface, float alphaVal)
 void Algorithm::execute() {
     findTrianglesOverlayingIsosurface();
     findCutPoints();
-    warpPerimeterTriangles();
-    clipPerimeterTriangles();
+//    warpPerimeterTriangles();
+//    clipPerimeterTriangles();
 }
 
 void Algorithm::findTrianglesOverlayingIsosurface() {

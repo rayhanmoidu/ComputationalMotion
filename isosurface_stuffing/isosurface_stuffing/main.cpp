@@ -16,7 +16,7 @@
 #include "RectangleIsosurface.hpp"
 
 const GLint WIDTH = 1000, HEIGHT = 500;
-const int triangleSideLength = 37;
+const int triangleSideLength = 80;
 const int circleRadius = 200;
 const int rectangleWidth = 200;
 const int rectangleHeight = 200;
@@ -74,7 +74,9 @@ int main() {
 //        algorithmInstance.renderProcessedTriangleCutpoints();
 //        bargraph.drawGraph();
         quadtreeTiling.render();
+//        quadtreeTiling.test123();
         circle.render();
+
 
         glfwSwapBuffers(window);
     }
