@@ -11,7 +11,7 @@ isosurface(isosurface) {
     vBound = screenHeight;
     gridSizeLimit = smallestGridSize;
 
-    root = new QuadtreeNode(hBound / 2, vBound / 2, hBound);
+    root = new QuadtreeNode(hBound / 2, vBound / 2, hBound, NULL);
 
     if (shouldRefine(root)) {
         constructChildren(root);
@@ -20,10 +20,10 @@ isosurface(isosurface) {
 }
 
 void Quadtree::constructChildren(QuadtreeNode *node) {
-    QuadtreeNode* northEastChild = new QuadtreeNode(node->getCenterX() + node->getDimension()/4, node->getCenterY() + node->getDimension()/4, node->getDimension() / 2);
-    QuadtreeNode* northWestChild = new QuadtreeNode(node->getCenterX() - node->getDimension()/4, node->getCenterY() + node->getDimension()/4, node->getDimension() / 2);
-    QuadtreeNode* southEastChild = new QuadtreeNode(node->getCenterX() + node->getDimension()/4, node->getCenterY() - node->getDimension()/4, node->getDimension() / 2);
-    QuadtreeNode* southWestChild = new QuadtreeNode(node->getCenterX() - node->getDimension()/4, node->getCenterY() - node->getDimension()/4, node->getDimension() / 2);
+    QuadtreeNode* northEastChild = new QuadtreeNode(node->getCenterX() + node->getDimension()/4, node->getCenterY() + node->getDimension()/4, node->getDimension() / 2, node);
+    QuadtreeNode* northWestChild = new QuadtreeNode(node->getCenterX() - node->getDimension()/4, node->getCenterY() + node->getDimension()/4, node->getDimension() / 2, node);
+    QuadtreeNode* southEastChild = new QuadtreeNode(node->getCenterX() + node->getDimension()/4, node->getCenterY() - node->getDimension()/4, node->getDimension() / 2, node);
+    QuadtreeNode* southWestChild = new QuadtreeNode(node->getCenterX() - node->getDimension()/4, node->getCenterY() - node->getDimension()/4, node->getDimension() / 2, node);
 
     if (shouldRefine(northEastChild)) constructChildren(northEastChild);
     if (shouldRefine(northWestChild)) constructChildren(northWestChild);
@@ -75,46 +75,6 @@ void Quadtree::renderHelper(QuadtreeNode* curNode) {
     }
 }
 
-pair<Point, Point> Quadtree::findCellBoundsInDirection(QuadtreeNode curNode, Direction direction) {
-    Point p1;
-    Point p2;
-    if (direction == north) {
-        float x1 = curNode.getCenterX() - (curNode.getDimension() / 2);
-        float x2 = curNode.getCenterX() + (curNode.getDimension() / 2);
-        float y = curNode.getCenterY() + (curNode.getDimension() / 2);
-        p1.setX(x1);
-        p1.setY(y);
-        p2.setX(x2);
-        p2.setY(y);
-    } else if (direction == south) {
-        float x1 = curNode.getCenterX() - (curNode.getDimension() / 2);
-        float x2 = curNode.getCenterX() + (curNode.getDimension() / 2);
-        float y = curNode.getCenterY() - (curNode.getDimension() / 2);
-        p1.setX(x1);
-        p1.setY(y);
-        p2.setX(x2);
-        p2.setY(y);
-    } else if (direction == east) {
-        float x = curNode.getCenterX() + (curNode.getDimension() / 2);
-        float y1 = curNode.getCenterY() - (curNode.getDimension() / 2);
-        float y2 = curNode.getCenterY() + (curNode.getDimension() / 2);
-        p1.setX(x);
-        p1.setY(y1);
-        p2.setX(x);
-        p2.setY(y2);
-    } else if (direction == west) {
-        float x = curNode.getCenterX() - (curNode.getDimension() / 2);
-        float y1 = curNode.getCenterY() - (curNode.getDimension() / 2);
-        float y2 = curNode.getCenterY() + (curNode.getDimension() / 2);
-        p1.setX(x);
-        p1.setY(y1);
-        p2.setX(x);
-        p2.setY(y2);
-    }
-
-    return pair<Point, Point>(p1, p2);
-}
-
 void colorSquare(QuadtreeNode node) {
     glBegin(GL_QUADS);
         glVertex2f(node.getCenterX() - node.getDimension() / 2, node.getCenterY() - node.getDimension() / 2);
@@ -122,67 +82,6 @@ void colorSquare(QuadtreeNode node) {
         glVertex2f(node.getCenterX() + node.getDimension() / 2, node.getCenterY() + node.getDimension() / 2);
         glVertex2f(node.getCenterX() - node.getDimension() / 2, node.getCenterY() + node.getDimension() / 2);
     glEnd();
-}
-
-vector<QuadtreeNode*> Quadtree::findLeafNeighborsInDirection(QuadtreeNode* curNode, Direction direction) {
-    pair<Point, Point> bounds = findCellBoundsInDirection(*curNode, direction);
-
-    vector<QuadtreeNode*> neighborsInDirection;
-    neighborsInDirection = findLeafNeighborsInDirectionHelper(bounds.first, bounds.second, neighborsInDirection, root, direction);
-
-    return neighborsInDirection;
-}
-
-vector<QuadtreeNode*> Quadtree::findLeafNeighborsInDirectionHelper(Point bound1, Point bound2, vector<QuadtreeNode*> foundNeighbors, QuadtreeNode* curNode, Direction dir) {
-    if (curNode->numChildren()!=0) {
-        vector<QuadtreeNode*> curChildren = curNode->getChildren();
-        for (int i = 0; i < curChildren.size(); i++) {
-            foundNeighbors = findLeafNeighborsInDirectionHelper(bound1, bound2, foundNeighbors, curChildren[i], dir);
-        }
-    } else {
-        pair<Point, Point> testBounds;
-        if (dir==north) {
-            testBounds = findCellBoundsInDirection(*curNode, south);
-            if (testBounds.first.getY()== bound1.getY() && testBounds.second.getY()== bound2.getY()) {
-                if (testBounds.first.getX() >= bound1.getX() && testBounds.second.getX() <= bound2.getX()) {
-                    foundNeighbors.push_back(curNode);
-                } else if (bound1.getX() >= testBounds.first.getX() && bound2.getX() <= testBounds.second.getX()) {
-                    foundNeighbors.push_back(curNode);
-                }
-            }
-        }
-        else if (dir==south) {
-            testBounds = findCellBoundsInDirection(*curNode, north);
-            if (testBounds.first.getY()== bound1.getY() && testBounds.second.getY()== bound2.getY()) {
-                if (testBounds.first.getX() >= bound1.getX() && testBounds.second.getX() <= bound2.getX()) {
-                    foundNeighbors.push_back(curNode);
-                } else if (bound1.getX() >= testBounds.first.getX() && bound2.getX() <= testBounds.second.getX()) {
-                    foundNeighbors.push_back(curNode);
-                }
-            }
-        }
-        else if (dir==east) {
-            testBounds = findCellBoundsInDirection(*curNode, west);
-            if (testBounds.first.getX()== bound1.getX() && testBounds.second.getX()== bound2.getX()) {
-                if (testBounds.first.getY() >= bound1.getY() && testBounds.second.getY() <= bound2.getY()) {
-                    foundNeighbors.push_back(curNode);
-                } else if (bound1.getY() >= testBounds.first.getY() && bound2.getY() <= testBounds.second.getY()) {
-                    foundNeighbors.push_back(curNode);
-                }
-            }
-        }
-        else if (dir==west) {
-            testBounds = findCellBoundsInDirection(*curNode, east);
-            if (testBounds.first.getX()== bound1.getX() && testBounds.second.getX()== bound2.getX()) {
-                if (testBounds.first.getY() >= bound1.getY() && testBounds.second.getY() <= bound2.getY()) {
-                    foundNeighbors.push_back(curNode);
-                } else if (bound1.getY() >= testBounds.first.getY() && bound2.getY() <= testBounds.second.getY()) {
-                    foundNeighbors.push_back(curNode);
-                }
-            }
-        }
-    }
-    return foundNeighbors;
 }
 
 vector<QuadtreeNode*> Quadtree::getListOfLeaves() {
@@ -209,7 +108,7 @@ vector<QuadtreeNode*> Quadtree::getListOfLeavesHelper(QuadtreeNode* curNode, vec
     return leaves;
 }
 
-vector<QuadtreeNode*> Quadtree::removeLeaf(vector<QuadtreeNode*> leaves, QuadtreeNode* leafToRemove) {
+vector<QuadtreeNode*> Quadtree::removeNodeFromVector(vector<QuadtreeNode*> leaves, QuadtreeNode* leafToRemove) {
     vector<QuadtreeNode*> newLeaves;
     for (int i = 0; i < leaves.size(); i++) {
         if (!(leaves[i] == leafToRemove)) {
@@ -235,10 +134,10 @@ bool Quadtree::isBalanced() {
         QuadtreeNode* curLeaf = leaves[i];
 
         vector<QuadtreeNode*> neighbors;
-        vector<QuadtreeNode*> northNeighbors = findLeafNeighborsInDirection(curLeaf, north);
-        vector<QuadtreeNode*> southNeighbors = findLeafNeighborsInDirection(curLeaf, south);
-        vector<QuadtreeNode*> eastNeighbors = findLeafNeighborsInDirection(curLeaf, east);
-        vector<QuadtreeNode*> westNeighbors = findLeafNeighborsInDirection(curLeaf, west);
+        vector<QuadtreeNode*> northNeighbors = getNeighbours(curLeaf, north);
+        vector<QuadtreeNode*> southNeighbors = getNeighbours(curLeaf, south);
+        vector<QuadtreeNode*> eastNeighbors = getNeighbours(curLeaf, east);
+        vector<QuadtreeNode*> westNeighbors = getNeighbours(curLeaf, west);
 
         neighbors.insert(neighbors.end(), northNeighbors.begin(), northNeighbors.end());
         neighbors.insert(neighbors.end(), southNeighbors.begin(), southNeighbors.end());
@@ -268,10 +167,10 @@ void Quadtree::balanceQuadtree() {
         QuadtreeNode* curLeaf = leaves[0];
 
         vector<QuadtreeNode*> neighbors;
-        vector<QuadtreeNode*> northNeighbors = findLeafNeighborsInDirection(curLeaf, north);
-        vector<QuadtreeNode*> southNeighbors = findLeafNeighborsInDirection(curLeaf, south);
-        vector<QuadtreeNode*> eastNeighbors = findLeafNeighborsInDirection(curLeaf, east);
-        vector<QuadtreeNode*> westNeighbors = findLeafNeighborsInDirection(curLeaf, west);
+        vector<QuadtreeNode*> northNeighbors = getNeighbours(curLeaf, north);
+        vector<QuadtreeNode*> southNeighbors = getNeighbours(curLeaf, south);
+        vector<QuadtreeNode*> eastNeighbors = getNeighbours(curLeaf, east);
+        vector<QuadtreeNode*> westNeighbors = getNeighbours(curLeaf, west);
 
         neighbors.insert(neighbors.end(), northNeighbors.begin(), northNeighbors.end());
         neighbors.insert(neighbors.end(), southNeighbors.begin(), southNeighbors.end());
@@ -289,10 +188,10 @@ void Quadtree::balanceQuadtree() {
         if (mustRefineCurLeaf) {
 //            cout <<"LALALALALALLALA" << endl;
             
-            QuadtreeNode* northEastChild = new QuadtreeNode(curLeaf->getCenterX() + curLeaf->getDimension()/4, curLeaf->getCenterY() + curLeaf->getDimension()/4, curLeaf->getDimension() / 2);
-            QuadtreeNode* northWestChild = new QuadtreeNode(curLeaf->getCenterX() - curLeaf->getDimension()/4, curLeaf->getCenterY() + curLeaf->getDimension()/4, curLeaf->getDimension() / 2);
-            QuadtreeNode* southEastChild = new QuadtreeNode(curLeaf->getCenterX() + curLeaf->getDimension()/4, curLeaf->getCenterY() - curLeaf->getDimension()/4, curLeaf->getDimension() / 2);
-            QuadtreeNode* southWestChild = new QuadtreeNode(curLeaf->getCenterX() - curLeaf->getDimension()/4, curLeaf->getCenterY() - curLeaf->getDimension()/4, curLeaf->getDimension() / 2);
+            QuadtreeNode* northEastChild = new QuadtreeNode(curLeaf->getCenterX() + curLeaf->getDimension()/4, curLeaf->getCenterY() + curLeaf->getDimension()/4, curLeaf->getDimension() / 2, curLeaf);
+            QuadtreeNode* northWestChild = new QuadtreeNode(curLeaf->getCenterX() - curLeaf->getDimension()/4, curLeaf->getCenterY() + curLeaf->getDimension()/4, curLeaf->getDimension() / 2, curLeaf);
+            QuadtreeNode* southEastChild = new QuadtreeNode(curLeaf->getCenterX() + curLeaf->getDimension()/4, curLeaf->getCenterY() - curLeaf->getDimension()/4, curLeaf->getDimension() / 2, curLeaf);
+            QuadtreeNode* southWestChild = new QuadtreeNode(curLeaf->getCenterX() - curLeaf->getDimension()/4, curLeaf->getCenterY() - curLeaf->getDimension()/4, curLeaf->getDimension() / 2, curLeaf);
 
             curLeaf->addChild(northEastChild, northeast);
             curLeaf->addChild(northWestChild, northwest);
@@ -304,11 +203,112 @@ void Quadtree::balanceQuadtree() {
             leaves.push_back(southEastChild);
             leaves.push_back(southWestChild);
         }
-        leaves = removeLeaf(leaves, curLeaf);
+        leaves = removeNodeFromVector(leaves, curLeaf);
     }
 }
 
 QuadtreeNode* Quadtree::getRoot() {
     return root;
+}
+
+QuadtreeNode* Quadtree::getNeighbourOfGreaterOrEqualSize(QuadtreeNode* curNode, Direction dir) {
+    if (dir==north) {
+        if (curNode->getParent()==NULL) return NULL;
+        if (curNode->getParent()->getSWChild()==curNode) return curNode->getParent()->getNWChild();
+        if (curNode->getParent()->getSEChild()==curNode) return curNode->getParent()->getNEChild();
+        
+        QuadtreeNode* testNode = getNeighbourOfGreaterOrEqualSize(curNode->getParent(), dir);
+        if (testNode==NULL || testNode->isLeaf()) return testNode;
+        
+        if (curNode->getParent()->getNWChild()==curNode) return testNode->getSWChild();
+        else return testNode->getSEChild();
+    } else if (dir == south) {
+        if (curNode->getParent()==NULL) return NULL;
+        if (curNode->getParent()->getNWChild()==curNode) return curNode->getParent()->getSWChild();
+        if (curNode->getParent()->getNEChild()==curNode) return curNode->getParent()->getSEChild();
+        
+        QuadtreeNode* testNode = getNeighbourOfGreaterOrEqualSize(curNode->getParent(), dir);
+        if (testNode==NULL || testNode->isLeaf()) return testNode;
+        
+        if (curNode->getParent()->getSWChild()==curNode) return testNode->getNWChild();
+        else return testNode->getNEChild();
+    } else if (dir == east) {
+        if (curNode->getParent()==NULL) return NULL;
+        if (curNode->getParent()->getNWChild()==curNode) return curNode->getParent()->getNEChild();
+        if (curNode->getParent()->getSWChild()==curNode) return curNode->getParent()->getSEChild();
+        
+        QuadtreeNode* testNode = getNeighbourOfGreaterOrEqualSize(curNode->getParent(), dir);
+        if (testNode==NULL || testNode->isLeaf()) return testNode;
+        
+        if (curNode->getParent()->getNEChild()==curNode) return testNode->getNWChild();
+        else return testNode->getSWChild();
+    } else if (dir==west) {
+        if (curNode->getParent()==NULL) return NULL;
+        if (curNode->getParent()->getNEChild()==curNode) return curNode->getParent()->getNWChild();
+        if (curNode->getParent()->getSEChild()==curNode) return curNode->getParent()->getSWChild();
+        
+        QuadtreeNode* testNode = getNeighbourOfGreaterOrEqualSize(curNode->getParent(), dir);
+        if (testNode==NULL || testNode->isLeaf()) return testNode;
+        
+        if (curNode->getParent()->getNWChild()==curNode) return testNode->getNEChild();
+        else return testNode->getSEChild();
+    }
+    cout << "should never go here" << endl;
+    return NULL;
+}
+
+vector<QuadtreeNode*> Quadtree::getNeighboursOfSmallerSize(QuadtreeNode* curNode, QuadtreeNode* neighbour, Direction dir) {
+    vector<QuadtreeNode*> neighbours;
+    vector<QuadtreeNode*> candidates;
+    if (neighbour!=NULL) candidates.push_back(neighbour);
+    
+    if (dir==north) {
+        while (candidates.size() > 0) {
+            QuadtreeNode* curCandidate = candidates[0];
+            if (curCandidate->isLeaf()) neighbours.push_back(curCandidate);
+            else {
+                candidates.push_back(curCandidate->getSWChild());
+                candidates.push_back(curCandidate->getSEChild());
+            }
+            candidates = removeNodeFromVector(candidates, curCandidate);
+        }
+    } else if (dir==south) {
+        while (candidates.size() > 0) {
+            QuadtreeNode* curCandidate = candidates[0];
+            if (curCandidate->isLeaf()) neighbours.push_back(curCandidate);
+            else {
+                candidates.push_back(curCandidate->getNEChild());
+                candidates.push_back(curCandidate->getNWChild());
+            }
+            candidates = removeNodeFromVector(candidates, curCandidate);
+        }
+    } else if (dir==east) {
+        while (candidates.size() > 0) {
+            QuadtreeNode* curCandidate = candidates[0];
+            if (curCandidate->isLeaf()) neighbours.push_back(curCandidate);
+            else {
+                candidates.push_back(curCandidate->getSWChild());
+                candidates.push_back(curCandidate->getNWChild());
+            }
+            candidates = removeNodeFromVector(candidates, curCandidate);
+        }
+    } else if (dir==west) {
+        while (candidates.size() > 0) {
+            QuadtreeNode* curCandidate = candidates[0];
+            if (curCandidate->isLeaf()) neighbours.push_back(curCandidate);
+            else {
+                candidates.push_back(curCandidate->getNEChild());
+                candidates.push_back(curCandidate->getSEChild());
+            }
+            candidates = removeNodeFromVector(candidates, curCandidate);
+        }
+    }
+    return neighbours;
+}
+
+vector<QuadtreeNode*> Quadtree::getNeighbours(QuadtreeNode* curNode, Direction dir) {
+    QuadtreeNode* neighbour = getNeighbourOfGreaterOrEqualSize(curNode, dir);
+    vector<QuadtreeNode*> neighbours = getNeighboursOfSmallerSize(curNode, neighbour, dir);
+    return neighbours;
 }
 

@@ -18,9 +18,10 @@ QuadtreeNode::QuadtreeNode() {
     NWChild = NULL;
     SEChild = NULL;
     SWChild = NULL;
+    parent = NULL;
 }
 
-QuadtreeNode::QuadtreeNode(float cx, float cy, float d) {
+QuadtreeNode::QuadtreeNode(float cx, float cy, float d, QuadtreeNode* newParent) {
     centerX = cx;
     centerY = cy;
     dimension = d;
@@ -28,6 +29,7 @@ QuadtreeNode::QuadtreeNode(float cx, float cy, float d) {
     NWChild = NULL;
     SEChild = NULL;
     SWChild = NULL;
+    parent = newParent;
 }
 
 float QuadtreeNode::getDimension() {
@@ -69,4 +71,28 @@ void QuadtreeNode::addChild(QuadtreeNode* newChild, Direction dir) {
 
 bool QuadtreeNode::operator == (QuadtreeNode &obj) {
     return obj.centerY == centerY && obj.centerX == centerX && obj.dimension == dimension;
+}
+
+QuadtreeNode* QuadtreeNode::getParent() {
+    return parent;
+}
+
+QuadtreeNode* QuadtreeNode::getNEChild() {
+    return NEChild;
+}
+
+QuadtreeNode* QuadtreeNode::getNWChild() {
+    return NWChild;
+}
+
+QuadtreeNode* QuadtreeNode::getSEChild() {
+    return SEChild;
+}
+
+QuadtreeNode* QuadtreeNode::getSWChild() {
+    return SWChild;
+}
+
+bool QuadtreeNode::isLeaf() {
+    return numChildren()==0;
 }

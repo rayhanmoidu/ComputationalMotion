@@ -32,12 +32,15 @@ private:
     void constructChildren(QuadtreeNode*);
     
     // balancing
-    pair<Point, Point> findCellBoundsInDirection(QuadtreeNode, Direction);
-    vector<QuadtreeNode*> findLeafNeighborsInDirection(QuadtreeNode*, Direction);
-    vector<QuadtreeNode*> findLeafNeighborsInDirectionHelper(Point, Point, vector<QuadtreeNode*>, QuadtreeNode*, Direction);
     vector<QuadtreeNode*> getListOfLeavesHelper(QuadtreeNode*, vector<QuadtreeNode*>);
     vector<QuadtreeNode*> getListOfLeaves();
-    vector<QuadtreeNode*> removeLeaf(vector<QuadtreeNode*>, QuadtreeNode*);
+    vector<QuadtreeNode*> removeNodeFromVector(vector<QuadtreeNode*>, QuadtreeNode*);
+    
+    // test neighbour finding
+    QuadtreeNode* getNeighbourOfGreaterOrEqualSize(QuadtreeNode*, Direction);
+    vector<QuadtreeNode*> getNeighboursOfSmallerSize(QuadtreeNode*, QuadtreeNode*, Direction);
+    vector<QuadtreeNode*> getNeighbours(QuadtreeNode*, Direction);
+    
     bool doesContainLeaf(vector<QuadtreeNode*>, QuadtreeNode*);
     void balanceQuadtree();
     bool isBalanced();

@@ -18,14 +18,22 @@ enum Direction { north, east, south, west, northeast, northwest, southeast, sout
 class QuadtreeNode {
 public:
     QuadtreeNode();
-    QuadtreeNode(float, float, float);
+    QuadtreeNode(float, float, float, QuadtreeNode*);
+    
     int numChildren();
+    void addChild(QuadtreeNode*, Direction);
+    bool isLeaf();
+    
     vector<QuadtreeNode*> getChildren();
     float getCenterX();
     float getCenterY();
     float getDimension();
     
-    void addChild(QuadtreeNode*, Direction);
+    QuadtreeNode* getParent();
+    QuadtreeNode* getNEChild();
+    QuadtreeNode* getNWChild();
+    QuadtreeNode* getSEChild();
+    QuadtreeNode* getSWChild();
     
     bool operator == (QuadtreeNode &obj);
 
@@ -37,6 +45,7 @@ private:
     QuadtreeNode* NWChild;
     QuadtreeNode* SEChild;
     QuadtreeNode* SWChild;
+    QuadtreeNode* parent;
 };
 
 //QuadtreeNode nullQuadtreeNode(-1, -1, -1);

@@ -72,10 +72,10 @@ int main() {
                 
         canvas.initCanvas();
         
-        algorithmInstance.renderProcessedTriangles();
-        algorithmInstance.renderProcessedTriangleCutpoints();
+//        algorithmInstance.renderProcessedTriangles();
+//        algorithmInstance.renderProcessedTriangleCutpoints();
         bargraph.drawGraph();
-//        quadtree.render();
+        quadtree.render();
         circle.render();
 
 
