@@ -16,7 +16,14 @@ isosurface(isosurface) {
     if (shouldRefine(root)) {
         constructChildren(root);
     }
-    while (!isBalanced()) balanceQuadtree();
+    balanceQuadtree();
+    
+    if (isBalanced()) {
+        cout <<"correctly balanced!"<<endl;
+    } else {
+        cout <<"ERROR incorrectly balanced!"<<endl;
+    }
+//    while (!isBalanced()) balanceQuadtree();
 }
 
 void Quadtree::constructChildren(QuadtreeNode *node) {
@@ -202,6 +209,10 @@ void Quadtree::balanceQuadtree() {
             leaves.push_back(northWestChild);
             leaves.push_back(southEastChild);
             leaves.push_back(southWestChild);
+            
+            for (int i = 0; i < neighbors.size(); i++) {
+                leaves.push_back(neighbors[i]);
+            }
         }
         leaves = removeNodeFromVector(leaves, curLeaf);
     }
