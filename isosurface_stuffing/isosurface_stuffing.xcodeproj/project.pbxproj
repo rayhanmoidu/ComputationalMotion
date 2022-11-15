@@ -25,6 +25,7 @@
 		A346C65A2910E69E00339D2F /* IsoscelesTiling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C6582910E69E00339D2F /* IsoscelesTiling.cpp */; };
 		A346C6602910E84800339D2F /* RectangleIsosurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C65E2910E84800339D2F /* RectangleIsosurface.cpp */; };
 		A346C6632912CE0700339D2F /* QuadtreeTiling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C6612912CE0700339D2F /* QuadtreeTiling.cpp */; };
+		A3599AAD292318F500498281 /* QuadtreeNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3599AAB292318F500498281 /* QuadtreeNode.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -73,6 +74,8 @@
 		A346C65F2910E84800339D2F /* RectangleIsosurface.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RectangleIsosurface.hpp; sourceTree = "<group>"; };
 		A346C6612912CE0700339D2F /* QuadtreeTiling.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = QuadtreeTiling.cpp; sourceTree = "<group>"; };
 		A346C6622912CE0700339D2F /* QuadtreeTiling.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = QuadtreeTiling.hpp; sourceTree = "<group>"; };
+		A3599AAB292318F500498281 /* QuadtreeNode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = QuadtreeNode.cpp; sourceTree = "<group>"; };
+		A3599AAC292318F500498281 /* QuadtreeNode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = QuadtreeNode.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +127,8 @@
 				A346C64D2908BC6800339D2F /* Algorithm.hpp */,
 				A346C64F2909A09900339D2F /* Quadtree.cpp */,
 				A346C6502909A09900339D2F /* Quadtree.hpp */,
+				A3599AAB292318F500498281 /* QuadtreeNode.cpp */,
+				A3599AAC292318F500498281 /* QuadtreeNode.hpp */,
 				A346C6522910CE8400339D2F /* BarGraph.cpp */,
 				A346C6532910CE8400339D2F /* BarGraph.hpp */,
 				A346C65E2910E84800339D2F /* RectangleIsosurface.cpp */,
@@ -211,6 +216,7 @@
 			files = (
 				A346C6602910E84800339D2F /* RectangleIsosurface.cpp in Sources */,
 				A346C6512909A09900339D2F /* Quadtree.cpp in Sources */,
+				A3599AAD292318F500498281 /* QuadtreeNode.cpp in Sources */,
 				A346C64B29088D0300339D2F /* CircleIsosurface.cpp in Sources */,
 				A346C63629063EE600339D2F /* Point.cpp in Sources */,
 				A3320E30290508440078823D /* main.cpp in Sources */,

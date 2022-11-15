@@ -12,40 +12,11 @@
 #include "Isosurface.hpp"
 #include <vector>
 #include <utility>
+#include <iostream>
+#include "QuadtreeNode.hpp"
 //#include <pair>
 
 using namespace std;
-
-enum Direction { north, east, south, west };
-
-struct QuadtreeNode {
-    float centerX;
-    float centerY;
-    float dimension;
-    vector<QuadtreeNode> children;
-    
-    QuadtreeNode() {
-        centerX = 0;
-        centerY = 0;
-        dimension = 0;
-        children = vector<QuadtreeNode>();
-    }
-    
-    QuadtreeNode(float cx, float cy, float d) {
-        centerX = cx;
-        centerY = cy;
-        dimension = d;
-        children = vector<QuadtreeNode>();
-    }
-    
-    void addChild(QuadtreeNode newChild) {
-        children.push_back(newChild);
-    }
-    
-    bool operator == (QuadtreeNode &obj) {
-        return obj.centerY == centerY && obj.centerX == centerX && obj.dimension == dimension;
-    }
-};
 
 class Quadtree {
 public:
@@ -55,7 +26,7 @@ public:
     QuadtreeNode* getRoot();
     
 private:
-    bool shouldRefine(QuadtreeNode);
+    bool shouldRefine(QuadtreeNode*);
     
     void construct();
     void constructChildren(QuadtreeNode*);
@@ -71,14 +42,14 @@ private:
     void balanceQuadtree();
     bool isBalanced();
         
-    void renderHelper(QuadtreeNode);
+    void renderHelper(QuadtreeNode*);
     
     int gridSizeLimit;
     int hBound;
     int vBound;
     
     Isosurface &isosurface;
-    QuadtreeNode root;
+    QuadtreeNode* root;
 };
 
 #endif /* Quadtree_hpp */

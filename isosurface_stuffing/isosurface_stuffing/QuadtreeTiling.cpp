@@ -14,21 +14,22 @@ QuadtreeTiling::QuadtreeTiling(Quadtree quadtree, QuadtreeTilingType tilingType)
 }
 
 void QuadtreeTiling::createTilingHelper(QuadtreeNode* curNode, QuadtreeTilingType tilingType) {
-    if (curNode->children.size()==0) {
+    vector<QuadtreeNode*> children = curNode->getChildren();
+    if (children.size()==0) {
         if (tilingType==isoscelesSingle) createTrianglesFromCell_isoscelesSingle(curNode);
         if (tilingType==isoscelesDouble) createTrianglesFromCell_isoscelesDouble(curNode);
         if (tilingType==equilateral) createTrianglesFromCell_equilateral(curNode);
         if (tilingType==provablyGood) createTrianglesFromCell_provablyGood(curNode);
     } else {
-        for (int i = 0; i < curNode->children.size(); i++) createTilingHelper(&(curNode->children[i]), tilingType);
+        for (int i = 0; i < children.size(); i++) createTilingHelper(children[i], tilingType);
     }
 }
 
 void QuadtreeTiling::createTrianglesFromCell_isoscelesSingle(QuadtreeNode *curNode) {
-    Point ULCorner(curNode->centerX - curNode->dimension / 2, curNode->centerY - curNode->dimension / 2);
-    Point URCorner(curNode->centerX + curNode->dimension / 2, curNode->centerY - curNode->dimension / 2);
-    Point BLCorner(curNode->centerX - curNode->dimension / 2, curNode->centerY + curNode->dimension / 2);
-    Point BRCorner(curNode->centerX + curNode->dimension / 2, curNode->centerY + curNode->dimension / 2);
+    Point ULCorner(curNode->getCenterX() - curNode->getDimension() / 2, curNode->getCenterY() - curNode->getDimension() / 2);
+    Point URCorner(curNode->getCenterX() + curNode->getDimension() / 2, curNode->getCenterY() - curNode->getDimension() / 2);
+    Point BLCorner(curNode->getCenterX() - curNode->getDimension() / 2, curNode->getCenterY() + curNode->getDimension() / 2);
+    Point BRCorner(curNode->getCenterX() + curNode->getDimension() / 2, curNode->getCenterY() + curNode->getDimension() / 2);
     
     Triangle t1(ULCorner, BLCorner, BRCorner);
     Triangle t2(URCorner, BRCorner, ULCorner);
@@ -38,11 +39,11 @@ void QuadtreeTiling::createTrianglesFromCell_isoscelesSingle(QuadtreeNode *curNo
 }
 
 void QuadtreeTiling::createTrianglesFromCell_isoscelesDouble(QuadtreeNode *curNode) {
-    Point ULCorner(curNode->centerX - curNode->dimension / 2, curNode->centerY - curNode->dimension / 2);
-    Point URCorner(curNode->centerX + curNode->dimension / 2, curNode->centerY - curNode->dimension / 2);
-    Point BLCorner(curNode->centerX - curNode->dimension / 2, curNode->centerY + curNode->dimension / 2);
-    Point BRCorner(curNode->centerX + curNode->dimension / 2, curNode->centerY + curNode->dimension / 2);
-    Point center(curNode->centerX, curNode->centerY);
+    Point ULCorner(curNode->getCenterX() - curNode->getDimension() / 2, curNode->getCenterY() - curNode->getDimension() / 2);
+    Point URCorner(curNode->getCenterX() + curNode->getDimension() / 2, curNode->getCenterY() - curNode->getDimension() / 2);
+    Point BLCorner(curNode->getCenterX() - curNode->getDimension() / 2, curNode->getCenterY() + curNode->getDimension() / 2);
+    Point BRCorner(curNode->getCenterX() + curNode->getDimension() / 2, curNode->getCenterY() + curNode->getDimension() / 2);
+    Point center(curNode->getCenterX(), curNode->getCenterY());
     
     Triangle t1(ULCorner, URCorner, center);
     Triangle t2(ULCorner, BLCorner, center);
@@ -58,11 +59,11 @@ void QuadtreeTiling::createTrianglesFromCell_isoscelesDouble(QuadtreeNode *curNo
 void QuadtreeTiling::createTrianglesFromCell_equilateral(QuadtreeNode *curNode) {
     //todo
     float val = M_PI / 180;
-    float shift = (tan(30*val) * curNode->dimension);
-    Point ULCorner((curNode->centerX - curNode->dimension / 2) + shift, curNode->centerY - curNode->dimension / 2);
-    Point URCorner((curNode->centerX + curNode->dimension / 2) + shift, curNode->centerY - curNode->dimension / 2);
-    Point BLCorner((curNode->centerX - curNode->dimension / 2), curNode->centerY + curNode->dimension / 2);
-    Point BRCorner((curNode->centerX + curNode->dimension / 2), curNode->centerY + curNode->dimension / 2);
+    float shift = (tan(30*val) * curNode->getDimension());
+    Point ULCorner((curNode->getCenterX() - curNode->getDimension() / 2) + shift, curNode->getCenterY() - curNode->getDimension() / 2);
+    Point URCorner((curNode->getCenterX() + curNode->getDimension() / 2) + shift, curNode->getCenterY() - curNode->getDimension() / 2);
+    Point BLCorner((curNode->getCenterX() - curNode->getDimension() / 2), curNode->getCenterY() + curNode->getDimension() / 2);
+    Point BRCorner((curNode->getCenterX() + curNode->getDimension() / 2), curNode->getCenterY() + curNode->getDimension() / 2);
     
     Triangle t1(ULCorner, BLCorner, BRCorner);
     Triangle t2(URCorner, BRCorner, ULCorner);
