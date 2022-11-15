@@ -18,6 +18,7 @@ public:
     void removeCutpoint(Cutpoint);
     void removeAllCutpoints();
     void addCutpoint(Cutpoint);
+    vector<float> computeAngles();
     
     void render();
     void renderCutpoints();
@@ -30,6 +31,7 @@ public:
     
 private:
     void setColors();
+    float applyCosineLaw(float, float, float);
     
     Point p1;
     Point p2;

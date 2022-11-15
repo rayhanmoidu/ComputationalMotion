@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include "Triangle.hpp"
+#include "Quadtree.hpp"
 
 class Tiling {
 public:

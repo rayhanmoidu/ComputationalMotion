@@ -14,6 +14,7 @@
 #include "Quadtree.hpp"
 #include "BarGraph.hpp"
 #include "RectangleIsosurface.hpp"
+#include "QuadtreeTiling.hpp"
 
 const GLint WIDTH = 1000, HEIGHT = 500;
 const int triangleSideLength = 80;
@@ -55,12 +56,13 @@ int main() {
     CircleIsosurface circle(circleRadius, canvas.getWidth() / 2, canvas.getHeight(), isosurfaceRenderingThreshold);
     RectangleIsosurface rectangle(rectangleWidth, rectangleHeight, canvas.getWidth() / 2, canvas.getHeight(), isosurfaceRenderingThreshold);
     
-    // ALGORITHM
-    Algorithm algorithmInstance(newTiling, circle, alpha);
-    algorithmInstance.execute();
-    
     // QUADTREE
-    Quadtree quadtreeTiling(canvas.getWidth() / 2, canvas.getHeight(), 10, circle);
+    Quadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), 10, circle);
+    QuadtreeTiling quadtreeTiling(quadtree, isoscelesSingle);
+    
+    // ALGORITHM
+    Algorithm algorithmInstance(quadtreeTiling, circle, alpha);
+    algorithmInstance.execute();
     
     // BARGRAPH
     BarGraph bargraph(algorithmInstance.getProcessedTriangles(), canvas.getWidth() / 2, canvas.getHeight(), canvas.getWidth() / 2, numBars);
@@ -70,11 +72,10 @@ int main() {
                 
         canvas.initCanvas();
         
-//        algorithmInstance.renderProcessedTriangles();
-//        algorithmInstance.renderProcessedTriangleCutpoints();
-//        bargraph.drawGraph();
-        quadtreeTiling.render();
-//        quadtreeTiling.test123();
+        algorithmInstance.renderProcessedTriangles();
+        algorithmInstance.renderProcessedTriangleCutpoints();
+        bargraph.drawGraph();
+//        quadtree.render();
         circle.render();
 
 

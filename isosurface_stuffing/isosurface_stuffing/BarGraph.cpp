@@ -21,28 +21,11 @@ BarGraph::BarGraph(vector<Triangle> curTriangles, int width, int height, int xOf
 void BarGraph::computeAngles() {
     for (int i = 0; i < triangles.size(); i++) {
         Triangle curTriangle = triangles[i];
-        vector<Point> points = curTriangle.getPoints();
-        
-        float dx1 = points[0].getX() - points[1].getX();
-        float dy1 = points[0].getY() - points[1].getY();
-        
-        float dx2 = points[1].getX() - points[2].getX();
-        float dy2 = points[1].getY() - points[2].getY();
-        
-        float dx3 = points[2].getX() - points[0].getX();
-        float dy3 = points[2].getY() - points[0].getY();
-        
-        float a = sqrt(dx1*dx1 + dy1*dy1);
-        float b = sqrt(dx2*dx2 + dy2*dy2);
-        float c = sqrt(dx3*dx3 + dy3*dy3);
-        
-        float angle1 = applyCosineLaw(a, b, c);
-        float angle2 = applyCosineLaw(b, c, a);
-        float angle3 = applyCosineLaw(c, a, b);
+        vector<float> triangleAngles = curTriangle.computeAngles();
                 
-        angles.push_back(angle1);
-        angles.push_back(angle2);
-        angles.push_back(angle3);
+        angles.push_back(triangleAngles[0]);
+        angles.push_back(triangleAngles[1]);
+        angles.push_back(triangleAngles[2]);
     }
 }
 
@@ -126,16 +109,12 @@ void BarGraph::drawGraph() {
         glVertex2f(curBarStartPos, graphStartPosY);
         glVertex2f(curBarStartPos + barWidth/2, graphStartPosY);
         if (isDwarfBar) {
-            glVertex2f(curBarStartPos + barWidth/2, graphStartPosY + valueOfVerticalPixel*(it->second/20));
-            glVertex2f(curBarStartPos, graphStartPosY + valueOfVerticalPixel*(it->second/20));
+            glVertex2f(curBarStartPos + barWidth/2, graphStartPosY + valueOfVerticalPixel*(it->second/40));
+            glVertex2f(curBarStartPos, graphStartPosY + valueOfVerticalPixel*(it->second/40));
         } else {
             glVertex2f(curBarStartPos + barWidth/2, graphStartPosY + valueOfVerticalPixel*(it->second));
             glVertex2f(curBarStartPos, graphStartPosY + valueOfVerticalPixel*(it->second));
         }
         glEnd();
     }
-}
-
-float BarGraph::applyCosineLaw(float a, float b, float c) {
-    return (acos((b*b + c*c - a*a) / (2*b*c))) * (180/M_PI);
 }

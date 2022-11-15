@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <iostream>
+#include <cmath>
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -128,4 +129,35 @@ bool Triangle::operator == (Triangle &obj) {
 
     
     return (pointsMatch1 && pointsMatch2 && pointsMatch3) && doCutpointsMatch;
+}
+
+float Triangle::applyCosineLaw(float a, float b, float c) {
+    return (acos((b*b + c*c - a*a) / (2*b*c))) * (180/M_PI);
+}
+
+vector<float> Triangle::computeAngles() {
+    vector<float> angles;
+    
+    float dx1 = p1.getX() - p2.getX();
+    float dy1 = p1.getY() - p2.getY();
+    
+    float dx2 = p2.getX() - p3.getX();
+    float dy2 = p2.getY() - p3.getY();
+    
+    float dx3 = p3.getX() - p1.getX();
+    float dy3 = p3.getY() - p1.getY();
+    
+    float a = sqrt(dx1*dx1 + dy1*dy1);
+    float b = sqrt(dx2*dx2 + dy2*dy2);
+    float c = sqrt(dx3*dx3 + dy3*dy3);
+    
+    float angle1 = applyCosineLaw(a, b, c);
+    float angle2 = applyCosineLaw(b, c, a);
+    float angle3 = applyCosineLaw(c, a, b);
+    
+    angles.push_back(angle1);
+    angles.push_back(angle2);
+    angles.push_back(angle3);
+    
+    return angles;
 }

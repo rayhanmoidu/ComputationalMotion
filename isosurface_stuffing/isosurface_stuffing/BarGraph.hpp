@@ -14,7 +14,6 @@ private:
     
     void computeAngles();
     void distributeGraphValues();
-    float applyCosineLaw(float, float, float);
     
     vector<Triangle> triangles;
     vector<float> angles;

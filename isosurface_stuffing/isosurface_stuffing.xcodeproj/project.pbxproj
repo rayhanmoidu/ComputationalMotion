@@ -24,6 +24,7 @@
 		A346C6542910CE8400339D2F /* BarGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C6522910CE8400339D2F /* BarGraph.cpp */; };
 		A346C65A2910E69E00339D2F /* IsoscelesTiling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C6582910E69E00339D2F /* IsoscelesTiling.cpp */; };
 		A346C6602910E84800339D2F /* RectangleIsosurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C65E2910E84800339D2F /* RectangleIsosurface.cpp */; };
+		A346C6632912CE0700339D2F /* QuadtreeTiling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C6612912CE0700339D2F /* QuadtreeTiling.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -70,6 +71,8 @@
 		A346C6592910E69E00339D2F /* IsoscelesTiling.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IsoscelesTiling.hpp; sourceTree = "<group>"; };
 		A346C65E2910E84800339D2F /* RectangleIsosurface.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RectangleIsosurface.cpp; sourceTree = "<group>"; };
 		A346C65F2910E84800339D2F /* RectangleIsosurface.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RectangleIsosurface.hpp; sourceTree = "<group>"; };
+		A346C6612912CE0700339D2F /* QuadtreeTiling.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = QuadtreeTiling.cpp; sourceTree = "<group>"; };
+		A346C6622912CE0700339D2F /* QuadtreeTiling.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = QuadtreeTiling.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +117,8 @@
 				A346C64029064A3300339D2F /* EquilateralTiling.cpp */,
 				A346C64129064A3300339D2F /* EquilateralTiling.hpp */,
 				A346C63D2906483400339D2F /* Tiling.cpp */,
+				A346C6612912CE0700339D2F /* QuadtreeTiling.cpp */,
+				A346C6622912CE0700339D2F /* QuadtreeTiling.hpp */,
 				A346C63E2906483400339D2F /* Tiling.hpp */,
 				A346C64C2908BC6800339D2F /* Algorithm.cpp */,
 				A346C64D2908BC6800339D2F /* Algorithm.hpp */,
@@ -217,6 +222,7 @@
 				A346C65A2910E69E00339D2F /* IsoscelesTiling.cpp in Sources */,
 				A346C64229064A3300339D2F /* EquilateralTiling.cpp in Sources */,
 				A346C639290640E500339D2F /* Triangle.cpp in Sources */,
+				A346C6632912CE0700339D2F /* QuadtreeTiling.cpp in Sources */,
 				A346C63C2906432B00339D2F /* Cutpoint.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
