@@ -28,3 +28,15 @@ void Tiling::addVertex(Point p) {
     }
     if (!didFind) vertices.push_back(p);
 }
+
+vector<Triangle> Tiling::removeTriangle(vector<Triangle> curTriangles, Triangle triangleToRemove) {
+    std::vector<Triangle> newTriangles;
+
+    for (int i = 0; i < curTriangles.size(); i++) {
+        if (!curTriangles[i].doTriangleVerticesMatch(triangleToRemove)) {
+            newTriangles.push_back(curTriangles[i]);
+        }
+    }
+
+    return newTriangles;
+}

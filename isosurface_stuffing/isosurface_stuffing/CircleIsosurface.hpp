@@ -14,7 +14,7 @@
 
 class CircleIsosurface : public Isosurface {
 public:
-    CircleIsosurface(int, int, int, float);
+    CircleIsosurface(int=0, int=0, int=0, float=0);
     float signedDistanceFunction(Point) override;
 private:
     int radius;

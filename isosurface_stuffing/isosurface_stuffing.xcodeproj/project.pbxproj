@@ -26,6 +26,9 @@
 		A346C6602910E84800339D2F /* RectangleIsosurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C65E2910E84800339D2F /* RectangleIsosurface.cpp */; };
 		A346C6632912CE0700339D2F /* QuadtreeTiling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C6612912CE0700339D2F /* QuadtreeTiling.cpp */; };
 		A3599AAD292318F500498281 /* QuadtreeNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3599AAB292318F500498281 /* QuadtreeNode.cpp */; };
+		A3599AB029243ACA00498281 /* IsoscelesSingleQuadtreeTiling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3599AAE29243ACA00498281 /* IsoscelesSingleQuadtreeTiling.cpp */; };
+		A3599AB32924441700498281 /* IsoscelesDoubleQuadtreeTiling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3599AB12924441700498281 /* IsoscelesDoubleQuadtreeTiling.cpp */; };
+		A3599AB62924447100498281 /* EquilateralQuadtreeTiling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3599AB42924447100498281 /* EquilateralQuadtreeTiling.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -76,6 +79,12 @@
 		A346C6622912CE0700339D2F /* QuadtreeTiling.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = QuadtreeTiling.hpp; sourceTree = "<group>"; };
 		A3599AAB292318F500498281 /* QuadtreeNode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = QuadtreeNode.cpp; sourceTree = "<group>"; };
 		A3599AAC292318F500498281 /* QuadtreeNode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = QuadtreeNode.hpp; sourceTree = "<group>"; };
+		A3599AAE29243ACA00498281 /* IsoscelesSingleQuadtreeTiling.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IsoscelesSingleQuadtreeTiling.cpp; sourceTree = "<group>"; };
+		A3599AAF29243ACA00498281 /* IsoscelesSingleQuadtreeTiling.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IsoscelesSingleQuadtreeTiling.hpp; sourceTree = "<group>"; };
+		A3599AB12924441700498281 /* IsoscelesDoubleQuadtreeTiling.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IsoscelesDoubleQuadtreeTiling.cpp; sourceTree = "<group>"; };
+		A3599AB22924441700498281 /* IsoscelesDoubleQuadtreeTiling.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IsoscelesDoubleQuadtreeTiling.hpp; sourceTree = "<group>"; };
+		A3599AB42924447100498281 /* EquilateralQuadtreeTiling.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EquilateralQuadtreeTiling.cpp; sourceTree = "<group>"; };
+		A3599AB52924447100498281 /* EquilateralQuadtreeTiling.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = EquilateralQuadtreeTiling.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,9 +129,15 @@
 				A346C64029064A3300339D2F /* EquilateralTiling.cpp */,
 				A346C64129064A3300339D2F /* EquilateralTiling.hpp */,
 				A346C63D2906483400339D2F /* Tiling.cpp */,
+				A346C63E2906483400339D2F /* Tiling.hpp */,
 				A346C6612912CE0700339D2F /* QuadtreeTiling.cpp */,
 				A346C6622912CE0700339D2F /* QuadtreeTiling.hpp */,
-				A346C63E2906483400339D2F /* Tiling.hpp */,
+				A3599AAE29243ACA00498281 /* IsoscelesSingleQuadtreeTiling.cpp */,
+				A3599AAF29243ACA00498281 /* IsoscelesSingleQuadtreeTiling.hpp */,
+				A3599AB12924441700498281 /* IsoscelesDoubleQuadtreeTiling.cpp */,
+				A3599AB22924441700498281 /* IsoscelesDoubleQuadtreeTiling.hpp */,
+				A3599AB42924447100498281 /* EquilateralQuadtreeTiling.cpp */,
+				A3599AB52924447100498281 /* EquilateralQuadtreeTiling.hpp */,
 				A346C64C2908BC6800339D2F /* Algorithm.cpp */,
 				A346C64D2908BC6800339D2F /* Algorithm.hpp */,
 				A346C64F2909A09900339D2F /* Quadtree.cpp */,
@@ -219,10 +234,12 @@
 				A3599AAD292318F500498281 /* QuadtreeNode.cpp in Sources */,
 				A346C64B29088D0300339D2F /* CircleIsosurface.cpp in Sources */,
 				A346C63629063EE600339D2F /* Point.cpp in Sources */,
+				A3599AB32924441700498281 /* IsoscelesDoubleQuadtreeTiling.cpp in Sources */,
 				A3320E30290508440078823D /* main.cpp in Sources */,
 				A346C6542910CE8400339D2F /* BarGraph.cpp in Sources */,
 				A346C63F2906483400339D2F /* Tiling.cpp in Sources */,
 				A346C64829088AA100339D2F /* Isosurface.cpp in Sources */,
+				A3599AB029243ACA00498281 /* IsoscelesSingleQuadtreeTiling.cpp in Sources */,
 				A346C64E2908BC6800339D2F /* Algorithm.cpp in Sources */,
 				A346C6332906235D00339D2F /* Canvas.cpp in Sources */,
 				A346C65A2910E69E00339D2F /* IsoscelesTiling.cpp in Sources */,
@@ -230,6 +247,7 @@
 				A346C639290640E500339D2F /* Triangle.cpp in Sources */,
 				A346C6632912CE0700339D2F /* QuadtreeTiling.cpp in Sources */,
 				A346C63C2906432B00339D2F /* Cutpoint.cpp in Sources */,
+				A3599AB62924447100498281 /* EquilateralQuadtreeTiling.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

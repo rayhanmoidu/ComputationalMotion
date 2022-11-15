@@ -15,6 +15,8 @@
 #include "BarGraph.hpp"
 #include "RectangleIsosurface.hpp"
 #include "QuadtreeTiling.hpp"
+#include "IsoscelesSingleQuadtreeTiling.hpp"
+#include "IsoscelesDoubleQuadtreeTiling.hpp"
 
 const GLint WIDTH = 1000, HEIGHT = 500;
 const int triangleSideLength = 80;
@@ -49,8 +51,8 @@ int main() {
     }
     
     // TILING
-    IsoscelesTiling newTiling(canvas.getWidth() / 2, canvas.getHeight(), triangleSideLength);
-    newTiling.createTiling(0, 0, "all", "normal");
+//    IsoscelesTiling newTiling(canvas.getWidth() / 2, canvas.getHeight(), triangleSideLength);
+//    newTiling.createTiling(0, 0, "all", "normal");
     
     // ISOSURFACE
     CircleIsosurface circle(circleRadius, canvas.getWidth() / 2, canvas.getHeight(), isosurfaceRenderingThreshold);
@@ -58,7 +60,7 @@ int main() {
     
     // QUADTREE
     Quadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), 10, circle);
-    QuadtreeTiling quadtreeTiling(quadtree, isoscelesSingle);
+    IsoscelesDoubleQuadtreeTiling quadtreeTiling(quadtree);
     
     // ALGORITHM
     Algorithm algorithmInstance(quadtreeTiling, circle, alpha);
@@ -85,11 +87,4 @@ int main() {
     glfwTerminate();
     return 0;
 }
-
-
-// balanace the quadtree
-// quadtree tiling (introduce diagonals to make it into triangles, can either simply use the diagonal or do it like the paper did it)
-// skew the quadtree to make it into parallelograms that turn into equilateral triangles
-// provably good meshig (probably the most ideal one!)
-
 

@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <cmath>
 #include <iostream>
+#include "CircleIsosurface.hpp"
 
 Quadtree::Quadtree(int screenWidth, int screenHeight, int smallestGridSize, Isosurface &isosurface) :
 isosurface(isosurface) {
@@ -23,7 +24,16 @@ isosurface(isosurface) {
     } else {
         cout <<"ERROR incorrectly balanced!"<<endl;
     }
-//    while (!isBalanced()) balanceQuadtree();
+}
+
+Quadtree::Quadtree(Isosurface &isosurface) : isosurface(isosurface) {
+    hBound = 0;
+    vBound = 0;
+    gridSizeLimit = 0;
+}
+
+Isosurface& Quadtree::getIsosurface() {
+    return isosurface;
 }
 
 void Quadtree::constructChildren(QuadtreeNode *node) {

@@ -21,9 +21,11 @@ using namespace std;
 class Quadtree {
 public:
     Quadtree(int, int, int, Isosurface&);
+    Quadtree(Isosurface&);
     void render();
     
     QuadtreeNode* getRoot();
+    Isosurface& getIsosurface();
     
 private:
     bool shouldRefine(QuadtreeNode*);

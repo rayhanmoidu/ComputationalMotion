@@ -15,19 +15,6 @@
 
 using namespace std;
 
-//struct pair_hash {
-//    inline std::size_t operator()(const std::pair<float,float> & v) const {
-//        cout <<"pair_hash"<<endl;
-//        cout << v.first<<" "<<v.second<<endl;
-////        int prime = 31;
-////        int result = 1;
-////        result = prime * result + v.first;
-////        result = prime * result + v.second;
-////        cout << result << endl;
-//        return 1;
-//    }
-//};
-
 class Tiling {
 public:
     Tiling(int=0, int=0, int=0);
@@ -40,6 +27,7 @@ public:
     vector<Triangle> getTriangles();
     
     void addVertex(Point);
+    vector<Triangle> removeTriangle(vector<Triangle>, Triangle);
     
 protected:
     vector<Triangle> triangles;
