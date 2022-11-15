@@ -18,10 +18,30 @@ void IsoscelesTiling::createTiling(float xPos, float yPos, string key, string or
         Point p3(xPos + triangleSideLength, yPos + triangleSideLength);
         Point p4(xPos, yPos + triangleSideLength);
         
-        vertices.push_back(p1);
-        vertices.push_back(p2);
-        vertices.push_back(p3);
-        vertices.push_back(p4);
+//        pair<float, float> vertex1 = pair<float, float>(int(p1.getX()), int(p1.getY()));
+//        pair<float, float> vertex2 = pair<float, float>(int(p2.getX()), int(p2.getY()));
+//        pair<float, float> vertex3 = pair<float, float>(int(p3.getX()), int(p3.getY()));
+//        pair<float, float> vertex4 = pair<float, float>(int(p4.getX()), int(p4.getY()));
+//
+//        cout << vertex1.first << " "<<vertex1.second << endl;
+//        cout << vertex2.first << " "<<vertex2.second<<endl;
+//        cout<<"inserting v1"<<endl;
+//        vertices.insert(vertex1);
+////        if (vertices.find(vertex1)==vertices.end()) vertices.insert(vertex1);
+//        cout<<"inserting v2"<<endl;
+//        if (vertices.find(vertex2)==vertices.end()) vertices.insert(vertex2);
+//        if (vertices.find(vertex3)==vertices.end()) vertices.insert(vertex3);
+//        if (vertices.find(vertex4)==vertices.end()) vertices.insert(vertex4);
+        
+//        vertices.push_back(p1);
+//        vertices.push_back(p2);
+//        vertices.push_back(p3);
+//        vertices.push_back(p4);
+        
+        addVertex(p1);
+        addVertex(p2);
+        addVertex(p3);
+        addVertex(p4);
         
         Triangle t1;
         Triangle t2;

@@ -26,6 +26,7 @@ public:
     void setPoints(Point, Point, Point);
     vector<Point> getPoints();
     vector<Cutpoint> getCutpoints();
+    bool doTriangleVerticesMatch(Triangle t2);
     
     bool operator == (Triangle &obj);
     

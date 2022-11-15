@@ -131,6 +131,15 @@ bool Triangle::operator == (Triangle &obj) {
     return (pointsMatch1 && pointsMatch2 && pointsMatch3) && doCutpointsMatch;
 }
 
+bool Triangle::doTriangleVerticesMatch(Triangle t2) {
+    bool pointsMatch1 = (p1==t2.p1) || (p1==t2.p2) || (p1==t2.p3);
+    bool pointsMatch2 = (p2==t2.p1) || (p2==t2.p2) || (p2==t2.p3);
+    bool pointsMatch3 = (p3==t2.p1) || (p3==t2.p2) || (p3==t2.p3);
+
+    
+    return (pointsMatch1 && pointsMatch2 && pointsMatch3);
+}
+
 float Triangle::applyCosineLaw(float a, float b, float c) {
     return (acos((b*b + c*c - a*a) / (2*b*c))) * (180/M_PI);
 }

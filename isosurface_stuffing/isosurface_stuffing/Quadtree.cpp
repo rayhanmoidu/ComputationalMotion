@@ -169,7 +169,6 @@ bool Quadtree::isBalanced() {
 
 void Quadtree::balanceQuadtree() {
     vector<QuadtreeNode*> leaves = getListOfLeaves();
-    cout<<leaves.size()<<endl;
     while(leaves.size() > 0) {
         QuadtreeNode* curLeaf = leaves[0];
 

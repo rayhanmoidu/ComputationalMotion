@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include "Quadtree.hpp"
 #include "Tiling.hpp"
+#include "Point.hpp"
 
 enum QuadtreeTilingType { isoscelesSingle, isoscelesDouble, equilateral, provablyGood};
 
@@ -20,10 +21,16 @@ public:
     void createTiling(float, float, string, string) override;
 private:
     void createTilingHelper(QuadtreeNode*, QuadtreeTilingType);
+    vector<Triangle> removeTriangle(vector<Triangle>, Triangle);
+    vector<Triangle> getTriangleObjects();
+    vector<Point> findTriangleMidpointsThatAreVertices(Point, Point, Point);
+    
     void createTrianglesFromCell_isoscelesSingle(QuadtreeNode*);
     void createTrianglesFromCell_isoscelesDouble(QuadtreeNode*);
     void createTrianglesFromCell_equilateral(QuadtreeNode*);
     void createTrianglesFromCell_provablyGood(QuadtreeNode*);
+    
+    void satisfyJunctions_isoscelesSingle();
 };
 
 #endif /* QuadtreeTiling_hpp */

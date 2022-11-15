@@ -30,10 +30,15 @@ void EquilateralTiling::createTiling(float xPos, float yPos, string key, string 
             p4.setY(yPos + sqrt(3)/2*triangleSideLength);
         }
         
-        vertices.push_back(p1);
-        vertices.push_back(p2);
-        vertices.push_back(p3);
-        vertices.push_back(p4);
+//        vertices.insert(pair<float, float>(p1.getX(), p1.getY()));
+//        vertices.insert(pair<float, float>(p2.getX(), p2.getY()));
+//        vertices.insert(pair<float, float>(p3.getX(), p3.getY()));
+//        vertices.insert(pair<float, float>(p4.getX(), p4.getY()));
+        
+        addVertex(p1);
+        addVertex(p2);
+        addVertex(p3);
+        addVertex(p4);
         
         Triangle t1;
         Triangle t2;

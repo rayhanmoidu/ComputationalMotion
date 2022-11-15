@@ -17,3 +17,14 @@ void Tiling::render() {
         triangles[i].render();
     }
 }
+
+void Tiling::addVertex(Point p) {
+    bool didFind = false;
+    for (int i = 0; i < vertices.size(); i++) {
+        if (vertices[i]==p) {
+            didFind=true;
+            break;
+        }
+    }
+    if (!didFind) vertices.push_back(p);
+}
