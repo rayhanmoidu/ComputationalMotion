@@ -12,7 +12,7 @@
 #include <vector>
 #include "Quadtree.hpp"
 
-QuadtreeTiling::QuadtreeTiling(Quadtree tree) {
+QuadtreeTiling::QuadtreeTiling() {
 }
 
 void QuadtreeTiling::createTilingHelper(QuadtreeNode* curNode) {

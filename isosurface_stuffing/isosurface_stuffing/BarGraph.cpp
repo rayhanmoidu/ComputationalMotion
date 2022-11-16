@@ -31,7 +31,8 @@ void BarGraph::computeAngles() {
 
 void BarGraph::distributeGraphValues() {
     for (int i = 0; i < angles.size(); i++) {
-        int key = round(angles[i]) / angleWindowPerBar;
+        int key = floor(angles[i] / angleWindowPerBar);
+        
         if (graphValues.count(key)) {
             graphValues[key] += 1;
         } else {
@@ -99,8 +100,11 @@ void BarGraph::drawGraph() {
     float graphStartPosX = xStartPos + horizontalOffset + templateThickness + barWidth/2;
     float graphStartPosY = verticalOffset + templateThickness;
     
+//    cout << graphValues.size()<<endl;
+    
     for(std::map<int,int>::iterator it = graphValues.begin(); it != graphValues.end(); ++it) {
         bool isDwarfBar = it->second > medianValue*4;
+//        cout << it->first<<endl;
         if (isDwarfBar) glColor3f(1, 0.5, 0.5);
         else glColor3f(0.5, 0.5, 0.5);
         

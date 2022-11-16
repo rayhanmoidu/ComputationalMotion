@@ -17,6 +17,9 @@
 #include "QuadtreeTiling.hpp"
 #include "IsoscelesSingleQuadtreeTiling.hpp"
 #include "IsoscelesDoubleQuadtreeTiling.hpp"
+#include "SquareQuadtree.hpp"
+#include "ParallelogramQuadtree.hpp"
+#include "EquilateralQuadtreeTiling.hpp"
 
 const GLint WIDTH = 1000, HEIGHT = 500;
 const int triangleSideLength = 80;
@@ -59,10 +62,10 @@ int main() {
     RectangleIsosurface rectangle(rectangleWidth, rectangleHeight, canvas.getWidth() / 2, canvas.getHeight(), isosurfaceRenderingThreshold);
     
     // QUADTREE
-    Quadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), 10, circle);
-    IsoscelesDoubleQuadtreeTiling quadtreeTiling(quadtree);
-    
-    // ALGORITHM
+    ParallelogramQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), 10, circle);
+    EquilateralQuadtreeTiling quadtreeTiling(quadtree);
+//
+//    // ALGORITHM
     Algorithm algorithmInstance(quadtreeTiling, circle, alpha);
     algorithmInstance.execute();
     
@@ -78,6 +81,9 @@ int main() {
         algorithmInstance.renderProcessedTriangleCutpoints();
         bargraph.drawGraph();
 //        quadtree.render();
+//        quadtreeTiling.render();
+//        quadtree.render();
+
         circle.render();
 
 

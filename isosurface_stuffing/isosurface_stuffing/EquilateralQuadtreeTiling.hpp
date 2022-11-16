@@ -11,10 +11,11 @@
 #include <stdio.h>
 #include "QuadtreeTiling.hpp"
 #include "Quadtree.hpp"
+#include "ParallelogramQuadtree.hpp"
 
 class EquilateralQuadtreeTiling : public QuadtreeTiling {
 public:
-    EquilateralQuadtreeTiling(Quadtree);
+    EquilateralQuadtreeTiling(ParallelogramQuadtree);
     void createTrianglesFromCell(QuadtreeNode*) override;
     void satisfyJunctions() override;
 };

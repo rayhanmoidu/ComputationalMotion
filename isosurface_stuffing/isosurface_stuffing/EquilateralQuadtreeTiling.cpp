@@ -6,19 +6,33 @@
 //
 
 #include "EquilateralQuadtreeTiling.hpp"
+#define GLEW_STATIC
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
-EquilateralQuadtreeTiling::EquilateralQuadtreeTiling(Quadtree tree) : QuadtreeTiling(tree) {
+EquilateralQuadtreeTiling::EquilateralQuadtreeTiling(ParallelogramQuadtree tree) : QuadtreeTiling() {
     createTilingHelper(tree.getRoot());
-    satisfyJunctions();
+//    satisfyJunctions();
 }
 
+//void plotPoint(Point p) {
+//    cout<<"plotting"<<endl;
+//    glColor3f(1, 1, 1);
+//    glBegin(GL_QUADS);
+//        glVertex2f(p.getX() - 4, p.getY() - 4);
+//        glVertex2f(p.getX() + 4, p.getY() - 4);
+//    glVertex2f(p.getX() + 4, p.getY() + 4);
+//        glVertex2f(p.getX() - 4, p.getY() + 4);
+//    glEnd();
+//}
+
 void EquilateralQuadtreeTiling::createTrianglesFromCell(QuadtreeNode *curNode) {
-    float val = M_PI / 180;
-    float shift = (tan(30*val) * curNode->getDimension());
-    Point ULCorner((curNode->getCenterX() - curNode->getDimension() / 2) + shift, curNode->getCenterY() - curNode->getDimension() / 2);
-    Point URCorner((curNode->getCenterX() + curNode->getDimension() / 2) + shift, curNode->getCenterY() - curNode->getDimension() / 2);
-    Point BLCorner((curNode->getCenterX() - curNode->getDimension() / 2), curNode->getCenterY() + curNode->getDimension() / 2);
-    Point BRCorner((curNode->getCenterX() + curNode->getDimension() / 2), curNode->getCenterY() + curNode->getDimension() / 2);
+    float height = sqrt(3) * curNode->getDimension()/2;
+    
+    Point ULCorner((curNode->getCenterX() - curNode->getDimension() / 4), curNode->getCenterY() + height / 2);
+    Point URCorner((curNode->getCenterX() + 3*curNode->getDimension() / 4), curNode->getCenterY() + height / 2);
+    Point BLCorner((curNode->getCenterX() - 3*curNode->getDimension() / 4), curNode->getCenterY() - height / 2);
+    Point BRCorner((curNode->getCenterX() + curNode->getDimension() / 4), curNode->getCenterY() - height / 2);
 
     addVertex(ULCorner);
     addVertex(URCorner);

@@ -15,7 +15,7 @@
 
 class QuadtreeTiling : public Tiling {
 public:
-    QuadtreeTiling(Quadtree);
+    QuadtreeTiling();
     void createTiling(float, float, string, string) override;
     
 protected:

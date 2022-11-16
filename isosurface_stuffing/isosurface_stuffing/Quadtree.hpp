@@ -22,16 +22,16 @@ class Quadtree {
 public:
     Quadtree(int, int, int, Isosurface&);
     Quadtree(Isosurface&);
-    void render();
+    virtual void render() = 0;
     
     QuadtreeNode* getRoot();
     Isosurface& getIsosurface();
     
-private:
-    bool shouldRefine(QuadtreeNode*);
-    
-    void construct();
-    void constructChildren(QuadtreeNode*);
+protected:
+    virtual bool shouldRefine(QuadtreeNode*) = 0;
+    virtual void constructChildren(QuadtreeNode*) = 0;
+    virtual void renderHelper(QuadtreeNode*) = 0;
+    virtual void colorSquare(QuadtreeNode) = 0;
     
     // balancing
     vector<QuadtreeNode*> getListOfLeavesHelper(QuadtreeNode*, vector<QuadtreeNode*>);
@@ -46,8 +46,6 @@ private:
     bool doesContainLeaf(vector<QuadtreeNode*>, QuadtreeNode*);
     void balanceQuadtree();
     bool isBalanced();
-        
-    void renderHelper(QuadtreeNode*);
     
     int gridSizeLimit;
     int hBound;

@@ -7,7 +7,7 @@
 
 #include "IsoscelesSingleQuadtreeTiling.hpp"
 
-IsoscelesSingleQuadtreeTiling::IsoscelesSingleQuadtreeTiling(Quadtree tree) : QuadtreeTiling(tree) {
+IsoscelesSingleQuadtreeTiling::IsoscelesSingleQuadtreeTiling(Quadtree tree) : QuadtreeTiling() {
     createTilingHelper(tree.getRoot());
     satisfyJunctions();
 }
