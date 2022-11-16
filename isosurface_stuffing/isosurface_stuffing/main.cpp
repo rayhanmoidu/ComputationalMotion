@@ -65,10 +65,10 @@ int main() {
     ParallelogramQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), 10, circle);
     EquilateralQuadtreeTiling quadtreeTiling(quadtree);
 //
-//    // ALGORITHM
+    // ALGORITHM
     Algorithm algorithmInstance(quadtreeTiling, circle, alpha);
     algorithmInstance.execute();
-    
+
     // BARGRAPH
     BarGraph bargraph(algorithmInstance.getProcessedTriangles(), canvas.getWidth() / 2, canvas.getHeight(), canvas.getWidth() / 2, numBars);
     
@@ -82,7 +82,6 @@ int main() {
         bargraph.drawGraph();
 //        quadtree.render();
 //        quadtreeTiling.render();
-//        quadtree.render();
 
         circle.render();
 

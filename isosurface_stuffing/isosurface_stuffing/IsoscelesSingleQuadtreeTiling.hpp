@@ -11,10 +11,11 @@
 #include <stdio.h>
 #include "QuadtreeTiling.hpp"
 #include "Quadtree.hpp"
+#include "SquareQuadtree.hpp"
 
 class IsoscelesSingleQuadtreeTiling : public QuadtreeTiling {
 public:
-    IsoscelesSingleQuadtreeTiling(Quadtree);
+    IsoscelesSingleQuadtreeTiling(SquareQuadtree);
     void createTrianglesFromCell(QuadtreeNode*) override;
     void satisfyJunctions() override;
 };
