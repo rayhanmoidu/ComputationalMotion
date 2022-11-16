@@ -108,16 +108,13 @@ vector<QuadtreeNode*> Quadtree::getListOfLeaves() {
 }
 
 vector<QuadtreeNode*> Quadtree::getListOfLeavesHelper(QuadtreeNode* curNode, vector<QuadtreeNode*> leaves) {
-//    cout << "get list of leaves helper "<< curNode->getDimension() <<endl;
     if (curNode->numChildren()==0) {
         leaves.push_back(curNode);
         return leaves;
     }
     else {
-//        cout <<"starting with node "<< curNode->getDimension()<<endl;
         vector<QuadtreeNode*> curChildren = curNode->getChildren();
         for (int i = 0; i < curChildren.size(); i++) {
-//            cout <<"continuing with node "<< curChildren[i]->getDimension()<<endl;
             vector<QuadtreeNode*> newLeaves = getListOfLeavesHelper(curChildren[i], leaves);
             leaves = newLeaves;
         }
