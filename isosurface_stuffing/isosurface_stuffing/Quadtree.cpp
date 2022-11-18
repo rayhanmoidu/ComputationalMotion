@@ -134,20 +134,23 @@ void Quadtree::balanceQuadtree() {
         }
 
         if (mustRefineCurLeaf) {
-            QuadtreeNode* northEastChild = new QuadtreeNode(curLeaf->getCenterX() + curLeaf->getDimension()/4, curLeaf->getCenterY() + curLeaf->getDimension()/4, curLeaf->getDimension() / 2, curLeaf);
-            QuadtreeNode* northWestChild = new QuadtreeNode(curLeaf->getCenterX() - curLeaf->getDimension()/4, curLeaf->getCenterY() + curLeaf->getDimension()/4, curLeaf->getDimension() / 2, curLeaf);
-            QuadtreeNode* southEastChild = new QuadtreeNode(curLeaf->getCenterX() + curLeaf->getDimension()/4, curLeaf->getCenterY() - curLeaf->getDimension()/4, curLeaf->getDimension() / 2, curLeaf);
-            QuadtreeNode* southWestChild = new QuadtreeNode(curLeaf->getCenterX() - curLeaf->getDimension()/4, curLeaf->getCenterY() - curLeaf->getDimension()/4, curLeaf->getDimension() / 2, curLeaf);
+            refineNode(curLeaf);
+//            QuadtreeNode* northEastChild = new QuadtreeNode(curLeaf->getCenterX() + curLeaf->getDimension()/4, curLeaf->getCenterY() + curLeaf->getDimension()/4, curLeaf->getDimension() / 2, curLeaf);
+//            QuadtreeNode* northWestChild = new QuadtreeNode(curLeaf->getCenterX() - curLeaf->getDimension()/4, curLeaf->getCenterY() + curLeaf->getDimension()/4, curLeaf->getDimension() / 2, curLeaf);
+//            QuadtreeNode* southEastChild = new QuadtreeNode(curLeaf->getCenterX() + curLeaf->getDimension()/4, curLeaf->getCenterY() - curLeaf->getDimension()/4, curLeaf->getDimension() / 2, curLeaf);
+//            QuadtreeNode* southWestChild = new QuadtreeNode(curLeaf->getCenterX() - curLeaf->getDimension()/4, curLeaf->getCenterY() - curLeaf->getDimension()/4, curLeaf->getDimension() / 2, curLeaf);
+//
+//            curLeaf->addChild(northEastChild, northeast);
+//            curLeaf->addChild(northWestChild, northwest);
+//            curLeaf->addChild(southEastChild, southeast);
+//            curLeaf->addChild(southWestChild, southwest);
+            
+            vector<QuadtreeNode*> children = curLeaf->getChildren();
 
-            curLeaf->addChild(northEastChild, northeast);
-            curLeaf->addChild(northWestChild, northwest);
-            curLeaf->addChild(southEastChild, southeast);
-            curLeaf->addChild(southWestChild, southwest);
-
-            leaves.push_back(northEastChild);
-            leaves.push_back(northWestChild);
-            leaves.push_back(southEastChild);
-            leaves.push_back(southWestChild);
+            leaves.push_back(children[0]);
+            leaves.push_back(children[1]);
+            leaves.push_back(children[2]);
+            leaves.push_back(children[3]);
             
             for (int i = 0; i < neighbors.size(); i++) {
                 leaves.push_back(neighbors[i]);

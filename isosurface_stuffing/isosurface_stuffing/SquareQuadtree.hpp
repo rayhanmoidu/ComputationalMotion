@@ -20,6 +20,7 @@ public:
     void constructChildren(QuadtreeNode*) override;
     void renderHelper(QuadtreeNode*) override;
     void colorSquare(QuadtreeNode) override;
+    void refineNode(QuadtreeNode*) override;
 };
 
 

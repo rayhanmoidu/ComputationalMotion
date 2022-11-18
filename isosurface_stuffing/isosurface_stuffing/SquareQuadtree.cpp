@@ -97,3 +97,15 @@ void SquareQuadtree::colorSquare(QuadtreeNode node) {
         glVertex2f(node.getCenterX() - node.getDimension() / 2, node.getCenterY() + node.getDimension() / 2);
     glEnd();
 }
+
+void SquareQuadtree::refineNode(QuadtreeNode* node) {
+    QuadtreeNode* northEastChild = new QuadtreeNode(node->getCenterX() + node->getDimension()/4, node->getCenterY() + node->getDimension()/4, node->getDimension() / 2, node);
+    QuadtreeNode* northWestChild = new QuadtreeNode(node->getCenterX() - node->getDimension()/4, node->getCenterY() + node->getDimension()/4, node->getDimension() / 2, node);
+    QuadtreeNode* southEastChild = new QuadtreeNode(node->getCenterX() + node->getDimension()/4, node->getCenterY() - node->getDimension()/4, node->getDimension() / 2, node);
+    QuadtreeNode* southWestChild = new QuadtreeNode(node->getCenterX() - node->getDimension()/4, node->getCenterY() - node->getDimension()/4, node->getDimension() / 2, node);
+
+    node->addChild(northEastChild, northeast);
+    node->addChild(northWestChild, northwest);
+    node->addChild(southEastChild, southeast);
+    node->addChild(southWestChild, southwest);
+}

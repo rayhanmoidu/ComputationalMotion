@@ -12,6 +12,8 @@
 #include "Quadtree.hpp"
 #include "Tiling.hpp"
 #include "Point.hpp"
+#include <unordered_set>
+#include <utility>
 
 class QuadtreeTiling : public Tiling {
 public:
@@ -21,6 +23,7 @@ public:
 protected:
     void createTilingHelper(QuadtreeNode*);
     vector<Point> findTriangleMidpointsThatAreVertices(Point, Point, Point);
+//    std::unordered_set<std::pair<float, float>> verticesSet;
     
     virtual void createTrianglesFromCell(QuadtreeNode*) = 0;
     virtual void satisfyJunctions() = 0;

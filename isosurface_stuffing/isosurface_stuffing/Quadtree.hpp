@@ -32,6 +32,7 @@ protected:
     virtual void constructChildren(QuadtreeNode*) = 0;
     virtual void renderHelper(QuadtreeNode*) = 0;
     virtual void colorSquare(QuadtreeNode) = 0;
+    virtual void refineNode(QuadtreeNode*) = 0;
     
     // balancing
     vector<QuadtreeNode*> getListOfLeavesHelper(QuadtreeNode*, vector<QuadtreeNode*>);

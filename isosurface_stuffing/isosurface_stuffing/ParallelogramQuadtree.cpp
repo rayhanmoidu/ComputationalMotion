@@ -30,7 +30,7 @@ ParallelogramQuadtree::ParallelogramQuadtree(int screenWidth, int screenHeight, 
     if (shouldRefine(root)) {
         constructChildren(root);
     }
-//    balanceQuadtree();
+    balanceQuadtree();
     
     if (isBalanced()) {
         cout <<"correctly balanced!"<<endl;
@@ -147,4 +147,26 @@ void ParallelogramQuadtree::colorSquare(QuadtreeNode node) {
         glVertex2f(node.getCenterX() - node.getDimension() / 2, node.getCenterY() + node.getDimension() / 2);
     glEnd();
 }
+
+void ParallelogramQuadtree::refineNode(QuadtreeNode* node) {
+    float shiftX = (node->getDimension() / 2) * (tan60) / (tan30+tan60);
+    float shiftY = shiftX*tan30;
+    
+    float newCurX1 = node->getCenterX() - node->getDimension() / 4;
+    float newCurY1 = node->getCenterY() - getCellHeight(node)/2;
+    
+    float newCurX2 = node->getCenterX() + node->getDimension() / 4;
+    float newCurY2 = node->getCenterY() + getCellHeight(node)/2;
+    
+    QuadtreeNode* northEastChild = new QuadtreeNode(node->getCenterX() + shiftX, node->getCenterY() + shiftY, node->getDimension() / 2, node);
+    QuadtreeNode* northWestChild = new QuadtreeNode(newCurX2 - shiftX, newCurY2 - shiftY, node->getDimension() / 2, node);
+    QuadtreeNode* southEastChild = new QuadtreeNode(newCurX1 + shiftX, newCurY1 + shiftY, node->getDimension() / 2, node);
+    QuadtreeNode* southWestChild = new QuadtreeNode(node->getCenterX() - shiftX, node->getCenterY() - shiftY, node->getDimension() / 2, node);
+
+    node->addChild(northEastChild, northeast);
+    node->addChild(northWestChild, northwest);
+    node->addChild(southEastChild, southeast);
+    node->addChild(southWestChild, southwest);
+}
+
 

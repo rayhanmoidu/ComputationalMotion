@@ -76,11 +76,11 @@ int main() {
     while (!glfwWindowShouldClose(window)) {
                 
         canvas.initCanvas();
-        
-        algorithmInstance.renderProcessedTriangles();
-        algorithmInstance.renderProcessedTriangleCutpoints();
-        bargraph.drawGraph();
-//        quadtree.render();
+//
+//        algorithmInstance.renderProcessedTriangles();
+//        algorithmInstance.renderProcessedTriangleCutpoints();
+//        bargraph.drawGraph();
+        quadtree.render();
 //        quadtreeTiling.render();
 
         circle.render();
