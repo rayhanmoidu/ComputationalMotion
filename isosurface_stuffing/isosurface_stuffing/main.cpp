@@ -62,7 +62,7 @@ int main() {
     RectangleIsosurface rectangle(rectangleWidth, rectangleHeight, canvas.getWidth() / 2, canvas.getHeight(), isosurfaceRenderingThreshold);
     
     // QUADTREE
-    ParallelogramQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), 40, circle);
+    ParallelogramQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), 10, circle);
     EquilateralQuadtreeTiling quadtreeTiling(quadtree);
 //
     // ALGORITHM
