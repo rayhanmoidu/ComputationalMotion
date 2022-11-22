@@ -14,6 +14,10 @@ Triangle::Triangle(Point triangleP1, Point triangleP2, Point triangleP3) {
     p3 = triangleP3;
     cutpoints = vector<Cutpoint>();
     setColors();
+    doesExistVertexBetweenP1P2 = false;
+    doesExistVertexBetweenP2P3 = false;
+    doesExistVertexBetweenP1P3 = false;
+    twins = vector<Triangle>();
 }
 
 Triangle::Triangle() {
@@ -22,6 +26,10 @@ Triangle::Triangle() {
     p3 = Point();
     cutpoints = vector<Cutpoint>();
     setColors();
+    doesExistVertexBetweenP1P2 = false;
+    doesExistVertexBetweenP2P3 = false;
+    doesExistVertexBetweenP1P3 = false;
+    twins = vector<Triangle>();
 }
 
 void Triangle::setColors() {
@@ -169,4 +177,31 @@ vector<float> Triangle::computeAngles() {
     angles.push_back(angle3);
     
     return angles;
+}
+
+void Triangle::setDoesExistVertexBetweenP1P2(bool doesExist) {
+    doesExistVertexBetweenP1P2 = doesExist;
+}
+void Triangle::setDoesExistVertexBetweenP2P3(bool doesExist) {
+    doesExistVertexBetweenP2P3 = doesExist;
+}
+void Triangle::setDoesExistVertexBetweenP1P3(bool doesExist) {
+    doesExistVertexBetweenP1P3 = doesExist;
+}
+
+bool Triangle::getDoesExistVertexBetweenP1P2() {
+    return doesExistVertexBetweenP1P2;
+}
+bool Triangle::getDoesExistVertexBetweenP2P3() {
+    return doesExistVertexBetweenP2P3;
+}
+bool Triangle::getDoesExistVertexBetweenP1P3() {
+    return doesExistVertexBetweenP1P3;
+}
+
+void Triangle::addTwin(Triangle newTwin) {
+    twins.push_back(newTwin);
+}
+vector<Triangle> Triangle::getTwins() {
+    return twins;
 }

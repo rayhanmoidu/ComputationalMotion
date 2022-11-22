@@ -27,22 +27,18 @@ public:
     QuadtreeNode* getRoot();
     Isosurface& getIsosurface();
     
+    vector<QuadtreeNode*> getListOfLeaves();
+    virtual void refineNode(QuadtreeNode*) = 0;
+    vector<QuadtreeNode*> removeNodeFromVector(vector<QuadtreeNode*>, QuadtreeNode*);
+    
 protected:
     virtual bool shouldRefine(QuadtreeNode*) = 0;
     virtual void constructChildren(QuadtreeNode*) = 0;
     virtual void renderHelper(QuadtreeNode*) = 0;
     virtual void colorSquare(QuadtreeNode) = 0;
-    virtual void refineNode(QuadtreeNode*) = 0;
     
     // balancing
-    vector<QuadtreeNode*> getListOfLeavesHelper(QuadtreeNode*, vector<QuadtreeNode*>);
-    vector<QuadtreeNode*> getListOfLeaves();
-    vector<QuadtreeNode*> removeNodeFromVector(vector<QuadtreeNode*>, QuadtreeNode*);
-    
-    // test neighbour finding
-    QuadtreeNode* getNeighbourOfGreaterOrEqualSize(QuadtreeNode*, Direction);
-    vector<QuadtreeNode*> getNeighboursOfSmallerSize(QuadtreeNode*, QuadtreeNode*, Direction);
-    vector<QuadtreeNode*> getNeighbours(QuadtreeNode*, Direction);
+//    vector<QuadtreeNode*> getListOfLeaves();
     
     bool doesContainLeaf(vector<QuadtreeNode*>, QuadtreeNode*);
     void balanceQuadtree();

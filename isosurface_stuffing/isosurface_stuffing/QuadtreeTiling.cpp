@@ -26,6 +26,7 @@ void QuadtreeTiling::createTilingHelper(QuadtreeNode* curNode) {
 
 vector<Point> QuadtreeTiling::findTriangleMidpointsThatAreVertices(Point mp1, Point mp2, Point mp3) {
     vector<Point> intersections;
+    cout << mp1.getX() <<" "<<mp1.getY()<<endl;
     if (vertices.count(pair<float, float>(mp1.getX(), mp1.getY()))) intersections.push_back(mp1);
     if (vertices.count(pair<float, float>(mp2.getX(), mp2.getY()))) intersections.push_back(mp2);
     if (vertices.count(pair<float, float>(mp3.getX(), mp3.getY()))) intersections.push_back(mp3);

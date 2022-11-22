@@ -34,6 +34,7 @@ void IsoscelesSingleQuadtreeTiling::satisfyJunctions() {
     vector<Triangle> trianglesToProcess = triangles;
 
     while(trianglesToProcess.size()>0) {
+        cout << trianglesToProcess.size()<<endl;
         Triangle curTriangle = trianglesToProcess[0];
         vector<Point> curPoints = curTriangle.getPoints();
         float x1 = (curPoints[0].getX() + curPoints[1].getX()) / 2;

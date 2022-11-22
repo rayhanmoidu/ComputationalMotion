@@ -36,8 +36,16 @@ public:
     QuadtreeNode* getSWChild();
     
     bool operator == (QuadtreeNode &obj);
+    
+    vector<QuadtreeNode*> getNeighbours(Direction);
+    vector<QuadtreeNode*> getListOfLeaves(vector<QuadtreeNode*>);
 
 private:
+    QuadtreeNode* getNeighbourOfGreaterOrEqualSize(Direction);
+    vector<QuadtreeNode*> getNeighboursOfSmallerSize(QuadtreeNode*, Direction);
+    
+    vector<QuadtreeNode*> removeNodeFromVector(vector<QuadtreeNode*>, QuadtreeNode*);
+    
     float centerX;
     float centerY;
     float dimension;

@@ -18,6 +18,7 @@ public:
     EquilateralQuadtreeTiling(ParallelogramQuadtree);
     void createTrianglesFromCell(QuadtreeNode*) override;
     void satisfyJunctions() override;
+    void rebalanceQuadtree(ParallelogramQuadtree);
 };
 
 #endif /* EquilateralQuadtreeTiling_hpp */
