@@ -2,7 +2,6 @@
 
 Tiling::Tiling(int width, int height, int triangleSize) {
     triangles = vector<Triangle>();
-    vertices = vector<Point>();
     hBound = width;
     vBound = height;
     triangleSideLength = triangleSize;
@@ -19,14 +18,7 @@ void Tiling::render() {
 }
 
 void Tiling::addVertex(Point p) {
-    bool didFind = false;
-    for (int i = 0; i < vertices.size(); i++) {
-        if (vertices[i]==p) {
-            didFind=true;
-            break;
-        }
-    }
-    if (!didFind) vertices.push_back(p);
+    vertices.insert(pair<float, float>(p.getX(), p.getY()));
 }
 
 vector<Triangle> Tiling::removeTriangle(vector<Triangle> curTriangles, Triangle triangleToRemove) {

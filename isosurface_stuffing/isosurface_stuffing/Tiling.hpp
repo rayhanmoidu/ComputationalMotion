@@ -15,6 +15,16 @@
 
 using namespace std;
 
+struct pair_hash {
+    inline std::size_t operator()(const std::pair<float,float> & v) const {
+        int prime = 31;
+        int result = 1;
+        result = prime * result + v.first;
+        result = prime * result + v.second;
+        return result;
+    }
+};
+
 class Tiling {
 public:
     Tiling(int=0, int=0, int=0);
@@ -31,8 +41,7 @@ public:
     
 protected:
     vector<Triangle> triangles;
-//    std::unordered_set<std::pair<float, float>, pair_hash> vertices;
-    vector<Point> vertices;
+    std::unordered_set<std::pair<float, float>, pair_hash> vertices;
     int hBound;
     int vBound;
     int triangleSideLength;
