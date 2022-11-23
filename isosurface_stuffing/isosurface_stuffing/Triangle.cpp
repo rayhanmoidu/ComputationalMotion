@@ -178,30 +178,3 @@ vector<float> Triangle::computeAngles() {
     
     return angles;
 }
-
-void Triangle::setDoesExistVertexBetweenP1P2(bool doesExist) {
-    doesExistVertexBetweenP1P2 = doesExist;
-}
-void Triangle::setDoesExistVertexBetweenP2P3(bool doesExist) {
-    doesExistVertexBetweenP2P3 = doesExist;
-}
-void Triangle::setDoesExistVertexBetweenP1P3(bool doesExist) {
-    doesExistVertexBetweenP1P3 = doesExist;
-}
-
-bool Triangle::getDoesExistVertexBetweenP1P2() {
-    return doesExistVertexBetweenP1P2;
-}
-bool Triangle::getDoesExistVertexBetweenP2P3() {
-    return doesExistVertexBetweenP2P3;
-}
-bool Triangle::getDoesExistVertexBetweenP1P3() {
-    return doesExistVertexBetweenP1P3;
-}
-
-void Triangle::addTwin(Triangle newTwin) {
-    twins.push_back(newTwin);
-}
-vector<Triangle> Triangle::getTwins() {
-    return twins;
-}

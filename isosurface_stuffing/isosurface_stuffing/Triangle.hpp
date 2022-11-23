@@ -24,17 +24,6 @@ public:
     void renderCutpoints();
     
     void setPoints(Point, Point, Point);
-    
-    void setDoesExistVertexBetweenP1P2(bool);
-    void setDoesExistVertexBetweenP2P3(bool);
-    void setDoesExistVertexBetweenP1P3(bool);
-    bool getDoesExistVertexBetweenP1P2();
-    bool getDoesExistVertexBetweenP2P3();
-    bool getDoesExistVertexBetweenP1P3();
-    
-    void addTwin(Triangle);
-    vector<Triangle> getTwins();
-    
     vector<Point> getPoints();
     vector<Cutpoint> getCutpoints();
     
