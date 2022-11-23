@@ -9,5 +9,19 @@
 #define ProvablyGoodTest_hpp
 
 #include <stdio.h>
+#include "Point.hpp"
+#include "Triangle.hpp"
+
+enum CellConfiguration { ABAB };
+
+
+class ProvablyGoodTest {
+public:
+    ProvablyGoodTest(CellConfiguration, Point, float);
+private:
+    void triangulate_ABAB(Point, float);
+    bool verifyAngles(vector<Triangle>);
+};
+
 
 #endif /* ProvablyGoodTest_hpp */

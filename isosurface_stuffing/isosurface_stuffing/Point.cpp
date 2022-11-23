@@ -1,5 +1,8 @@
 #include "Point.hpp"
 #include <cmath>
+#define GLEW_STATIC
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 Point::Point(float pointX, float pointY) {
     x = pointX;
@@ -28,4 +31,13 @@ bool Point::operator == (Point &obj) {
 
 int getCanvasCoordinate(int coordinateToTransform) {
     return coordinateToTransform*2;
+}
+
+void Point::plot(int threshold) {
+    glBegin(GL_QUADS);
+    glVertex2f(this->getX() - threshold, this->getY() - threshold);
+    glVertex2f(this->getX() + threshold, this->getY() - threshold);
+    glVertex2f(this->getX() + threshold, this->getY() + threshold);
+    glVertex2f(this->getX() - threshold, this->getY() + threshold);
+    glEnd();
 }

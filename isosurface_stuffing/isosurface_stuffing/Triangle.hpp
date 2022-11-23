@@ -41,11 +41,6 @@ private:
     float colorkey1;
     float colorkey2;
     float colorkey3;
-    
-    bool doesExistVertexBetweenP1P2;
-    bool doesExistVertexBetweenP2P3;
-    bool doesExistVertexBetweenP1P3;
-    vector<Triangle> twins;
 };
 
 #endif /* Triangle_hpp */

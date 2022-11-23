@@ -20,6 +20,8 @@
 #include "SquareQuadtree.hpp"
 #include "ParallelogramQuadtree.hpp"
 #include "EquilateralQuadtreeTiling.hpp"
+#include "ProvablyGoodTest.hpp"
+#include "SquareIsosurface.hpp"
 
 const GLint WIDTH = 1000, HEIGHT = 500;
 const int triangleSideLength = 80;
@@ -29,6 +31,7 @@ const int rectangleHeight = 200;
 const float alpha = 60;
 const float isosurfaceRenderingThreshold = 2;
 const int numBars = 18; // 180 % numBars should be 0
+
 
 int main() {
     glfwInit();
@@ -58,15 +61,15 @@ int main() {
 //    newTiling.createTiling(0, 0, "all", "normal");
     
     // ISOSURFACE
-    CircleIsosurface circle(circleRadius, canvas.getWidth() / 2, canvas.getHeight(), isosurfaceRenderingThreshold);
+    SquareIsosurface isosurface(circleRadius, circleRadius, canvas.getWidth() / 2, canvas.getHeight(), isosurfaceRenderingThreshold);
     RectangleIsosurface rectangle(rectangleWidth, rectangleHeight, canvas.getWidth() / 2, canvas.getHeight(), isosurfaceRenderingThreshold);
     
     // QUADTREE
-    ParallelogramQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), 10, circle);
+    ParallelogramQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), 10, isosurface);
     EquilateralQuadtreeTiling quadtreeTiling(quadtree);
 //
     // ALGORITHM
-    Algorithm algorithmInstance(quadtreeTiling, circle, alpha);
+    Algorithm algorithmInstance(quadtreeTiling, isosurface, alpha);
     algorithmInstance.execute();
 
     // BARGRAPH
@@ -82,8 +85,11 @@ int main() {
         bargraph.drawGraph();
 //        quadtree.render();
 //        quadtreeTiling.render();
+        
 
-        circle.render();
+        isosurface.render();
+        
+//        ProvablyGoodTest testProvablyGood(ABAB, Point(canvas.getWidth() / 4, canvas.getHeight() / 2), canvas.getWidth()/4);
 
 
         glfwSwapBuffers(window);

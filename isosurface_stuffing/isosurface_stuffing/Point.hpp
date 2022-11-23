@@ -15,6 +15,8 @@ public:
     //setters
     void setX(float);
     void setY(float);
+    
+    void plot(int);
 
 protected:
     int getCanvasCoordinate(int);

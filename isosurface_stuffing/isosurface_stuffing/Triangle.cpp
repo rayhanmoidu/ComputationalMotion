@@ -14,10 +14,6 @@ Triangle::Triangle(Point triangleP1, Point triangleP2, Point triangleP3) {
     p3 = triangleP3;
     cutpoints = vector<Cutpoint>();
     setColors();
-    doesExistVertexBetweenP1P2 = false;
-    doesExistVertexBetweenP2P3 = false;
-    doesExistVertexBetweenP1P3 = false;
-    twins = vector<Triangle>();
 }
 
 Triangle::Triangle() {
@@ -26,10 +22,6 @@ Triangle::Triangle() {
     p3 = Point();
     cutpoints = vector<Cutpoint>();
     setColors();
-    doesExistVertexBetweenP1P2 = false;
-    doesExistVertexBetweenP2P3 = false;
-    doesExistVertexBetweenP1P3 = false;
-    twins = vector<Triangle>();
 }
 
 void Triangle::setColors() {
