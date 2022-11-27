@@ -80,16 +80,16 @@ int main() {
                 
         canvas.initCanvas();
 //
-        algorithmInstance.renderProcessedTriangles();
-        algorithmInstance.renderProcessedTriangleCutpoints();
-        bargraph.drawGraph();
+//        algorithmInstance.renderProcessedTriangles();
+//        algorithmInstance.renderProcessedTriangleCutpoints();
+//        bargraph.drawGraph();
 //        quadtree.render();
 //        quadtreeTiling.render();
         
 
-        isosurface.render();
+//        isosurface.render();
         
-//        ProvablyGoodTest testProvablyGood(ABAB, Point(canvas.getWidth() / 4, canvas.getHeight() / 2), canvas.getWidth()/4);
+        ProvablyGoodTest testProvablyGood(ABAB, Point(canvas.getWidth() / 4, canvas.getHeight() / 2), canvas.getWidth()/4);
 
 
         glfwSwapBuffers(window);

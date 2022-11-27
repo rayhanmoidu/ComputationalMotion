@@ -53,6 +53,7 @@ void EquilateralQuadtreeTiling::rebalanceQuadtree(ParallelogramQuadtree tree) {
         if (mustRefineCurLeaf) {
             tree.refineNode(curLeaf);
             if (neighbourToAdd != NULL) leavesToProcess.push_back(neighbourToAdd);
+            for (int i = 0; i < neighbors.size(); i++) leavesToProcess.push_back(neighbors[i]);
         }
         leavesToProcess = tree.removeNodeFromVector(leavesToProcess, curLeaf);
     }
