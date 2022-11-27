@@ -12,15 +12,23 @@
 #include "Point.hpp"
 #include "Triangle.hpp"
 
-enum CellConfiguration { ABAB };
+enum CellConfiguration { ABAB, ABCB, BBCC, BBBB, ABBB, AABB };
 
 
 class ProvablyGoodTest {
 public:
     ProvablyGoodTest(CellConfiguration, Point, float);
+    void render();
 private:
     void triangulate_ABAB(Point, float);
-    bool verifyAngles(vector<Triangle>);
+    void triangulate_ABCB(Point, float);
+    void triangulate_BBCC(Point, float);
+    void triangulate_BBBB(Point, float);
+    void triangulate_ABBB(Point, float);
+    void triangulate_AABB(Point, float);
+    bool verifyAngles();
+    
+    vector<Triangle> triangles;
 };
 
 

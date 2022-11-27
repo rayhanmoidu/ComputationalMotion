@@ -75,7 +75,8 @@ int main() {
     // BARGRAPH
     BarGraph bargraph(algorithmInstance.getProcessedTriangles(), canvas.getWidth() / 2, canvas.getHeight(), canvas.getWidth() / 2, numBars);
     
-        
+    ProvablyGoodTest testProvablyGood(AABB, Point(canvas.getWidth() / 4, canvas.getHeight() / 2), canvas.getWidth()/4);
+
     while (!glfwWindowShouldClose(window)) {
                 
         canvas.initCanvas();
@@ -89,8 +90,7 @@ int main() {
 
 //        isosurface.render();
         
-        ProvablyGoodTest testProvablyGood(ABAB, Point(canvas.getWidth() / 4, canvas.getHeight() / 2), canvas.getWidth()/4);
-
+        testProvablyGood.render();
 
         glfwSwapBuffers(window);
     }
