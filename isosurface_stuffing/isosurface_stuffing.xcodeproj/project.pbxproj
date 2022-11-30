@@ -33,6 +33,7 @@
 		A3599AB9292481C200498281 /* SquareQuadtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3599AB7292481C200498281 /* SquareQuadtree.cpp */; };
 		A3599ABC2924877D00498281 /* ParallelogramQuadtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3599ABA2924877D00498281 /* ParallelogramQuadtree.cpp */; };
 		A39B21E8293722D600354A7D /* ProvablyGoodTriangleFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A39B21E6293722D600354A7D /* ProvablyGoodTriangleFactory.cpp */; };
+		A39B21EB293731B200354A7D /* ProvablyGoodQuadtreeTiling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A39B21E9293731B200354A7D /* ProvablyGoodQuadtreeTiling.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -97,6 +98,8 @@
 		A3599ABB2924877D00498281 /* ParallelogramQuadtree.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ParallelogramQuadtree.hpp; sourceTree = "<group>"; };
 		A39B21E6293722D600354A7D /* ProvablyGoodTriangleFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ProvablyGoodTriangleFactory.cpp; sourceTree = "<group>"; };
 		A39B21E7293722D600354A7D /* ProvablyGoodTriangleFactory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ProvablyGoodTriangleFactory.hpp; sourceTree = "<group>"; };
+		A39B21E9293731B200354A7D /* ProvablyGoodQuadtreeTiling.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ProvablyGoodQuadtreeTiling.cpp; sourceTree = "<group>"; };
+		A39B21EA293731B200354A7D /* ProvablyGoodQuadtreeTiling.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ProvablyGoodQuadtreeTiling.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,10 +149,12 @@
 				A3599AAE29243ACA00498281 /* IsoscelesSingleQuadtreeTiling.cpp */,
 				A3599AB22924441700498281 /* IsoscelesDoubleQuadtreeTiling.hpp */,
 				A3599AB12924441700498281 /* IsoscelesDoubleQuadtreeTiling.cpp */,
+				A39B21EA293731B200354A7D /* ProvablyGoodQuadtreeTiling.hpp */,
+				A39B21E9293731B200354A7D /* ProvablyGoodQuadtreeTiling.cpp */,
 				A3599AB52924447100498281 /* EquilateralQuadtreeTiling.hpp */,
 				A3599AB42924447100498281 /* EquilateralQuadtreeTiling.cpp */,
-				A39B21E6293722D600354A7D /* ProvablyGoodTriangleFactory.cpp */,
 				A39B21E7293722D600354A7D /* ProvablyGoodTriangleFactory.hpp */,
+				A39B21E6293722D600354A7D /* ProvablyGoodTriangleFactory.cpp */,
 				A346C64D2908BC6800339D2F /* Algorithm.hpp */,
 				A346C64C2908BC6800339D2F /* Algorithm.cpp */,
 				A346C6502909A09900339D2F /* Quadtree.hpp */,
@@ -250,6 +255,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A346C6602910E84800339D2F /* RectangleIsosurface.cpp in Sources */,
+				A39B21EB293731B200354A7D /* ProvablyGoodQuadtreeTiling.cpp in Sources */,
 				A346C6512909A09900339D2F /* Quadtree.cpp in Sources */,
 				A3599ABC2924877D00498281 /* ParallelogramQuadtree.cpp in Sources */,
 				A342609F292EB8A700ACDE52 /* SquareIsosurface.cpp in Sources */,

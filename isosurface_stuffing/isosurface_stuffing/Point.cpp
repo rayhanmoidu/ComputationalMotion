@@ -14,20 +14,10 @@ Point::Point(float pointX, float pointY) {
 }
 
 void Point::rotate(float theta, Point center) {
-//        cout <<"centerx "<<center.getX()<<endl;
-//        cout <<"centery "<<center.getY()<<endl;
-        cout <<"before x "<<x<<endl;
-        cout <<"before y "<<y<<endl;
-//    cout << theta << endl;
-//    cout << round(cos(theta)) <<" "<<round(sin(theta))<<endl;
-//    cout <<(this->getY()-center.getY())<<endl;
-//    cout <<(this->getX()-center.getX())<<endl;
     float oldX = this->getX();
     float oldY = this->getY();
     x = round(cos(theta)) * (oldX-center.getX()) - round(sin(theta)) * (oldY-center.getY()) + center.getX();
     y = round(sin(theta)) * (oldX-center.getX()) + round(cos(theta)) * (oldY-center.getY()) + center.getY();
-        cout <<"after x "<<x<<endl;
-        cout <<"after y "<<y<<endl;
 }
 
 float Point::getX() {

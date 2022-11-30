@@ -22,20 +22,26 @@ inline bool isEqual(double x, double y)
 }
 
 
-ProvablyGoodTriangleFactory::ProvablyGoodTriangleFactory(CellConfiguration configuration, Point center, float dimension, float theta) {
-    if (configuration==ABAB) triangulate_ABAB(center, dimension, theta);
-    if (configuration==ABCB) triangulate_ABCB(center, dimension, theta);
-    if (configuration==BBCC) triangulate_BBCC(center, dimension, theta);
-    if (configuration==BBBB) triangulate_BBBB(center, dimension, theta);
-    if (configuration==ABBB) triangulate_ABBB(center, dimension, theta);
-    if (configuration==AABB) triangulate_AABB(center, dimension, theta);
-    if (configuration==AAAA) triangulate_AAAA(center, dimension, theta);
-    if (configuration==AAAB) triangulate_AAAB(center, dimension, theta);
-    if (configuration==BBBC) triangulate_BBBC(center, dimension, theta);
+ProvablyGoodTriangleFactory::ProvablyGoodTriangleFactory() {
 }
 
-void ProvablyGoodTriangleFactory::triangulate_ABAB(Point center, float dimension, float theta) {
-    cout << cos(theta*2) << endl;
+vector<Triangle> ProvablyGoodTriangleFactory::triangulate(CellConfiguration configuration, Point center, float dimension, float theta) {
+    if (configuration==ABAB) return triangulate_ABAB(center, dimension, theta);
+    if (configuration==ABCB) return triangulate_ABCB(center, dimension, theta);
+    if (configuration==BBCC) return triangulate_BBCC(center, dimension, theta);
+    if (configuration==BBBB) return triangulate_BBBB(center, dimension, theta);
+    if (configuration==ABBB) return triangulate_ABBB(center, dimension, theta);
+    if (configuration==AABB) return triangulate_AABB(center, dimension, theta);
+    if (configuration==AAAA) return triangulate_AAAA(center, dimension, theta);
+    if (configuration==AAAB) return triangulate_AAAB(center, dimension, theta);
+    if (configuration==BBBC) return triangulate_BBBC(center, dimension, theta);
+    cout <<"should never reach here"<<endl;
+    return vector<Triangle>();
+}
+
+vector<Triangle> ProvablyGoodTriangleFactory::triangulate_ABAB(Point center, float dimension, float theta) {
+    vector<Triangle> triangles;
+    
     Point p1(center.getX() - dimension / 2, center.getY() + dimension / 2);
     Point p2(center.getX() + dimension / 2, center.getY() + dimension / 2);
     Point p3(center.getX() - dimension / 2, center.getY() - dimension / 2);
@@ -98,13 +104,13 @@ void ProvablyGoodTriangleFactory::triangulate_ABAB(Point center, float dimension
     triangles.push_back(Triangle (p17, p10, p14));
     triangles.push_back(Triangle (p17, p10, p13));
     triangles.push_back(Triangle (p13, p3, p6));
-        
-    bool isVerified = verifyAngles();
-    if (!isVerified) cout <<"Oh no... not all acute"<<endl;
-    else cout<<"All acute!"<<endl;
+    
+    return triangles;
 }
 
-void ProvablyGoodTriangleFactory::triangulate_AAAB(Point center, float dimension, float theta) {
+vector<Triangle> ProvablyGoodTriangleFactory::triangulate_AAAB(Point center, float dimension, float theta) {
+    vector<Triangle> triangles;
+    
     Point p1(center.getX() - dimension / 2, center.getY() + dimension / 2);
     Point p2(center.getX() + dimension / 2, center.getY() + dimension / 2);
     Point p3(center.getX() - dimension / 2, center.getY() - dimension / 2);
@@ -134,6 +140,29 @@ void ProvablyGoodTriangleFactory::triangulate_AAAB(Point center, float dimension
     Point p20(p16.getX() + (p15.getX() - p16.getX())*0.45, center.getY());
     Point p21(p20.getX() + (p19.getX() - p20.getX())/2, center.getY() + dimension*0.2);
     Point p22(p20.getX() + (p19.getX() - p20.getX())/2, center.getY() - dimension*0.2);
+    
+    p1.rotate(theta, center);
+    p2.rotate(theta, center);
+    p3.rotate(theta, center);
+    p4.rotate(theta, center);
+    p5.rotate(theta, center);
+    p6.rotate(theta, center);
+    p7.rotate(theta, center);
+    p8.rotate(theta, center);
+    p9.rotate(theta, center);
+    p10.rotate(theta, center);
+    p11.rotate(theta, center);
+    p12.rotate(theta, center);
+    p13.rotate(theta, center);
+    p14.rotate(theta, center);
+    p15.rotate(theta, center);
+    p16.rotate(theta, center);
+    p17.rotate(theta, center);
+    p18.rotate(theta, center);
+    p19.rotate(theta, center);
+    p20.rotate(theta, center);
+    p21.rotate(theta, center);
+    p22.rotate(theta, center);
         
     triangles.push_back(Triangle(p1, p5, p11));
     triangles.push_back(Triangle (p11, p5, p16));
@@ -162,14 +191,13 @@ void ProvablyGoodTriangleFactory::triangulate_AAAB(Point center, float dimension
     triangles.push_back(Triangle (p21, p7, p12));
     triangles.push_back(Triangle (p21, p12, p17));
     triangles.push_back(Triangle (p21, p20, p17));
-
-        
-    bool isVerified = verifyAngles();
-    if (!isVerified) cout <<"Oh no... not all acute"<<endl;
-    else cout<<"All acute!"<<endl;
+    
+    return triangles;
 }
 
-void ProvablyGoodTriangleFactory::triangulate_AAAA(Point center, float dimension, float theta) {
+vector<Triangle> ProvablyGoodTriangleFactory::triangulate_AAAA(Point center, float dimension, float theta) {
+    vector<Triangle> triangles;
+    
     Point p1(center.getX() - dimension / 2, center.getY() + dimension / 2);
     Point p2(center.getX() + dimension / 2, center.getY() + dimension / 2);
     Point p3(center.getX() - dimension / 2, center.getY() - dimension / 2);
@@ -203,6 +231,32 @@ void ProvablyGoodTriangleFactory::triangulate_AAAA(Point center, float dimension
     Point p23(center.getX() - offset, center.getY() + offset);
     Point p24(center.getX() + offset, center.getY() + offset);
     Point p25(center.getX() + offset, center.getY() - offset);
+    
+    p1.rotate(theta, center);
+    p2.rotate(theta, center);
+    p3.rotate(theta, center);
+    p4.rotate(theta, center);
+    p5.rotate(theta, center);
+    p6.rotate(theta, center);
+    p7.rotate(theta, center);
+    p8.rotate(theta, center);
+    p9.rotate(theta, center);
+    p10.rotate(theta, center);
+    p11.rotate(theta, center);
+    p12.rotate(theta, center);
+    p13.rotate(theta, center);
+    p14.rotate(theta, center);
+    p15.rotate(theta, center);
+    p16.rotate(theta, center);
+    p17.rotate(theta, center);
+    p18.rotate(theta, center);
+    p19.rotate(theta, center);
+    p20.rotate(theta, center);
+    p21.rotate(theta, center);
+    p22.rotate(theta, center);
+    p23.rotate(theta, center);
+    p24.rotate(theta, center);
+    p25.rotate(theta, center);
         
     triangles.push_back(Triangle(p1, p7, p11));
     triangles.push_back(Triangle (p12, p2, p15));
@@ -236,13 +290,13 @@ void ProvablyGoodTriangleFactory::triangulate_AAAA(Point center, float dimension
     triangles.push_back(Triangle (p25, p21, p17));
     triangles.push_back(Triangle (p22, p17, p21));
     triangles.push_back(Triangle (p22, p17, p18));
-        
-    bool isVerified = verifyAngles();
-    if (!isVerified) cout <<"Oh no... not all acute"<<endl;
-    else cout<<"All acute!"<<endl;
+    
+    return triangles;
 }
 
-void ProvablyGoodTriangleFactory::triangulate_BBBB(Point center, float dimension, float theta) {
+vector<Triangle> ProvablyGoodTriangleFactory::triangulate_BBBB(Point center, float dimension, float theta) {
+    vector<Triangle> triangles;
+    
     Point p1(center.getX() - dimension / 2, center.getY() + dimension / 2);
     Point p2(center.getX() + dimension / 2, center.getY() + dimension / 2);
     Point p3(center.getX() - dimension / 2, center.getY() - dimension / 2);
@@ -268,6 +322,27 @@ void ProvablyGoodTriangleFactory::triangulate_BBBB(Point center, float dimension
     Point p14(p20.getX() + (p7.getX()-p20.getX())*0.65, p17.getY() + (p9.getY()-p17.getY())*0.5);
     Point p15(p5.getX() + (p20.getX()-p5.getX())*0.35, p17.getY() - (p9.getY()-p17.getY())*0.5);
     Point p16(p20.getX() + (p7.getX()-p20.getX())*0.65, p17.getY() - (p9.getY()-p17.getY())*0.5);
+    
+    p1.rotate(theta, center);
+    p2.rotate(theta, center);
+    p3.rotate(theta, center);
+    p4.rotate(theta, center);
+    p5.rotate(theta, center);
+    p6.rotate(theta, center);
+    p7.rotate(theta, center);
+    p8.rotate(theta, center);
+    p9.rotate(theta, center);
+    p10.rotate(theta, center);
+    p11.rotate(theta, center);
+    p12.rotate(theta, center);
+    p13.rotate(theta, center);
+    p14.rotate(theta, center);
+    p15.rotate(theta, center);
+    p16.rotate(theta, center);
+    p17.rotate(theta, center);
+    p18.rotate(theta, center);
+    p19.rotate(theta, center);
+    p20.rotate(theta, center);
 
     triangles.push_back(Triangle(p1, p5, p13));
     triangles.push_back(Triangle (p1, p9, p13));
@@ -296,12 +371,12 @@ void ProvablyGoodTriangleFactory::triangulate_BBBB(Point center, float dimension
     triangles.push_back(Triangle (p14, p18, p7));
     triangles.push_back(Triangle (p16, p8, p4));
         
-    bool isVerified = verifyAngles();
-    if (!isVerified) cout <<"Oh no... not all acute"<<endl;
-    else cout<<"All acute!"<<endl;
+    return triangles;
 }
 
-void ProvablyGoodTriangleFactory::triangulate_BBBC(Point center, float dimension, float theta) {
+vector<Triangle> ProvablyGoodTriangleFactory::triangulate_BBBC(Point center, float dimension, float theta) {
+    vector<Triangle> triangles;
+    
     Point p1(center.getX() - dimension / 2, center.getY() + dimension / 2);
     Point p2(center.getX() + dimension / 2, center.getY() + dimension / 2);
     Point p3(center.getX() - dimension / 2, center.getY() - dimension / 2);
@@ -327,6 +402,26 @@ void ProvablyGoodTriangleFactory::triangulate_BBBC(Point center, float dimension
     Point p18(p5.getX() + (p7.getX()-p5.getX())*3/4, center.getY());
     Point p19(center.getX() + dimension/4, center.getY() + dimension*0.325);
     Point p6(center.getX() + dimension/4, center.getY() - dimension*0.325);
+    
+    p1.rotate(theta, center);
+    p2.rotate(theta, center);
+    p3.rotate(theta, center);
+    p4.rotate(theta, center);
+    p5.rotate(theta, center);
+    p6.rotate(theta, center);
+    p7.rotate(theta, center);
+    p8.rotate(theta, center);
+    p9.rotate(theta, center);
+    p10.rotate(theta, center);
+    p11.rotate(theta, center);
+    p12.rotate(theta, center);
+    p13.rotate(theta, center);
+    p14.rotate(theta, center);
+    p15.rotate(theta, center);
+    p16.rotate(theta, center);
+    p17.rotate(theta, center);
+    p18.rotate(theta, center);
+    p19.rotate(theta, center);
 
 
     triangles.push_back(Triangle(p1, p5, p13));
@@ -354,13 +449,13 @@ void ProvablyGoodTriangleFactory::triangulate_BBBC(Point center, float dimension
     triangles.push_back(Triangle (p6, p17, p18));
     triangles.push_back(Triangle (p15, p17, p18));
     triangles.push_back(Triangle (p14, p15, p17));
-        
-    bool isVerified = verifyAngles();
-    if (!isVerified) cout <<"Oh no... not all acute"<<endl;
-    else cout<<"All acute!"<<endl;
+    
+    return triangles;
 }
 
-void ProvablyGoodTriangleFactory::triangulate_BBCC(Point center, float dimension, float theta) {
+vector<Triangle> ProvablyGoodTriangleFactory::triangulate_BBCC(Point center, float dimension, float theta) {
+    vector<Triangle> triangles;
+    
     Point p1(center.getX() - dimension / 2, center.getY() + dimension / 2);
     Point p2(center.getX() + dimension / 2, center.getY() + dimension / 2);
     Point p3(center.getX() - dimension / 2, center.getY() - dimension / 2);
@@ -382,6 +477,24 @@ void ProvablyGoodTriangleFactory::triangulate_BBCC(Point center, float dimension
     Point p15(p14.getX(), p1.getY() + (p14.getY()-p1.getY())/2);
     Point p16(p14.getX() + (p2.getX()-p14.getX())/2, p14.getY());
     Point p17(p2.getX() - (p2.getX()-p1.getX())*0.25, p2.getY() - (p2.getY()-p4.getY())*0.25);
+    
+    p1.rotate(theta, center);
+    p2.rotate(theta, center);
+    p3.rotate(theta, center);
+    p4.rotate(theta, center);
+    p5.rotate(theta, center);
+    p6.rotate(theta, center);
+    p7.rotate(theta, center);
+    p8.rotate(theta, center);
+    p9.rotate(theta, center);
+    p10.rotate(theta, center);
+    p11.rotate(theta, center);
+    p12.rotate(theta, center);
+    p13.rotate(theta, center);
+    p14.rotate(theta, center);
+    p15.rotate(theta, center);
+    p16.rotate(theta, center);
+    p17.rotate(theta, center);
         
     triangles.push_back(Triangle(p1, p5, p11));
     triangles.push_back(Triangle (p5, p6, p15));
@@ -406,13 +519,13 @@ void ProvablyGoodTriangleFactory::triangulate_BBCC(Point center, float dimension
     triangles.push_back(Triangle (p2, p17, p7));
     triangles.push_back(Triangle (p7, p16, p8));
     triangles.push_back(Triangle (p12, p13, p14));
-        
-    bool isVerified = verifyAngles();
-    if (!isVerified) cout <<"Oh no... not all acute"<<endl;
-    else cout<<"All acute!"<<endl;
+    
+    return triangles;
 }
 
-void ProvablyGoodTriangleFactory::triangulate_ABCB(Point center, float dimension, float theta) {
+vector<Triangle> ProvablyGoodTriangleFactory::triangulate_ABCB(Point center, float dimension, float theta) {
+    vector<Triangle> triangles;
+    
     Point p1(center.getX() - dimension / 2, center.getY() + dimension / 2);
     Point p2(center.getX() + dimension / 2, center.getY() + dimension / 2);
     Point p3(center.getX() - dimension / 2, center.getY() - dimension / 2);
@@ -435,6 +548,25 @@ void ProvablyGoodTriangleFactory::triangulate_ABCB(Point center, float dimension
     Point p16(p12.getX(), p14.getY() + (p12.getY()-p14.getY())/2);
     Point p17(p9.getX(), p3.getY() + (p9.getY()-p10.getY())*2/3);
     Point p18(p13.getX() + (p14.getX()-p13.getX())/2, p13.getY() + (p17.getY()-p13.getY())/2);
+    
+    p1.rotate(theta, center);
+    p2.rotate(theta, center);
+    p3.rotate(theta, center);
+    p4.rotate(theta, center);
+    p5.rotate(theta, center);
+    p6.rotate(theta, center);
+    p7.rotate(theta, center);
+    p8.rotate(theta, center);
+    p9.rotate(theta, center);
+    p10.rotate(theta, center);
+    p11.rotate(theta, center);
+    p12.rotate(theta, center);
+    p13.rotate(theta, center);
+    p14.rotate(theta, center);
+    p15.rotate(theta, center);
+    p16.rotate(theta, center);
+    p17.rotate(theta, center);
+    p18.rotate(theta, center);
         
     triangles.push_back(Triangle(p1, p5, p11));
     triangles.push_back(Triangle (p11, p9, p17));
@@ -458,13 +590,13 @@ void ProvablyGoodTriangleFactory::triangulate_ABCB(Point center, float dimension
     triangles.push_back(Triangle (p13, p3, p6));
     triangles.push_back(Triangle (p13, p10, p3));
     triangles.push_back(Triangle (p14, p4, p10));
-        
-    bool isVerified = verifyAngles();
-    if (!isVerified) cout <<"Oh no... not all acute"<<endl;
-    else cout<<"All acute!"<<endl;
+    
+    return triangles;
 }
 
-void ProvablyGoodTriangleFactory::triangulate_ABBB(Point center, float dimension, float theta) {
+vector<Triangle> ProvablyGoodTriangleFactory::triangulate_ABBB(Point center, float dimension, float theta) {
+    vector<Triangle> triangles;
+    
     Point p1(center.getX() - dimension / 2, center.getY() + dimension / 2);
     Point p2(center.getX() + dimension / 2, center.getY() + dimension / 2);
     Point p3(center.getX() - dimension / 2, center.getY() - dimension / 2);
@@ -492,6 +624,26 @@ void ProvablyGoodTriangleFactory::triangulate_ABBB(Point center, float dimension
 
     Point p15(p5.getX() + (p20.getX()-p5.getX())*0.35, p17.getY() - (p1.getY()-p17.getY())*0.5);
     Point p16(p20.getX() + (p7.getX()-p20.getX())*0.65, p17.getY() - (p1.getY()-p17.getY())*0.5);
+    
+    p1.rotate(theta, center);
+    p2.rotate(theta, center);
+    p3.rotate(theta, center);
+    p4.rotate(theta, center);
+    p5.rotate(theta, center);
+    p6.rotate(theta, center);
+    p7.rotate(theta, center);
+    p8.rotate(theta, center);
+    p9.rotate(theta, center);
+    p10.rotate(theta, center);
+    p11.rotate(theta, center);
+    p12.rotate(theta, center);
+    p13.rotate(theta, center);
+    p15.rotate(theta, center);
+    p16.rotate(theta, center);
+    p17.rotate(theta, center);
+    p18.rotate(theta, center);
+    p19.rotate(theta, center);
+    p20.rotate(theta, center);
 
     triangles.push_back(Triangle (p1, p9, p5));
     triangles.push_back(Triangle (p13, p9, p20));
@@ -516,13 +668,13 @@ void ProvablyGoodTriangleFactory::triangulate_ABBB(Point center, float dimension
     triangles.push_back(Triangle (p16, p12, p4));
     triangles.push_back(Triangle (p19, p11, p15));
     triangles.push_back(Triangle (p16, p8, p4));
-        
-    bool isVerified = verifyAngles();
-    if (!isVerified) cout <<"Oh no... not all acute"<<endl;
-    else cout<<"All acute!"<<endl;
+    
+    return triangles;
 }
 
-void ProvablyGoodTriangleFactory::triangulate_AABB(Point center, float dimension, float theta) {
+vector<Triangle> ProvablyGoodTriangleFactory::triangulate_AABB(Point center, float dimension, float theta) {
+    vector<Triangle> triangles;
+    
     Point p1(center.getX() - dimension / 2, center.getY() + dimension / 2);
     Point p2(center.getX() + dimension / 2, center.getY() + dimension / 2);
     Point p3(center.getX() - dimension / 2, center.getY() - dimension / 2);
@@ -550,6 +702,28 @@ void ProvablyGoodTriangleFactory::triangulate_AABB(Point center, float dimension
     Point p19(p18.getX(), p13.getY() - dimension/6);
     Point p20(p14.getX() - dimension/6, p18.getY());
     Point p21(p18.getX() + (p14.getX()-p18.getX())*0.4, p18.getY() + (p13.getY()-p18.getY())*0.4);
+    
+    p1.rotate(theta, center);
+    p2.rotate(theta, center);
+    p3.rotate(theta, center);
+    p4.rotate(theta, center);
+    p5.rotate(theta, center);
+    p6.rotate(theta, center);
+    p7.rotate(theta, center);
+    p8.rotate(theta, center);
+    p9.rotate(theta, center);
+    p10.rotate(theta, center);
+    p11.rotate(theta, center);
+    p12.rotate(theta, center);
+    p13.rotate(theta, center);
+    p14.rotate(theta, center);
+    p15.rotate(theta, center);
+    p16.rotate(theta, center);
+    p17.rotate(theta, center);
+    p18.rotate(theta, center);
+    p19.rotate(theta, center);
+    p20.rotate(theta, center);
+    p21.rotate(theta, center);
     
 //
     triangles.push_back(Triangle(p1, p5, p11));
@@ -579,18 +753,16 @@ void ProvablyGoodTriangleFactory::triangulate_AABB(Point center, float dimension
     triangles.push_back(Triangle(p11, p19, p15));
     triangles.push_back(Triangle(p21, p19, p12));
     triangles.push_back(Triangle (p12, p2, p9));
-//
-    bool isVerified = verifyAngles();
-    if (!isVerified) cout <<"Oh no... not all acute"<<endl;
-    else cout<<"All acute!"<<endl;
+    
+    return triangles;
 }
 
 
-void ProvablyGoodTriangleFactory::render() {
+void ProvablyGoodTriangleFactory::render(vector<Triangle> triangles) {
     for (int i = 0; i < triangles.size(); i++) triangles[i].render();
 }
 
-bool ProvablyGoodTriangleFactory::verifyAngles() {
+bool ProvablyGoodTriangleFactory::verifyAngles(vector<Triangle> triangles) {
     vector<float> angles;
     for (int i = 0; i < triangles.size(); i++) {
         vector<float> curTriangleAngles = triangles[i].computeAngles();

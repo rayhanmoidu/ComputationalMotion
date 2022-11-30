@@ -17,21 +17,20 @@ enum CellConfiguration { ABAB, ABCB, BBCC, BBBB, ABBB, AABB, AAAA, AAAB, BBBC };
 
 class ProvablyGoodTriangleFactory {
 public:
-    ProvablyGoodTriangleFactory(CellConfiguration, Point, float, float);
-    void render();
+    ProvablyGoodTriangleFactory();
+    vector<Triangle> triangulate(CellConfiguration, Point, float, float);
+    void render(vector<Triangle> triangles);
 private:
-    void triangulate_ABAB(Point, float, float);
-    void triangulate_ABCB(Point, float, float);
-    void triangulate_BBCC(Point, float, float);
-    void triangulate_BBBB(Point, float, float);
-    void triangulate_ABBB(Point, float, float);
-    void triangulate_AABB(Point, float, float);
-    void triangulate_AAAA(Point, float, float);
-    void triangulate_AAAB(Point, float, float);
-    void triangulate_BBBC(Point, float, float);
-    bool verifyAngles();
-    
-    vector<Triangle> triangles;
+    vector<Triangle> triangulate_ABAB(Point, float, float);
+    vector<Triangle> triangulate_ABCB(Point, float, float);
+    vector<Triangle> triangulate_BBCC(Point, float, float);
+    vector<Triangle> triangulate_BBBB(Point, float, float);
+    vector<Triangle> triangulate_ABBB(Point, float, float);
+    vector<Triangle> triangulate_AABB(Point, float, float);
+    vector<Triangle> triangulate_AAAA(Point, float, float);
+    vector<Triangle> triangulate_AAAB(Point, float, float);
+    vector<Triangle> triangulate_BBBC(Point, float, float);
+    bool verifyAngles(vector<Triangle> triangles);
 };
 
 
