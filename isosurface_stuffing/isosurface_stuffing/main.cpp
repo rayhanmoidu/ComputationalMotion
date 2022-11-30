@@ -20,7 +20,7 @@
 #include "SquareQuadtree.hpp"
 #include "ParallelogramQuadtree.hpp"
 #include "EquilateralQuadtreeTiling.hpp"
-#include "ProvablyGoodTest.hpp"
+#include "ProvablyGoodTriangleFactory.hpp"
 #include "SquareIsosurface.hpp"
 
 const GLint WIDTH = 1000, HEIGHT = 500;
@@ -75,7 +75,17 @@ int main() {
     // BARGRAPH
     BarGraph bargraph(algorithmInstance.getProcessedTriangles(), canvas.getWidth() / 2, canvas.getHeight(), canvas.getWidth() / 2, numBars);
     
-    ProvablyGoodTest testProvablyGood(AABB, Point(canvas.getWidth() / 4, canvas.getHeight() / 2), canvas.getWidth()/4);
+//    ProvablyGoodTriangleFactory testProvablyGood_1(AAAA, Point(200, 200), 200, 0);
+//    ProvablyGoodTriangleFactory testProvablyGood_2(AAAB, Point(200, 400), 200, 0);
+//    ProvablyGoodTriangleFactory testProvablyGood_3(AABB, Point(200, 600), 200, 0);
+//    ProvablyGoodTriangleFactory testProvablyGood_4(BBCC, Point(400, 200), 200, 0);
+//    ProvablyGoodTriangleFactory testProvablyGood_5(BBBB, Point(400, 400), 200, 0);
+//    ProvablyGoodTriangleFactory testProvablyGood_6(BBBC, Point(400, 600), 200, 0);
+//    ProvablyGoodTriangleFactory testProvablyGood_7(ABCB, Point(600, 200), 200, 0);
+//    ProvablyGoodTriangleFactory testProvablyGood_8(ABAB, Point(600, 400), 500, M_PI/2);
+//    ProvablyGoodTriangleFactory testProvablyGood_9(ABBB, Point(600, 600), 200, 0);
+    ProvablyGoodTriangleFactory testProvablyGood_8(ABAB, Point(600, 400), 500, M_PI/2);
+
 
     while (!glfwWindowShouldClose(window)) {
                 
@@ -90,7 +100,16 @@ int main() {
 
 //        isosurface.render();
         
-        testProvablyGood.render();
+//        testProvablyGood_1.render();
+//        testProvablyGood_2.render();
+//        testProvablyGood_3.render();
+//        testProvablyGood_4.render();
+//        testProvablyGood_5.render();
+//        testProvablyGood_6.render();
+//        testProvablyGood_7.render();
+        testProvablyGood_8.render();
+//        testProvablyGood_9.render();
+        
 
         glfwSwapBuffers(window);
     }

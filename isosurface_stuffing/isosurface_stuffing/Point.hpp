@@ -17,6 +17,8 @@ public:
     void setY(float);
     
     void plot(int);
+    
+    void rotate(float, Point);
 
 protected:
     int getCanvasCoordinate(int);
