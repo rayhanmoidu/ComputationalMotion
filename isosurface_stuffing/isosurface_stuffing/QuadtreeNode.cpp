@@ -98,6 +98,7 @@ bool QuadtreeNode::isLeaf() {
 }
 
 QuadtreeNode* QuadtreeNode::getNeighbourOfGreaterOrEqualSize(Direction dir) {
+    if (this==NULL) return NULL;
     if (dir==north) {
         if (this->getParent()==NULL) return NULL;
         if (this->getParent()->getSWChild()==this) return this->getParent()->getNWChild();
@@ -138,6 +139,48 @@ QuadtreeNode* QuadtreeNode::getNeighbourOfGreaterOrEqualSize(Direction dir) {
         
         if (this->getParent()->getNWChild()==this) return testNode->getNEChild();
         else return testNode->getSEChild();
+    } else if (dir==northwest) {
+        if (this->getParent()==NULL) return NULL;
+        if (this->getParent()->getSEChild()==this) return this->getParent()->getNWChild();
+        if (this->getParent()->getSWChild()==this) {
+            return this->getParent()->getNWChild()->getNeighbourOfGreaterOrEqualSize(west);
+        }
+        if (this->getParent()->getNEChild()==this) return this->getParent()->getNWChild()->getNeighbourOfGreaterOrEqualSize(north);
+        if (this->getParent()->getNWChild()==this) {
+            QuadtreeNode* testNode_1 = this->getNeighbourOfGreaterOrEqualSize(north);
+            QuadtreeNode* testNode_2 = testNode_1->getNeighbourOfGreaterOrEqualSize(west);
+            return testNode_2;
+        }
+    } else if (dir==northeast) {
+        if (this->getParent()==NULL) return NULL;
+        if (this->getParent()->getSWChild()==this) return this->getParent()->getNEChild();
+        if (this->getParent()->getSEChild()==this) return this->getParent()->getNEChild()->getNeighbourOfGreaterOrEqualSize(east);
+        if (this->getParent()->getNWChild()==this) return this->getParent()->getNEChild()->getNeighbourOfGreaterOrEqualSize(north);
+        if (this->getParent()->getNEChild()==this) {
+            QuadtreeNode* testNode_1 = this->getNeighbourOfGreaterOrEqualSize(north);
+            QuadtreeNode* testNode_2 = testNode_1->getNeighbourOfGreaterOrEqualSize(east);
+            return testNode_2;
+        }
+    } else if (dir==southeast) {
+        if (this->getParent()==NULL) return NULL;
+        if (this->getParent()->getNWChild()==this) return this->getParent()->getSEChild();
+        if (this->getParent()->getNEChild()==this) return this->getParent()->getSEChild()->getNeighbourOfGreaterOrEqualSize(east);
+        if (this->getParent()->getSWChild()==this) return this->getParent()->getSEChild()->getNeighbourOfGreaterOrEqualSize(south);
+        if (this->getParent()->getSEChild()==this) {
+            QuadtreeNode* testNode_1 = this->getNeighbourOfGreaterOrEqualSize(south);
+            QuadtreeNode* testNode_2 = testNode_1->getNeighbourOfGreaterOrEqualSize(east);
+            return testNode_2;
+        }
+    } else if (dir==southwest) {
+        if (this->getParent()==NULL) return NULL;
+        if (this->getParent()->getNEChild()==this) return this->getParent()->getSWChild();
+        if (this->getParent()->getNWChild()==this) return this->getParent()->getSWChild()->getNeighbourOfGreaterOrEqualSize(west);
+        if (this->getParent()->getSEChild()==this) return this->getParent()->getSWChild()->getNeighbourOfGreaterOrEqualSize(south);
+        if (this->getParent()->getSWChild()==this) {
+            QuadtreeNode* testNode_1 = this->getNeighbourOfGreaterOrEqualSize(south);
+            QuadtreeNode* testNode_2 = testNode_1->getNeighbourOfGreaterOrEqualSize(west);
+            return testNode_2;
+        }
     }
     cout << "should never go here" << endl;
     return NULL;
@@ -185,6 +228,42 @@ vector<QuadtreeNode*> QuadtreeNode::getNeighboursOfSmallerSize(QuadtreeNode* nei
             else {
                 candidates.push_back(curCandidate->getNEChild());
                 candidates.push_back(curCandidate->getSEChild());
+            }
+            candidates = removeNodeFromVector(candidates, curCandidate);
+        }
+    } else if (dir==northwest) {
+        while (candidates.size() > 0) {
+            QuadtreeNode* curCandidate = candidates[0];
+            if (curCandidate->isLeaf()) neighbours.push_back(curCandidate);
+            else {
+                candidates.push_back(curCandidate->getSEChild());
+            }
+            candidates = removeNodeFromVector(candidates, curCandidate);
+        }
+    } else if (dir==northeast) {
+        while (candidates.size() > 0) {
+            QuadtreeNode* curCandidate = candidates[0];
+            if (curCandidate->isLeaf()) neighbours.push_back(curCandidate);
+            else {
+                candidates.push_back(curCandidate->getSWChild());
+            }
+            candidates = removeNodeFromVector(candidates, curCandidate);
+        }
+    } else if (dir==southeast) {
+        while (candidates.size() > 0) {
+            QuadtreeNode* curCandidate = candidates[0];
+            if (curCandidate->isLeaf()) neighbours.push_back(curCandidate);
+            else {
+                candidates.push_back(curCandidate->getNWChild());
+            }
+            candidates = removeNodeFromVector(candidates, curCandidate);
+        }
+    } else if (dir==southwest) {
+        while (candidates.size() > 0) {
+            QuadtreeNode* curCandidate = candidates[0];
+            if (curCandidate->isLeaf()) neighbours.push_back(curCandidate);
+            else {
+                candidates.push_back(curCandidate->getNEChild());
             }
             candidates = removeNodeFromVector(candidates, curCandidate);
         }

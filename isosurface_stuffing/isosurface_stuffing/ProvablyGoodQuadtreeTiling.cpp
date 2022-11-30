@@ -9,8 +9,60 @@
 
 ProvablyGoodQuadtreeTiling::ProvablyGoodQuadtreeTiling(SquareQuadtree tree) : QuadtreeTiling() {
     // rebalance strongly
+    stronglyBalance(tree);
     createTilingHelper(tree.getRoot());
     satisfyJunctions();
+}
+
+void ProvablyGoodQuadtreeTiling::stronglyBalance(SquareQuadtree tree) {
+    vector<QuadtreeNode*> leaves;
+    leaves = tree.getRoot()->getListOfLeaves(leaves);
+    while(leaves.size() > 0) {
+        QuadtreeNode* curLeaf = leaves[0];
+
+        vector<QuadtreeNode*> neighbors;
+        vector<QuadtreeNode*> northNeighbors = curLeaf->getNeighbours(north);
+        vector<QuadtreeNode*> southNeighbors = curLeaf->getNeighbours(south);
+        vector<QuadtreeNode*> eastNeighbors = curLeaf->getNeighbours(east);
+        vector<QuadtreeNode*> westNeighbors = curLeaf->getNeighbours(west);
+        vector<QuadtreeNode*> northEastNeighbors = curLeaf->getNeighbours(northeast);
+        vector<QuadtreeNode*> southWestNeighbors = curLeaf->getNeighbours(southwest);
+        vector<QuadtreeNode*> southEastNeighbors = curLeaf->getNeighbours(southeast);
+        vector<QuadtreeNode*> northWestNeighbors = curLeaf->getNeighbours(northwest);
+
+        neighbors.insert(neighbors.end(), northNeighbors.begin(), northNeighbors.end());
+        neighbors.insert(neighbors.end(), southNeighbors.begin(), southNeighbors.end());
+        neighbors.insert(neighbors.end(), eastNeighbors.begin(), eastNeighbors.end());
+        neighbors.insert(neighbors.end(), westNeighbors.begin(), westNeighbors.end());
+        neighbors.insert(neighbors.end(), northEastNeighbors.begin(), northEastNeighbors.end());
+        neighbors.insert(neighbors.end(), southWestNeighbors.begin(), southWestNeighbors.end());
+        neighbors.insert(neighbors.end(), southEastNeighbors.begin(), southEastNeighbors.end());
+        neighbors.insert(neighbors.end(), northWestNeighbors.begin(), northWestNeighbors.end());
+
+        bool mustRefineCurLeaf = false;
+        for (int j = 0; j < neighbors.size(); j++) {
+            if (curLeaf->getDimension() / neighbors[j]->getDimension() > 2) {
+                mustRefineCurLeaf = true;
+                break;
+            }
+        }
+
+        if (mustRefineCurLeaf) {
+            tree.refineNode(curLeaf);
+            
+            vector<QuadtreeNode*> children = curLeaf->getChildren();
+
+            leaves.push_back(children[0]);
+            leaves.push_back(children[1]);
+            leaves.push_back(children[2]);
+            leaves.push_back(children[3]);
+            
+            for (int i = 0; i < neighbors.size(); i++) {
+                leaves.push_back(neighbors[i]);
+            }
+        }
+        leaves = tree.removeNodeFromVector(leaves, curLeaf);
+    }
 }
 
 string ProvablyGoodQuadtreeTiling::getSideLabel(vector<QuadtreeNode*> neighbours, QuadtreeNode* curNode) {

@@ -77,19 +77,6 @@ int main() {
 
     // BARGRAPH
     BarGraph bargraph(algorithmInstance.getProcessedTriangles(), canvas.getWidth() / 2, canvas.getHeight(), canvas.getWidth() / 2, numBars);
-    
-//    ProvablyGoodTriangleFactory testProvablyGood;
-//    vector<Triangle> testProvablyGood_1 = testProvablyGood.triangulate(AAAB, Point(200, 200), 150, M_PI/2);
-//    ProvablyGoodTriangleFactory testProvablyGood_2(AAAB, Point(200, 400), 150, M_PI);
-//    ProvablyGoodTriangleFactory testProvablyGood_3(AAAB, Point(200, 600), 150, M_PI*3/2);
-//    ProvablyGoodTriangleFactory testProvablyGood_4(AAAB, Point(400, 200), 150, 0);
-//    ProvablyGoodTriangleFactory testProvablyGood_5(BBBB, Point(400, 400), 150, M_PI/2);
-//    ProvablyGoodTriangleFactory testProvablyGood_6(BBBC, Point(400, 600), 150, M_PI/2);
-//    ProvablyGoodTriangleFactory testProvablyGood_7(ABCB, Point(600, 200), 150, M_PI/2);
-//    ProvablyGoodTriangleFactory testProvablyGood_8(ABAB, Point(600, 400), 150, M_PI/2);
-//    ProvablyGoodTriangleFactory testProvablyGood_9(ABBB, Point(600, 600), 150, M_PI/2);
-
-
 
     while (!glfwWindowShouldClose(window)) {
                 
@@ -103,16 +90,6 @@ int main() {
         
 
 //        isosurface.render();
-        
-//        for (int i = 0; i < testProvablyGood_1.size(); i++) testProvablyGood_1[i].render();
-//        testProvablyGood_2.render();
-//        testProvablyGood_3.render();
-//        testProvablyGood_4.render();
-//        testProvablyGood_5.render();
-//        testProvablyGood_6.render();
-//        testProvablyGood_7.render();
-//        testProvablyGood_8.render();
-//        testProvablyGood_9.render();
         
 
         glfwSwapBuffers(window);

@@ -20,10 +20,12 @@ public:
     void createTrianglesFromCell(QuadtreeNode*) override;
     void satisfyJunctions() override;
 private:
-    ProvablyGoodTriangleFactory triangulator;
+    void stronglyBalance(SquareQuadtree);
     string getSideLabel(vector<QuadtreeNode*>, QuadtreeNode*);
     bool isRotationValid(string);
     CellConfiguration getConfiguration(string);
     const string validConfigurations[9] = {"ABAB", "ABCB", "BBCC", "BBBB", "ABBB", "AABB", "AAAA", "AAAB", "BBBC"};
+    
+    ProvablyGoodTriangleFactory triangulator;
 };
 #endif /* ProvablyGoodQuadtreeTiling_hpp */
