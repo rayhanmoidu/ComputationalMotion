@@ -29,9 +29,10 @@ const int triangleSideLength = 80;
 const int circleRadius = 200;
 const int rectangleWidth = 200;
 const int rectangleHeight = 200;
-const float alpha = 60;
+const float alpha = 1;
 const float isosurfaceRenderingThreshold = 2;
 const int numBars = 18; // 180 % numBars should be 0
+const int smallestQuadtreeCell = 10;
 
 
 int main() {
@@ -63,11 +64,12 @@ int main() {
     
     // ISOSURFACE
     CircleIsosurface isosurface(circleRadius, canvas.getWidth() / 2, canvas.getHeight(), isosurfaceRenderingThreshold);
+
     RectangleIsosurface rectangle(rectangleWidth, rectangleHeight, canvas.getWidth() / 2, canvas.getHeight(), isosurfaceRenderingThreshold);
     
     // QUADTREE
-    SquareQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), 10, isosurface);
-    ProvablyGoodQuadtreeTiling quadtreeTiling(quadtree);
+    SquareQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, isosurface);
+    IsoscelesSingleQuadtreeTiling quadtreeTiling(quadtree);
     
     cout << quadtreeTiling.getTriangles().size()<<endl;
 //

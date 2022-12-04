@@ -9,26 +9,117 @@
 
 IsoscelesSingleQuadtreeTiling::IsoscelesSingleQuadtreeTiling(SquareQuadtree tree) : QuadtreeTiling() {
     createTilingHelper(tree.getRoot());
-    satisfyJunctions();
+//    satisfyJunctions();
 }
 
 void IsoscelesSingleQuadtreeTiling::createTrianglesFromCell(QuadtreeNode *curNode) {
-    Point ULCorner(curNode->getCenterX() - curNode->getDimension() / 2, curNode->getCenterY() - curNode->getDimension() / 2);
-    Point URCorner(curNode->getCenterX() + curNode->getDimension() / 2, curNode->getCenterY() - curNode->getDimension() / 2);
-    Point BLCorner(curNode->getCenterX() - curNode->getDimension() / 2, curNode->getCenterY() + curNode->getDimension() / 2);
-    Point BRCorner(curNode->getCenterX() + curNode->getDimension() / 2, curNode->getCenterY() + curNode->getDimension() / 2);
-
-    Triangle t1(ULCorner, BLCorner, BRCorner);
-    Triangle t2(URCorner, BRCorner, ULCorner);
+    Point ULCorner(curNode->getCenterX() - curNode->getDimension() / 2, curNode->getCenterY() + curNode->getDimension() / 2);
+    Point URCorner(curNode->getCenterX() + curNode->getDimension() / 2, curNode->getCenterY() + curNode->getDimension() / 2);
+    Point BLCorner(curNode->getCenterX() - curNode->getDimension() / 2, curNode->getCenterY() - curNode->getDimension() / 2);
+    Point BRCorner(curNode->getCenterX() + curNode->getDimension() / 2, curNode->getCenterY() - curNode->getDimension() / 2);
+    Point center(curNode->getCenterX(), curNode->getCenterY());
 
     addVertex(ULCorner);
     addVertex(URCorner);
     addVertex(BLCorner);
     addVertex(BRCorner);
-
-    triangles.push_back(t1);
-    triangles.push_back(t2);
+    
+    vector<QuadtreeNode*> northNeighbours = curNode->getNeighbours(north);
+    vector<QuadtreeNode*> westNeighbours = curNode->getNeighbours(west);
+    vector<QuadtreeNode*> eastNeighbours = curNode->getNeighbours(east);
+    vector<QuadtreeNode*> southNeighbours = curNode->getNeighbours(south);
+    
+    Point northMP((ULCorner.getX() + URCorner.getX()) / 2, ULCorner.getY());
+    Point southMP((BLCorner.getX() + BRCorner.getX()) / 2, BLCorner.getY());
+    Point westMP(ULCorner.getX(), (ULCorner.getY() + BLCorner.getY()) / 2);
+    Point eastMP(URCorner.getX(), (URCorner.getY() + BRCorner.getY()) / 2);
+    
+    if (eastNeighbours.size()>1) {
+        if (southNeighbours.size()>1) {
+            // east + south
+            Triangle t1(URCorner, southMP, BLCorner);
+            Triangle t2(URCorner, southMP, eastMP);
+            Triangle t3(eastMP, southMP, BRCorner);
+            
+            triangles.push_back(t1);
+            triangles.push_back(t2);
+            triangles.push_back(t3);
+        } else {
+            // east
+            Triangle t1(URCorner, eastMP, BLCorner);
+            Triangle t2(BRCorner, BLCorner, eastMP);
+            
+            triangles.push_back(t1);
+            triangles.push_back(t2);
+        }
+    } else {
+        if (southNeighbours.size()>1) {
+            // south
+            Triangle t1(URCorner, southMP, BLCorner);
+            Triangle t2(URCorner, BRCorner, southMP);
+            
+            triangles.push_back(t1);
+            triangles.push_back(t2);
+        } else {
+            // neither
+            Triangle t1(URCorner, BRCorner, BLCorner);
+            triangles.push_back(t1);
+        }
+    }
+    
+    if (westNeighbours.size()>1) {
+        if (northNeighbours.size()>1) {
+            // west + north
+            Triangle t1(URCorner, northMP, BLCorner);
+            Triangle t2(BLCorner, northMP, westMP);
+            Triangle t3(westMP, northMP, ULCorner);
+            
+            triangles.push_back(t1);
+            triangles.push_back(t2);
+            triangles.push_back(t3);
+        } else {
+            // west
+            Triangle t1(URCorner, westMP, BLCorner);
+            Triangle t2(URCorner, ULCorner, westMP);
+            
+            triangles.push_back(t1);
+            triangles.push_back(t2);
+        }
+    } else {
+        if (northNeighbours.size()>1) {
+            // north
+            Triangle t1(URCorner, northMP, BLCorner);
+            Triangle t2(ULCorner, BLCorner, northMP);
+            
+            triangles.push_back(t1);
+            triangles.push_back(t2);
+        } else {
+            // neither
+            Triangle t1(URCorner, ULCorner, BLCorner);
+            triangles.push_back(t1);
+        }
+    }
+    
+    
 }
+
+//void IsoscelesSingleQuadtreeTiling::createTrianglesFromCell(QuadtreeNode *curNode) {
+//    Point ULCorner(curNode->getCenterX() - curNode->getDimension() / 2, curNode->getCenterY() - curNode->getDimension() / 2);
+//    Point URCorner(curNode->getCenterX() + curNode->getDimension() / 2, curNode->getCenterY() - curNode->getDimension() / 2);
+//    Point BLCorner(curNode->getCenterX() - curNode->getDimension() / 2, curNode->getCenterY() + curNode->getDimension() / 2);
+//    Point BRCorner(curNode->getCenterX() + curNode->getDimension() / 2, curNode->getCenterY() + curNode->getDimension() / 2);
+//
+//    Triangle t1(ULCorner, BLCorner, BRCorner);
+//    Triangle t2(URCorner, BRCorner, ULCorner);
+//
+//    addVertex(ULCorner);
+//    addVertex(URCorner);
+//    addVertex(BLCorner);
+//    addVertex(BRCorner);
+//
+//    triangles.push_back(t1);
+//    triangles.push_back(t2);
+//}
 
 void IsoscelesSingleQuadtreeTiling::satisfyJunctions() {
     vector<Triangle> trianglesToProcess = triangles;
