@@ -29,11 +29,19 @@ const int triangleSideLength = 80;
 const int circleRadius = 200;
 const int rectangleWidth = 200;
 const int rectangleHeight = 200;
-const float alpha = 1;
+const float alpha = 60;
 const float isosurfaceRenderingThreshold = 2;
 const int numBars = 18; // 180 % numBars should be 0
 const int smallestQuadtreeCell = 10;
 
+float sizingFunction(float x, float y) {
+    if (x > 400 && x < 600) {
+        if (y > 50 && y < 200) {
+            return 1;
+        }
+    }
+    return 100;
+}
 
 int main() {
     glfwInit();
@@ -68,11 +76,9 @@ int main() {
     RectangleIsosurface rectangle(rectangleWidth, rectangleHeight, canvas.getWidth() / 2, canvas.getHeight(), isosurfaceRenderingThreshold);
     
     // QUADTREE
-    SquareQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, isosurface);
+    SquareQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, 10, &sizingFunction, 10);
     IsoscelesSingleQuadtreeTiling quadtreeTiling(quadtree);
-    
-    cout << quadtreeTiling.getTriangles().size()<<endl;
-//
+    //
      //ALGORITHM
     Algorithm algorithmInstance(quadtreeTiling, isosurface, alpha);
     algorithmInstance.execute();
@@ -87,11 +93,11 @@ int main() {
         algorithmInstance.renderProcessedTriangles();
         algorithmInstance.renderProcessedTriangleCutpoints();
         bargraph.drawGraph();
-//        quadtree.render();
+        quadtree.render();
 //        quadtreeTiling.render();
         
 
-//        isosurface.render();
+        isosurface.render();
         
 
         glfwSwapBuffers(window);
@@ -101,3 +107,10 @@ int main() {
     return 0;
 }
 
+
+// allow users to only specify refinemenet in cells blocks of size x
+// thus, need to test x units away accross area of each cell for refinement
+
+
+
+// ask about inputs / outputs

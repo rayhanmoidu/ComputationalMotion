@@ -31,6 +31,15 @@ void Algorithm::findTrianglesOverlayingIsosurface() {
     }
 }
 
+Point Algorithm::interpolateCutpoint(Point positiveVertex, Point negativeVertex) {
+    Point potentialCutpoint = positiveVertex;
+    while (1) {
+        potentialCutpoint = findCutpointLocationBetweenPolarPoints(potentialCutpoint, negativeVertex);
+        if (abs(isosurface.signedDistanceFunction(potentialCutpoint)) < 0.5) break;
+    }
+    return potentialCutpoint;
+}
+
 Point Algorithm::findCutpointLocationBetweenPolarPoints(Point positiveVertex, Point negativeVertex) {
     float dx = positiveVertex.getX() - negativeVertex.getX();
     float dy = positiveVertex.getY() - negativeVertex.getY();
@@ -59,13 +68,15 @@ void Algorithm::findCutPoints() {
         
         for (int posIndex = 0; posIndex < positiveVertices.size(); posIndex++) {
             for (int negIndex = 0; negIndex < negativeVertices.size(); negIndex++) {
-                Point potentialCutpoint = positiveVertices[posIndex];
-                while (1) {
-                    potentialCutpoint = findCutpointLocationBetweenPolarPoints(potentialCutpoint, negativeVertices[negIndex]);
-                    if (abs(isosurface.signedDistanceFunction(potentialCutpoint)) < 0.5) break;
-                }
                 
-                Cutpoint newCutpoint(potentialCutpoint.getX(), potentialCutpoint.getY(), positiveVertices[posIndex], negativeVertices[negIndex]);
+                Point cutpoint = interpolateCutpoint(positiveVertices[posIndex], negativeVertices[negIndex]);
+//                Point potentialCutpoint = positiveVertices[posIndex];
+//                while (1) {
+//                    potentialCutpoint = findCutpointLocationBetweenPolarPoints(potentialCutpoint, negativeVertices[negIndex]);
+//                    if (abs(isosurface.signedDistanceFunction(potentialCutpoint)) < 0.5) break;
+//                }
+                
+                Cutpoint newCutpoint(cutpoint.getX(), cutpoint.getY(), positiveVertices[posIndex], negativeVertices[negIndex]);
                 curTriangle->addCutpoint(newCutpoint);
             }
         }
@@ -149,17 +160,17 @@ void Algorithm::clipPerimeterTriangles() {
         
         if (negativeVertices.size()>=1) {
             if (negativeVertices.size()==2) {
-                Point p1 = findCutpointLocationBetweenPolarPoints(positiveVertices[0], negativeVertices[0]);
+                Point p1 = interpolateCutpoint(positiveVertices[0], negativeVertices[0]);
                 Cutpoint cp1(p1.getX(), p1.getY(), positiveVertices[0], negativeVertices[0]);
-                Point p2 = findCutpointLocationBetweenPolarPoints(positiveVertices[0], negativeVertices[1]);
+                Point p2 = interpolateCutpoint(positiveVertices[0], negativeVertices[1]);
                 Cutpoint cp2(p2.getX(), p2.getY(), positiveVertices[0], negativeVertices[1]);
                 
                 Triangle newTriangle = Triangle(cp1, cp2, positiveVertices[0]);
                 processedTriangles.push_back(newTriangle);
             } else if (negativeVertices.size()==1) {
-                Point p1 = findCutpointLocationBetweenPolarPoints(positiveVertices[0], negativeVertices[0]);
+                Point p1 = interpolateCutpoint(positiveVertices[0], negativeVertices[0]);
                 Cutpoint cp1(p1.getX(), p1.getY(), positiveVertices[0], negativeVertices[0]);
-                Point p2 = findCutpointLocationBetweenPolarPoints(positiveVertices[1], negativeVertices[0]);
+                Point p2 = interpolateCutpoint(positiveVertices[1], negativeVertices[0]);
                 Cutpoint cp2(p2.getX(), p2.getY(), positiveVertices[1], negativeVertices[0]);
                 
                 Triangle newTriangle1 = Triangle(cp1, positiveVertices[1], positiveVertices[0]);

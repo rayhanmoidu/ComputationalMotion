@@ -36,6 +36,7 @@ private:
     
     // helpers
     vector<Triangle*> getPerimeterTrianglesForProcessing();
+    Point interpolateCutpoint(Point, Point);
     Point findCutpointLocationBetweenPolarPoints(Point, Point);
     float distanceBetweenTwoPoints(Point, Point);
     vector<vector<Point>> sliceTrianglePointsBySign(vector<Point>);

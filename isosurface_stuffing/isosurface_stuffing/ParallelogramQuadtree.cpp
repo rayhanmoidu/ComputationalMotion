@@ -18,6 +18,7 @@ ParallelogramQuadtree::ParallelogramQuadtree(int screenWidth, int screenHeight, 
     hBound = screenWidth;
     vBound = screenHeight;
     gridSizeLimit = smallestGridSize;
+    refineAroundIsosurface = true;
     
     float newH = 4*hBound/3;
     
@@ -26,6 +27,30 @@ ParallelogramQuadtree::ParallelogramQuadtree(int screenWidth, int screenHeight, 
     float curCenterY = hBound/2;
 
     root = new QuadtreeNode(curCenterX, curCenterY, curDimension, NULL);
+
+    if (shouldRefine(root)) {
+        constructChildren(root);
+    }
+    balanceQuadtree();
+    
+    if (isBalanced()) {
+        cout <<"correctly balanced!"<<endl;
+    } else {
+        cout <<"ERROR incorrectly balanced!"<<endl;
+    }
+}
+
+ParallelogramQuadtree::ParallelogramQuadtree(int screenWidth, int screenHeight, int smallestGridSize, int cellToTraingleSizeRatio, float (*func)(float, float), int probingValue) : Quadtree() {
+    hBound = screenWidth;
+    vBound = screenHeight;
+    gridSizeLimit = smallestGridSize;
+    refineAroundIsosurface = false;
+    tilingCellSizeToMaxTriangleSizeRatio = cellToTraingleSizeRatio;
+    sizingFunction = func;
+    probingDistance = probingValue;
+
+
+    root = new QuadtreeNode(hBound / 2, vBound / 2, hBound, NULL);
 
     if (shouldRefine(root)) {
         constructChildren(root);
@@ -67,19 +92,45 @@ void ParallelogramQuadtree::constructChildren(QuadtreeNode *node) {
 }
 
 bool ParallelogramQuadtree::shouldRefine(QuadtreeNode* node) {
-    float diagonalLength = (2*(getCellHeight(node)));
+    if (refineAroundIsosurface) {
+        float diagonalLength = (2*(getCellHeight(node)));
 
-    Point corner1(node->getCenterX() + (node->getDimension()/2), node->getCenterY() + (node->getDimension()/2));
-    Point corner2(node->getCenterX() - (node->getDimension()/2), node->getCenterY() + (node->getDimension()/2));
-    Point corner3(node->getCenterX() + (node->getDimension()/2), node->getCenterY() - (node->getDimension()/2));
-    Point corner4(node->getCenterX() - (node->getDimension()/2), node->getCenterY() - (node->getDimension()/2));
+        Point corner1(node->getCenterX() + (node->getDimension()/2), node->getCenterY() + (node->getDimension()/2));
+        Point corner2(node->getCenterX() - (node->getDimension()/2), node->getCenterY() + (node->getDimension()/2));
+        Point corner3(node->getCenterX() + (node->getDimension()/2), node->getCenterY() - (node->getDimension()/2));
+        Point corner4(node->getCenterX() - (node->getDimension()/2), node->getCenterY() - (node->getDimension()/2));
 
-    if (node->getDimension() < gridSizeLimit) return false;
-    if (abs(isosurface.signedDistanceFunction(corner1)) > diagonalLength) return false;
-    if (abs(isosurface.signedDistanceFunction(corner4)) > diagonalLength) return false;
-    if (abs(isosurface.signedDistanceFunction(corner2)) > diagonalLength) return false;
-    if (abs(isosurface.signedDistanceFunction(corner3)) > diagonalLength) return false;
-    return true;
+        if (node->getDimension() < gridSizeLimit) return false;
+        if (abs(isosurface.signedDistanceFunction(corner1)) > diagonalLength) return false;
+        if (abs(isosurface.signedDistanceFunction(corner4)) > diagonalLength) return false;
+        if (abs(isosurface.signedDistanceFunction(corner2)) > diagonalLength) return false;
+        if (abs(isosurface.signedDistanceFunction(corner3)) > diagonalLength) return false;
+        return true;
+    } else {
+        Point curProbePoint(node->getCenterX() - (node->getDimension() / 2), node->getCenterY() + (node->getDimension() / 2));
+        
+        bool shouldRefine = false;
+        while (curProbePoint.getY() >= node->getCenterY() - (node->getDimension() / 2)) {
+            // TEST PROBE POINT
+            float maxTriangleSideLength = sizingFunction(curProbePoint.getX(), curProbePoint.getY());
+            
+            if (maxTriangleSideLength < node->getDimension()/tilingCellSizeToMaxTriangleSizeRatio) {
+                shouldRefine = true;
+                break;
+            }
+            
+            // ADJUST PROBE POINT
+            float newX = curProbePoint.getX() + probingDistance;
+            float newY = curProbePoint.getY();
+            if (newX > node->getCenterX() + (node->getDimension() / 2)) {
+                newX = node->getCenterX() - (node->getDimension() / 2);
+                newY = curProbePoint.getY() - probingDistance;
+            }
+            Point newProbePoint(newX, newY);
+            curProbePoint = newProbePoint;
+        }
+        return shouldRefine;
+    }
 }
 
 void ParallelogramQuadtree::render() {

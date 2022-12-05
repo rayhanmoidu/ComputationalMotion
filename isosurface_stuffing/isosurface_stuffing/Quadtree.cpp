@@ -6,31 +6,18 @@
 #include <iostream>
 #include "CircleIsosurface.hpp"
 
+CircleIsosurface nullIsosurface;
+
 Quadtree::Quadtree(int screenWidth, int screenHeight, int smallestGridSize, Isosurface &isosurface) :
 isosurface(isosurface) {
-//    hBound = screenWidth;
-//    vBound = screenHeight;
-//    gridSizeLimit = smallestGridSize;
-//
-//    root = new QuadtreeNode(hBound / 2, vBound / 2, hBound, NULL);
-//
-//    if (shouldRefine(root)) {
-//        constructChildren(root);
-//    }
-//    balanceQuadtree();
-//
-//    if (isBalanced()) {
-//        cout <<"correctly balanced!"<<endl;
-//    } else {
-//        cout <<"ERROR incorrectly balanced!"<<endl;
-//    }
 }
 
 Quadtree::Quadtree(Isosurface &isosurface) : isosurface(isosurface) {
-    hBound = 0;
-    vBound = 0;
-    gridSizeLimit = 0;
 }
+
+Quadtree::Quadtree() : isosurface(nullIsosurface) {
+}
+
 
 Isosurface& Quadtree::getIsosurface() {
     return isosurface;

@@ -14,6 +14,7 @@
 #include <utility>
 #include <iostream>
 #include "QuadtreeNode.hpp"
+#include "CircleIsosurface.hpp"
 //#include <pair>
 
 using namespace std;
@@ -22,6 +23,7 @@ class Quadtree {
 public:
     Quadtree(int, int, int, Isosurface&);
     Quadtree(Isosurface&);
+    Quadtree();
     virtual void render() = 0;
     
     QuadtreeNode* getRoot();
@@ -48,6 +50,11 @@ protected:
     int hBound;
     int vBound;
     
+    bool refineAroundIsosurface;
+    int tilingCellSizeToMaxTriangleSizeRatio = 0;
+    float (*sizingFunction)(float, float);
+    int probingDistance;
+        
     Isosurface &isosurface;
     QuadtreeNode* root;
 };

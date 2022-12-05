@@ -18,6 +18,7 @@ SquareQuadtree::SquareQuadtree(int screenWidth, int screenHeight, int smallestGr
     hBound = screenWidth;
     vBound = screenHeight;
     gridSizeLimit = smallestGridSize;
+    refineAroundIsosurface = true;
 
     root = new QuadtreeNode(hBound / 2, vBound / 2, hBound, NULL);
 
@@ -32,6 +33,30 @@ SquareQuadtree::SquareQuadtree(int screenWidth, int screenHeight, int smallestGr
         cout <<"ERROR incorrectly balanced!"<<endl;
     }
 }
+
+SquareQuadtree::SquareQuadtree(int screenWidth, int screenHeight, int smallestGridSize, int cellToTraingleSizeRatio, float (*func)(float, float), int probingValue) : Quadtree() {
+    hBound = screenWidth;
+    vBound = screenHeight;
+    gridSizeLimit = smallestGridSize;
+    refineAroundIsosurface = false;
+    tilingCellSizeToMaxTriangleSizeRatio = cellToTraingleSizeRatio;
+    sizingFunction = func;
+    probingDistance = probingValue;
+
+    root = new QuadtreeNode(hBound / 2, vBound / 2, hBound, NULL);
+
+    if (shouldRefine(root)) {
+        constructChildren(root);
+    }
+    balanceQuadtree();
+    
+    if (isBalanced()) {
+        cout <<"correctly balanced!"<<endl;
+    } else {
+        cout <<"ERROR incorrectly balanced!"<<endl;
+    }
+}
+
 
 void SquareQuadtree::constructChildren(QuadtreeNode *node) {
     QuadtreeNode* northEastChild = new QuadtreeNode(node->getCenterX() + node->getDimension()/4, node->getCenterY() + node->getDimension()/4, node->getDimension() / 2, node);
@@ -51,19 +76,45 @@ void SquareQuadtree::constructChildren(QuadtreeNode *node) {
 }
 
 bool SquareQuadtree::shouldRefine(QuadtreeNode* node) {
-    float diagonalLength = (sqrt(node->getDimension()*node->getDimension()*2));
+    if (refineAroundIsosurface) {
+        float diagonalLength = (sqrt(node->getDimension()*node->getDimension()*2));
 
-    Point corner1(node->getCenterX() + (node->getDimension()/2), node->getCenterY() + (node->getDimension()/2));
-    Point corner2(node->getCenterX() - (node->getDimension()/2), node->getCenterY() + (node->getDimension()/2));
-    Point corner3(node->getCenterX() + (node->getDimension()/2), node->getCenterY() - (node->getDimension()/2));
-    Point corner4(node->getCenterX() - (node->getDimension()/2), node->getCenterY() - (node->getDimension()/2));
-//    cout <<"lala" << node->getDimension()<<endl;
-    if (node->getDimension() < gridSizeLimit) return false;
-    if (abs(isosurface.signedDistanceFunction(corner1)) > diagonalLength) return false;
-    if (abs(isosurface.signedDistanceFunction(corner4)) > diagonalLength) return false;
-    if (abs(isosurface.signedDistanceFunction(corner2)) > diagonalLength) return false;
-    if (abs(isosurface.signedDistanceFunction(corner3)) > diagonalLength) return false;
-    return true;
+        Point corner1(node->getCenterX() + (node->getDimension()/2), node->getCenterY() + (node->getDimension()/2));
+        Point corner2(node->getCenterX() - (node->getDimension()/2), node->getCenterY() + (node->getDimension()/2));
+        Point corner3(node->getCenterX() + (node->getDimension()/2), node->getCenterY() - (node->getDimension()/2));
+        Point corner4(node->getCenterX() - (node->getDimension()/2), node->getCenterY() - (node->getDimension()/2));
+
+        if (node->getDimension() < gridSizeLimit) return false;
+        if (abs(isosurface.signedDistanceFunction(corner1)) > diagonalLength) return false;
+        if (abs(isosurface.signedDistanceFunction(corner4)) > diagonalLength) return false;
+        if (abs(isosurface.signedDistanceFunction(corner2)) > diagonalLength) return false;
+        if (abs(isosurface.signedDistanceFunction(corner3)) > diagonalLength) return false;
+        return true;
+    } else {
+        Point curProbePoint(node->getCenterX() - (node->getDimension() / 2), node->getCenterY() + (node->getDimension() / 2));
+        
+        bool shouldRefine = false;
+        while (curProbePoint.getY() >= node->getCenterY() - (node->getDimension() / 2)) {
+            // TEST PROBE POINT
+            float maxTriangleSideLength = sizingFunction(curProbePoint.getX(), curProbePoint.getY());
+            
+            if (maxTriangleSideLength < node->getDimension()/tilingCellSizeToMaxTriangleSizeRatio) {
+                shouldRefine = true;
+                break;
+            }
+            
+            // ADJUST PROBE POINT
+            float newX = curProbePoint.getX() + probingDistance;
+            float newY = curProbePoint.getY();
+            if (newX > node->getCenterX() + (node->getDimension() / 2)) {
+                newX = node->getCenterX() - (node->getDimension() / 2);
+                newY = curProbePoint.getY() - probingDistance;
+            }
+            Point newProbePoint(newX, newY);
+            curProbePoint = newProbePoint;
+        }
+        return shouldRefine;
+    }
 }
 
 void SquareQuadtree::render() {
