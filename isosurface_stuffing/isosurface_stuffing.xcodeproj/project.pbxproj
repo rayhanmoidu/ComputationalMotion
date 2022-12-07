@@ -11,7 +11,6 @@
 		A3320E382905096C0078823D /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3320E372905096C0078823D /* OpenGL.framework */; };
 		A3320E3A29050AE00078823D /* libGLEW.2.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A3320E3929050AE00078823D /* libGLEW.2.2.0.dylib */; };
 		A3320E3C29050B220078823D /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A3320E3B29050B220078823D /* libglfw.3.3.dylib */; };
-		A342609F292EB8A700ACDE52 /* SquareIsosurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A342609D292EB8A700ACDE52 /* SquareIsosurface.cpp */; };
 		A346C6332906235D00339D2F /* Canvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C6312906235D00339D2F /* Canvas.cpp */; };
 		A346C63629063EE600339D2F /* Point.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C63429063EE600339D2F /* Point.cpp */; };
 		A346C639290640E500339D2F /* Triangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A346C637290640E500339D2F /* Triangle.cpp */; };
@@ -32,6 +31,7 @@
 		A3599AB62924447100498281 /* EquilateralQuadtreeTiling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3599AB42924447100498281 /* EquilateralQuadtreeTiling.cpp */; };
 		A3599AB9292481C200498281 /* SquareQuadtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3599AB7292481C200498281 /* SquareQuadtree.cpp */; };
 		A3599ABC2924877D00498281 /* ParallelogramQuadtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3599ABA2924877D00498281 /* ParallelogramQuadtree.cpp */; };
+		A387BCCC2941080B00E8EFDF /* CustomIsosurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A387BCCA2941080B00E8EFDF /* CustomIsosurface.cpp */; };
 		A39B21E8293722D600354A7D /* ProvablyGoodTriangleFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A39B21E6293722D600354A7D /* ProvablyGoodTriangleFactory.cpp */; };
 		A39B21EB293731B200354A7D /* ProvablyGoodQuadtreeTiling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A39B21E9293731B200354A7D /* ProvablyGoodQuadtreeTiling.cpp */; };
 /* End PBXBuildFile section */
@@ -54,8 +54,6 @@
 		A3320E372905096C0078823D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		A3320E3929050AE00078823D /* libGLEW.2.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.2.0.dylib; path = ../../../../../opt/homebrew/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.0.dylib; sourceTree = "<group>"; };
 		A3320E3B29050B220078823D /* libglfw.3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.3.dylib; path = ../../../../../opt/homebrew/Cellar/glfw/3.3.8/lib/libglfw.3.3.dylib; sourceTree = "<group>"; };
-		A342609D292EB8A700ACDE52 /* SquareIsosurface.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SquareIsosurface.cpp; sourceTree = "<group>"; };
-		A342609E292EB8A700ACDE52 /* SquareIsosurface.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SquareIsosurface.hpp; sourceTree = "<group>"; };
 		A346C6312906235D00339D2F /* Canvas.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Canvas.cpp; sourceTree = "<group>"; };
 		A346C6322906235D00339D2F /* Canvas.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Canvas.hpp; sourceTree = "<group>"; };
 		A346C63429063EE600339D2F /* Point.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Point.cpp; sourceTree = "<group>"; };
@@ -96,6 +94,8 @@
 		A3599AB8292481C200498281 /* SquareQuadtree.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SquareQuadtree.hpp; sourceTree = "<group>"; };
 		A3599ABA2924877D00498281 /* ParallelogramQuadtree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ParallelogramQuadtree.cpp; sourceTree = "<group>"; };
 		A3599ABB2924877D00498281 /* ParallelogramQuadtree.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ParallelogramQuadtree.hpp; sourceTree = "<group>"; };
+		A387BCCA2941080B00E8EFDF /* CustomIsosurface.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CustomIsosurface.cpp; sourceTree = "<group>"; };
+		A387BCCB2941080B00E8EFDF /* CustomIsosurface.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CustomIsosurface.hpp; sourceTree = "<group>"; };
 		A39B21E6293722D600354A7D /* ProvablyGoodTriangleFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ProvablyGoodTriangleFactory.cpp; sourceTree = "<group>"; };
 		A39B21E7293722D600354A7D /* ProvablyGoodTriangleFactory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ProvablyGoodTriangleFactory.hpp; sourceTree = "<group>"; };
 		A39B21E9293731B200354A7D /* ProvablyGoodQuadtreeTiling.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ProvablyGoodQuadtreeTiling.cpp; sourceTree = "<group>"; };
@@ -171,8 +171,8 @@
 				A346C65E2910E84800339D2F /* RectangleIsosurface.cpp */,
 				A346C64A29088D0300339D2F /* CircleIsosurface.hpp */,
 				A346C64929088D0300339D2F /* CircleIsosurface.cpp */,
-				A342609D292EB8A700ACDE52 /* SquareIsosurface.cpp */,
-				A342609E292EB8A700ACDE52 /* SquareIsosurface.hpp */,
+				A387BCCB2941080B00E8EFDF /* CustomIsosurface.hpp */,
+				A387BCCA2941080B00E8EFDF /* CustomIsosurface.cpp */,
 				A346C63B2906432B00339D2F /* Cutpoint.hpp */,
 				A346C63A2906432B00339D2F /* Cutpoint.cpp */,
 				A346C638290640E500339D2F /* Triangle.hpp */,
@@ -258,7 +258,7 @@
 				A39B21EB293731B200354A7D /* ProvablyGoodQuadtreeTiling.cpp in Sources */,
 				A346C6512909A09900339D2F /* Quadtree.cpp in Sources */,
 				A3599ABC2924877D00498281 /* ParallelogramQuadtree.cpp in Sources */,
-				A342609F292EB8A700ACDE52 /* SquareIsosurface.cpp in Sources */,
+				A387BCCC2941080B00E8EFDF /* CustomIsosurface.cpp in Sources */,
 				A3599AAD292318F500498281 /* QuadtreeNode.cpp in Sources */,
 				A346C64B29088D0300339D2F /* CircleIsosurface.cpp in Sources */,
 				A39B21E8293722D600354A7D /* ProvablyGoodTriangleFactory.cpp in Sources */,

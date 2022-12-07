@@ -62,12 +62,21 @@ void BarGraph::distributeGraphValues() {
     
     // get maxVal of non-dwarf bar
     int maxVal = -1;
+    int maxDwarfVal = -1;
     
     for(std::map<int,int>::iterator it = graphValues.begin(); it != graphValues.end(); ++it) {
         if (it->second > maxVal && it->second <= medianValue*4) maxVal = it->second;
+        if (it->second > maxDwarfVal) maxDwarfVal = it->second;
     }
     
+//    for(std::map<int,int>::iterator it = graphValues.begin(); it != graphValues.end(); ++it) {
+//        if (it->second > maxVal && it->second <= medianValue*4) maxVal = it->second;
+//    }
+//
+//    bool isDwarfBar = it->second > medianValue*4;
+    
     maxGraphValue = maxVal;
+    maxDwarfValue = maxDwarfVal;
 }
 
 void BarGraph::drawGraphTemplate() {
@@ -100,11 +109,12 @@ void BarGraph::drawGraph() {
     float graphStartPosX = xStartPos + horizontalOffset + templateThickness + barWidth/2;
     float graphStartPosY = verticalOffset + templateThickness;
     
-//    cout << graphValues.size()<<endl;
+    float dwarfDivisor = maxDwarfValue / maxGraphValue;
     
+//    cout << dwarfDivisor << endl;
+        
     for(std::map<int,int>::iterator it = graphValues.begin(); it != graphValues.end(); ++it) {
         bool isDwarfBar = it->second > medianValue*4;
-//        cout << it->first<<endl;
         if (isDwarfBar) glColor3f(1, 0.5, 0.5);
         else glColor3f(0.5, 0.5, 0.5);
         
@@ -113,8 +123,8 @@ void BarGraph::drawGraph() {
         glVertex2f(curBarStartPos, graphStartPosY);
         glVertex2f(curBarStartPos + barWidth/2, graphStartPosY);
         if (isDwarfBar) {
-            glVertex2f(curBarStartPos + barWidth/2, graphStartPosY + valueOfVerticalPixel*(it->second/40));
-            glVertex2f(curBarStartPos, graphStartPosY + valueOfVerticalPixel*(it->second/40));
+            glVertex2f(curBarStartPos + barWidth/2, graphStartPosY + valueOfVerticalPixel*(it->second/dwarfDivisor));
+            glVertex2f(curBarStartPos, graphStartPosY + valueOfVerticalPixel*(it->second/dwarfDivisor));
         } else {
             glVertex2f(curBarStartPos + barWidth/2, graphStartPosY + valueOfVerticalPixel*(it->second));
             glVertex2f(curBarStartPos, graphStartPosY + valueOfVerticalPixel*(it->second));

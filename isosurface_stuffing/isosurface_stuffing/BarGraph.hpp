@@ -28,6 +28,7 @@ private:
     
     int maxGraphValue;
     int medianValue;
+    int maxDwarfValue;
     
     const int horizontalOffset = 50;
     const int verticalOffset = 50;

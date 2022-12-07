@@ -21,8 +21,8 @@
 #include "ParallelogramQuadtree.hpp"
 #include "EquilateralQuadtreeTiling.hpp"
 #include "ProvablyGoodTriangleFactory.hpp"
-#include "SquareIsosurface.hpp"
 #include "ProvablyGoodQuadtreeTiling.hpp"
+#include "CustomIsosurface.hpp"
 
 const GLint WIDTH = 1000, HEIGHT = 500;
 const int triangleSideLength = 80;
@@ -32,15 +32,21 @@ const int rectangleHeight = 200;
 const float alpha = 60;
 const float isosurfaceRenderingThreshold = 2;
 const int numBars = 18; // 180 % numBars should be 0
-const int smallestQuadtreeCell = 10;
+const int smallestQuadtreeCell = 5;
 
 float sizingFunction(float x, float y) {
-    if (x > 400 && x < 600) {
-        if (y > 50 && y < 200) {
+    if (x >= 400 && x <= 600) {
+        if (y >= 50 && y <= 200) {
             return 1;
         }
     }
     return 100;
+}
+
+float sdf(float x, float y) {
+    float valueToRoot = (x - 500)*(x - 500) + (y - 500)*(y - 500);
+    float vectorLength = sqrt(valueToRoot);
+    return vectorLength - 400;
 }
 
 int main() {
@@ -71,13 +77,16 @@ int main() {
 //    newTiling.createTiling(0, 0, "all", "normal");
     
     // ISOSURFACE
-    CircleIsosurface isosurface(circleRadius, canvas.getWidth() / 2, canvas.getHeight(), isosurfaceRenderingThreshold);
+    
+    
+    CustomIsosurface isosurface(&sdf);
 
     RectangleIsosurface rectangle(rectangleWidth, rectangleHeight, canvas.getWidth() / 2, canvas.getHeight(), isosurfaceRenderingThreshold);
     
     // QUADTREE
     SquareQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, 10, &sizingFunction, 10);
-    IsoscelesSingleQuadtreeTiling quadtreeTiling(quadtree);
+//    SquareQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, isosurface);
+    ProvablyGoodQuadtreeTiling quadtreeTiling(quadtree);
     //
      //ALGORITHM
     Algorithm algorithmInstance(quadtreeTiling, isosurface, alpha);
@@ -93,7 +102,7 @@ int main() {
         algorithmInstance.renderProcessedTriangles();
         algorithmInstance.renderProcessedTriangleCutpoints();
         bargraph.drawGraph();
-        quadtree.render();
+//        quadtree.render();
 //        quadtreeTiling.render();
         
 
