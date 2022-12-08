@@ -10,6 +10,8 @@
 ProvablyGoodQuadtreeTiling::ProvablyGoodQuadtreeTiling(SquareQuadtree tree) : QuadtreeTiling() {
     // rebalance strongly
     stronglyBalance(tree);
+    ProvablyGoodTriangleFactory newTriangulator(this);
+    triangulator = newTriangulator;
     createTilingHelper(tree.getRoot());
 }
 

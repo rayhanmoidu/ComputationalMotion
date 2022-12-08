@@ -29,6 +29,16 @@ int Tiling::findVertexIndex(Point p) {
     return verticesToIndexInList.at(key);
 }
 
-int handleVertex(Point p) {
-    return 0;
+int Tiling::check_addVertex_getIndex(Point p) {
+    if (verticesSet.count(pair<float, float>(p.getX(), p.getY()))) {
+        return findVertexIndex(p);
+    } else {
+        addVertex(p);
+        return int(vertices.size() - 1);
+    }
+}
+
+int Tiling::addVertex_getIndex(Point p) {
+    addVertex(p);
+    return int(vertices.size() - 1);
 }

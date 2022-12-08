@@ -119,11 +119,20 @@ bool Triangle::doesContainCutpoint(Cutpoint cp) {
     return false;
 }
 
-void Triangle::warpVertexToCutpoint(Point p, Cutpoint cp) {
+void Triangle::warpVertexToCutpoint(Point p, Cutpoint cp, int newIndex) {
     // todo... edit indices ?
-    if (p1==p) p1 = Point(cp.getX(), cp.getY());
-    if (p2==p) p2 = Point(cp.getX(), cp.getY());
-    if (p3==p) p3 = Point(cp.getX(), cp.getY());
+    if (p1==p) {
+        p1 = Point(cp.getX(), cp.getY());
+        i1 = newIndex;
+    }
+    if (p2==p) {
+        p2 = Point(cp.getX(), cp.getY());
+        i2 = newIndex;
+    }
+    if (p3==p) {
+        p3 = Point(cp.getX(), cp.getY());
+        i3 = newIndex;
+    }
 }
 
 void Triangle::removeCutpoint(Cutpoint cp) {

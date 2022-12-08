@@ -71,78 +71,15 @@ void EquilateralQuadtreeTiling::createTrianglesFromCell(QuadtreeNode *curNode) {
     Point westMP((ULCorner.getX() + BLCorner.getX()) / 2, (ULCorner.getY() + BLCorner.getY()) / 2);
     Point middleMP((BRCorner.getX() + ULCorner.getX()) / 2, (BRCorner.getY() + ULCorner.getY()) / 2);
     
-    int ULCornerIndex = 0;
-    int URCornerIndex = 0;
-    int BLCornerIndex = 0;
-    int BRCornerIndex = 0;
-    int middleMPIndex = 0;
-    int northMPIndex = 0;
-    int southMPIndex = 0;
-    int westMPIndex = 0;
-    int eastMPIndex = 0;
-    
-    if (verticesSet.count(pair<float, float>(ULCorner.getX(), ULCorner.getY()))) {
-        ULCornerIndex = findVertexIndex(ULCorner);
-    } else {
-        addVertex(ULCorner);
-        ULCornerIndex = int(vertices.size() - 1);
-    }
-    
-    if (verticesSet.count(pair<float, float>(URCorner.getX(), URCorner.getY()))) {
-        URCornerIndex = findVertexIndex(URCorner);
-    } else {
-        addVertex(URCorner);
-        URCornerIndex = int(vertices.size() - 1);
-    }
-    
-    if (verticesSet.count(pair<float, float>(BLCorner.getX(), BLCorner.getY()))) {
-        BLCornerIndex = findVertexIndex(BLCorner);
-    } else {
-        addVertex(BLCorner);
-        BLCornerIndex = int(vertices.size() - 1);
-    }
-    
-    if (verticesSet.count(pair<float, float>(BRCorner.getX(), BRCorner.getY()))) {
-        BRCornerIndex = findVertexIndex(BRCorner);
-    } else {
-        addVertex(BRCorner);
-        BRCornerIndex = int(vertices.size() - 1);
-    }
-    
-    if (verticesSet.count(pair<float, float>(middleMP.getX(), middleMP.getY()))) {
-        middleMPIndex = findVertexIndex(middleMP);
-    } else {
-        addVertex(middleMP);
-        middleMPIndex = int(vertices.size() - 1);
-    }
-    
-    if (verticesSet.count(pair<float, float>(northMP.getX(), northMP.getY()))) {
-        northMPIndex = findVertexIndex(northMP);
-    } else {
-        addVertex(northMP);
-        northMPIndex = int(vertices.size() - 1);
-    }
-    
-    if (verticesSet.count(pair<float, float>(southMP.getX(), southMP.getY()))) {
-        southMPIndex = findVertexIndex(southMP);
-    } else {
-        addVertex(southMP);
-        southMPIndex = int(vertices.size() - 1);
-    }
-    
-    if (verticesSet.count(pair<float, float>(westMP.getX(), westMP.getY()))) {
-        westMPIndex = findVertexIndex(westMP);
-    } else {
-        addVertex(westMP);
-        westMPIndex = int(vertices.size() - 1);
-    }
-    
-    if (verticesSet.count(pair<float, float>(eastMP.getX(), eastMP.getY()))) {
-        eastMPIndex = findVertexIndex(eastMP);
-    } else {
-        addVertex(eastMP);
-        eastMPIndex = int(vertices.size() - 1);
-    }
+    int ULCornerIndex = check_addVertex_getIndex(ULCorner);
+    int URCornerIndex = check_addVertex_getIndex(URCorner);
+    int BLCornerIndex = check_addVertex_getIndex(BLCorner);
+    int BRCornerIndex = check_addVertex_getIndex(BRCorner);
+    int middleMPIndex = check_addVertex_getIndex(middleMP);
+    int northMPIndex = check_addVertex_getIndex(northMP);
+    int southMPIndex = check_addVertex_getIndex(southMP);
+    int westMPIndex = check_addVertex_getIndex(westMP);
+    int eastMPIndex = check_addVertex_getIndex(eastMP);
 
     
     vector<QuadtreeNode*> northNeighbours = curNode->getNeighbours(north);

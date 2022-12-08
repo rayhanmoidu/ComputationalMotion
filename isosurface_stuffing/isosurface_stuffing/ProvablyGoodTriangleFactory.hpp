@@ -11,13 +11,14 @@
 #include <stdio.h>
 #include "Point.hpp"
 #include "Triangle.hpp"
+#include "QuadtreeTiling.hpp"
 
 enum CellConfiguration { ABAB, ABCB, BBCC, BBBB, ABBB, AABB, AAAA, AAAB, BBBC };
-
 
 class ProvablyGoodTriangleFactory {
 public:
     ProvablyGoodTriangleFactory();
+    ProvablyGoodTriangleFactory(QuadtreeTiling*);
     vector<Triangle> triangulate(CellConfiguration, Point, float, float);
     void render(vector<Triangle> triangles);
 private:
@@ -31,6 +32,7 @@ private:
     vector<Triangle> triangulate_AAAB(Point, float, float);
     vector<Triangle> triangulate_BBBC(Point, float, float);
     bool verifyAngles(vector<Triangle> triangles);
+    QuadtreeTiling *tiling;
 };
 
 

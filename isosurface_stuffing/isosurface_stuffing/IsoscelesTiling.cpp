@@ -19,39 +19,11 @@ void IsoscelesTiling::createTiling(float xPos, float yPos, string key, string or
         Point p3(xPos + triangleSideLength, yPos + triangleSideLength);
         Point p4(xPos, yPos + triangleSideLength);
         
-        int p1Index = 0;
-        int p2Index = 0;
-        int p3Index = 0;
-        int p4Index = 0;
-        
-        if (verticesSet.count(pair<float, float>(p1.getX(), p1.getY()))) {
-            p1Index = findVertexIndex(p1);
-        } else {
-            addVertex(p1);
-            p1Index = int(vertices.size() - 1);
-        }
-        
-        if (verticesSet.count(pair<float, float>(p2.getX(), p2.getY()))) {
-            p2Index = findVertexIndex(p2);
-        } else {
-            addVertex(p1);
-            p2Index = int(vertices.size() - 1);
-        }
-        
-        if (verticesSet.count(pair<float, float>(p3.getX(), p3.getY()))) {
-            p3Index = findVertexIndex(p3);
-        } else {
-            addVertex(p1);
-            p3Index = int(vertices.size() - 1);
-        }
-        
-        if (verticesSet.count(pair<float, float>(p4.getX(), p4.getY()))) {
-            p4Index = findVertexIndex(p4);
-        } else {
-            addVertex(p1);
-            p4Index = int(vertices.size() - 1);
-        }
-        
+        int p1Index = check_addVertex_getIndex(p1);
+        int p2Index = check_addVertex_getIndex(p2);
+        int p3Index = check_addVertex_getIndex(p3);
+        int p4Index = check_addVertex_getIndex(p4);
+
         Triangle t1;
         Triangle t2;
         

@@ -32,7 +32,7 @@ const int rectangleHeight = 200;
 const float alpha = 60;
 const float isosurfaceRenderingThreshold = 2;
 const int numBars = 18; // 180 % numBars should be 0
-const int smallestQuadtreeCell = 2;
+const int smallestQuadtreeCell = 10;
 
 float sizingFunction(float x, float y) {
     if (x >= 400 && x <= 600) {
@@ -85,11 +85,11 @@ int main() {
     
     // QUADTREE
 //    SquareQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, 10, &sizingFunction, 10);
-    ParallelogramQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, isosurface);
-    EquilateralQuadtreeTiling quadtreeTiling(quadtree);
+//    ParallelogramQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, isosurface);
+//    EquilateralQuadtreeTiling quadtreeTiling(quadtree);
     
-//    SquareQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, isosurface);
-//    IsoscelesDoubleQuadtreeTiling quadtreeTiling(quadtree);
+    SquareQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, isosurface);
+    ProvablyGoodQuadtreeTiling quadtreeTiling(quadtree);
 
     //
      //ALGORITHM
@@ -100,6 +100,7 @@ int main() {
 
     // BARGRAPH
     BarGraph bargraph(algorithmInstance.getProcessedTriangles(), canvas.getWidth() / 2, canvas.getHeight(), canvas.getWidth() / 2, numBars);
+    
 
     while (!glfwWindowShouldClose(window)) {
                 

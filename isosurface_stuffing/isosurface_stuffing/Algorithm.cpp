@@ -70,11 +70,6 @@ void Algorithm::findCutPoints() {
             for (int negIndex = 0; negIndex < negativeVertices.size(); negIndex++) {
                 
                 Point cutpoint = interpolateCutpoint(positiveVertices[posIndex], negativeVertices[negIndex]);
-//                Point potentialCutpoint = positiveVertices[posIndex];
-//                while (1) {
-//                    potentialCutpoint = findCutpointLocationBetweenPolarPoints(potentialCutpoint, negativeVertices[negIndex]);
-//                    if (abs(isosurface.signedDistanceFunction(potentialCutpoint)) < 0.5) break;
-//                }
                 
                 Cutpoint newCutpoint(cutpoint.getX(), cutpoint.getY(), positiveVertices[posIndex], negativeVertices[negIndex]);
                 curTriangle->addCutpoint(newCutpoint);
@@ -130,7 +125,9 @@ void Algorithm::warpPerimeterTriangles() {
                     Cutpoint warpingDestination = cutpointsToConsider[lowestDistanceIndex];
                     
                     for (int k = 0; k < trianglesSharingVertex.size(); k++) {
-                        trianglesSharingVertex[k]->warpVertexToCutpoint(curPoint, warpingDestination);
+                        int warpingDestinationIndex = baseTiling.check_addVertex_getIndex(warpingDestination);
+                        trianglesSharingVertex[k]->warpVertexToCutpoint(curPoint, warpingDestination, warpingDestinationIndex);
+                        // add warping destination to list of vertices and adjust triangles accordingly
                     }
                     
                     // get rid of all cutpoints bound by the negative vertex

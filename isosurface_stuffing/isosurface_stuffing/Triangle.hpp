@@ -16,7 +16,7 @@ public:
     bool doesContainCutpoint(Cutpoint);
     bool doesContainVertex(Point);
     bool doesContainVertex(int);
-    void warpVertexToCutpoint(Point, Cutpoint);
+    void warpVertexToCutpoint(Point, Cutpoint, int);
     void removeCutpoint(Cutpoint);
     void removeAllCutpoints();
     void addCutpoint(Cutpoint);

@@ -36,7 +36,8 @@ public:
     
     // getters
     vector<Triangle> getTriangles();
-    int handleVertex(Point p);
+    int check_addVertex_getIndex(Point p);
+    int addVertex_getIndex(Point p);
     
 protected:
     vector<Triangle> triangles;
