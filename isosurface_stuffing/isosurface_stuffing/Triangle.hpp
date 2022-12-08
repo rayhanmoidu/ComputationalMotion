@@ -10,10 +10,12 @@ using namespace std;
 
 class Triangle {
 public:
+    Triangle(Point, Point, Point, int, int, int);
     Triangle(Point, Point, Point);
     Triangle();
     bool doesContainCutpoint(Cutpoint);
     bool doesContainVertex(Point);
+    bool doesContainVertex(int);
     void warpVertexToCutpoint(Point, Cutpoint);
     void removeCutpoint(Cutpoint);
     void removeAllCutpoints();
@@ -23,11 +25,11 @@ public:
     void render();
     void renderCutpoints();
     
-    void setPoints(Point, Point, Point);
+    void setPointsAndIndices(Point, Point, Point, int, int, int);
     vector<Point> getPoints();
     vector<Cutpoint> getCutpoints();
+    vector<int> getIndices();
     
-    bool doTriangleVerticesMatch(Triangle t2);
     bool operator == (Triangle &obj);
     
 private:
@@ -41,6 +43,10 @@ private:
     float colorkey1;
     float colorkey2;
     float colorkey3;
+    
+    int i1;
+    int i2;
+    int i3;
 };
 
 #endif /* Triangle_hpp */

@@ -11,7 +11,6 @@ ProvablyGoodQuadtreeTiling::ProvablyGoodQuadtreeTiling(SquareQuadtree tree) : Qu
     // rebalance strongly
     stronglyBalance(tree);
     createTilingHelper(tree.getRoot());
-    satisfyJunctions();
 }
 
 void ProvablyGoodQuadtreeTiling::stronglyBalance(SquareQuadtree tree) {
@@ -120,8 +119,3 @@ void ProvablyGoodQuadtreeTiling::createTrianglesFromCell(QuadtreeNode *curNode) 
     vector<Triangle> newTriangles = triangulator.triangulate(getConfiguration(configuration), Point(curNode->getCenterX(), curNode->getCenterY()), curNode->getDimension(), theta);    
     for (int i = 0; i < newTriangles.size(); i++) triangles.push_back(newTriangles[i]);
 }
-
-void ProvablyGoodQuadtreeTiling::satisfyJunctions() {
-    // not needed
-}
-

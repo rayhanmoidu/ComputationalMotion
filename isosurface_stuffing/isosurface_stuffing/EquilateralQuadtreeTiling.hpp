@@ -17,7 +17,6 @@ class EquilateralQuadtreeTiling : public QuadtreeTiling {
 public:
     EquilateralQuadtreeTiling(ParallelogramQuadtree);
     void createTrianglesFromCell(QuadtreeNode*) override;
-    void satisfyJunctions() override;
     void rebalanceQuadtree(ParallelogramQuadtree);
 };
 

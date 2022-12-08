@@ -18,7 +18,6 @@ class ProvablyGoodQuadtreeTiling : public QuadtreeTiling {
 public:
     ProvablyGoodQuadtreeTiling(SquareQuadtree);
     void createTrianglesFromCell(QuadtreeNode*) override;
-    void satisfyJunctions() override;
 private:
     void stronglyBalance(SquareQuadtree);
     string getSideLabel(vector<QuadtreeNode*>, QuadtreeNode*);

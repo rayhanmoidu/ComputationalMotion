@@ -22,10 +22,8 @@ public:
     
 protected:
     void createTilingHelper(QuadtreeNode*);
-    vector<Point> findTriangleMidpointsThatAreVertices(Point, Point, Point);
     
     virtual void createTrianglesFromCell(QuadtreeNode*) = 0;
-    virtual void satisfyJunctions() = 0;
 };
 
 #endif /* QuadtreeTiling_hpp */

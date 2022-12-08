@@ -8,10 +8,24 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+Triangle::Triangle(Point triangleP1, Point triangleP2, Point triangleP3, int index1, int index2, int index3) {
+    p1 = triangleP1;
+    p2 = triangleP2;
+    p3 = triangleP3;
+    i1 = index1;
+    i2 = index2;
+    i3 = index3;
+    cutpoints = vector<Cutpoint>();
+    setColors();
+}
+
 Triangle::Triangle(Point triangleP1, Point triangleP2, Point triangleP3) {
     p1 = triangleP1;
     p2 = triangleP2;
     p3 = triangleP3;
+    i1 = 0;
+    i2 = 0;
+    i3 = 0;
     cutpoints = vector<Cutpoint>();
     setColors();
 }
@@ -20,6 +34,9 @@ Triangle::Triangle() {
     p1 = Point();
     p2 = Point();
     p3 = Point();
+    i1 = 0;
+    i2 = 0;
+    i3 = 0;
     cutpoints = vector<Cutpoint>();
     setColors();
 }
@@ -58,10 +75,13 @@ void Triangle::renderCutpoints() {
     }
 }
 
-void Triangle::setPoints(Point point1, Point point2, Point point3) {
+void Triangle::setPointsAndIndices(Point point1, Point point2, Point point3, int index1, int index2, int index3) {
     p1 = point1;
     p2 = point2;
     p3 = point3;
+    i1 = index1;
+    i2 = index2;
+    i3 = index3;
 }
 
 vector<Point> Triangle::getPoints() {
@@ -70,6 +90,14 @@ vector<Point> Triangle::getPoints() {
     points.push_back(p2);
     points.push_back(p3);
     return points;
+}
+
+vector<int> Triangle::getIndices() {
+    vector<int> indices = vector<int>();
+    indices.push_back(i1);
+    indices.push_back(i2);
+    indices.push_back(i3);
+    return indices;
 }
 
 void Triangle::addCutpoint(Cutpoint newCutpoint) {
@@ -92,6 +120,7 @@ bool Triangle::doesContainCutpoint(Cutpoint cp) {
 }
 
 void Triangle::warpVertexToCutpoint(Point p, Cutpoint cp) {
+    // todo... edit indices ?
     if (p1==p) p1 = Point(cp.getX(), cp.getY());
     if (p2==p) p2 = Point(cp.getX(), cp.getY());
     if (p3==p) p3 = Point(cp.getX(), cp.getY());
@@ -129,15 +158,6 @@ bool Triangle::operator == (Triangle &obj) {
 
     
     return (pointsMatch1 && pointsMatch2 && pointsMatch3) && doCutpointsMatch;
-}
-
-bool Triangle::doTriangleVerticesMatch(Triangle t2) {
-    bool pointsMatch1 = (p1==t2.p1) || (p1==t2.p2) || (p1==t2.p3);
-    bool pointsMatch2 = (p2==t2.p1) || (p2==t2.p2) || (p2==t2.p3);
-    bool pointsMatch3 = (p3==t2.p1) || (p3==t2.p2) || (p3==t2.p3);
-
-    
-    return (pointsMatch1 && pointsMatch2 && pointsMatch3);
 }
 
 float Triangle::applyCosineLaw(float a, float b, float c) {

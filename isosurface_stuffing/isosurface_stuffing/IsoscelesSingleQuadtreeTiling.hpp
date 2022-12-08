@@ -17,7 +17,6 @@ class IsoscelesSingleQuadtreeTiling : public QuadtreeTiling {
 public:
     IsoscelesSingleQuadtreeTiling(SquareQuadtree);
     void createTrianglesFromCell(QuadtreeNode*) override;
-    void satisfyJunctions() override;
 };
 
 #endif /* IsoscelesSingleQuadtreeTiling_hpp */

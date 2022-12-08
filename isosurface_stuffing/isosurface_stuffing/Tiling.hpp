@@ -5,6 +5,7 @@
 #include "Triangle.hpp"
 #include "Quadtree.hpp"
 #include <unordered_set>
+#include <unordered_map>
 #include <iostream>
 #include <utility>
 #include <set>
@@ -35,13 +36,17 @@ public:
     
     // getters
     vector<Triangle> getTriangles();
-    
-    void addVertex(Point);
-    vector<Triangle> removeTriangle(vector<Triangle>, Triangle);
+    int handleVertex(Point p);
     
 protected:
     vector<Triangle> triangles;
-    std::unordered_set<std::pair<float, float>, pair_hash> vertices;
+    
+    vector<pair<float, float>> vertices;
+    std::unordered_set<std::pair<float, float>, pair_hash> verticesSet;
+    std::unordered_map<std::pair<float, float>, int, pair_hash> verticesToIndexInList;
+    int findVertexIndex(Point p);
+    void addVertex(Point);
+    
     int hBound;
     int vBound;
     int triangleSideLength;

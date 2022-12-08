@@ -18,17 +18,17 @@ void Tiling::render() {
 }
 
 void Tiling::addVertex(Point p) {
-    vertices.insert(pair<float, float>(p.getX(), p.getY()));
+    verticesSet.insert(pair<float, float>(p.getX(), p.getY()));
+    vertices.push_back(pair<float, float>(p.getX(), p.getY()));
+    pair<pair<float, float>, int> mapInsertion(pair<float, float>(p.getX(), p.getY()), vertices.size()-1);
+    verticesToIndexInList.insert(mapInsertion);
 }
 
-vector<Triangle> Tiling::removeTriangle(vector<Triangle> curTriangles, Triangle triangleToRemove) {
-    std::vector<Triangle> newTriangles;
+int Tiling::findVertexIndex(Point p) {
+    pair<float, float> key(p.getX(), p.getY());
+    return verticesToIndexInList.at(key);
+}
 
-    for (int i = 0; i < curTriangles.size(); i++) {
-        if (!curTriangles[i].doTriangleVerticesMatch(triangleToRemove)) {
-            newTriangles.push_back(curTriangles[i]);
-        }
-    }
-
-    return newTriangles;
+int handleVertex(Point p) {
+    return 0;
 }

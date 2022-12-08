@@ -9,7 +9,6 @@
 
 IsoscelesSingleQuadtreeTiling::IsoscelesSingleQuadtreeTiling(SquareQuadtree tree) : QuadtreeTiling() {
     createTilingHelper(tree.getRoot());
-//    satisfyJunctions();
 }
 
 void IsoscelesSingleQuadtreeTiling::createTrianglesFromCell(QuadtreeNode *curNode) {
@@ -18,36 +17,108 @@ void IsoscelesSingleQuadtreeTiling::createTrianglesFromCell(QuadtreeNode *curNod
     Point BLCorner(curNode->getCenterX() - curNode->getDimension() / 2, curNode->getCenterY() - curNode->getDimension() / 2);
     Point BRCorner(curNode->getCenterX() + curNode->getDimension() / 2, curNode->getCenterY() - curNode->getDimension() / 2);
     Point center(curNode->getCenterX(), curNode->getCenterY());
+    Point northMP((ULCorner.getX() + URCorner.getX()) / 2, ULCorner.getY());
+    Point southMP((BLCorner.getX() + BRCorner.getX()) / 2, BLCorner.getY());
+    Point westMP(ULCorner.getX(), (ULCorner.getY() + BLCorner.getY()) / 2);
+    Point eastMP(URCorner.getX(), (URCorner.getY() + BRCorner.getY()) / 2);
 
     addVertex(ULCorner);
     addVertex(URCorner);
     addVertex(BLCorner);
     addVertex(BRCorner);
     
+    int ULCornerIndex = 0;
+    int URCornerIndex = 0;
+    int BLCornerIndex = 0;
+    int BRCornerIndex = 0;
+    int centerIndex = 0;
+    int northMPIndex = 0;
+    int southMPIndex = 0;
+    int westMPIndex = 0;
+    int eastMPIndex = 0;
+    
+    if (verticesSet.count(pair<float, float>(ULCorner.getX(), ULCorner.getY()))) {
+        ULCornerIndex = findVertexIndex(ULCorner);
+    } else {
+        addVertex(ULCorner);
+        ULCornerIndex = int(vertices.size() - 1);
+    }
+    
+    if (verticesSet.count(pair<float, float>(URCorner.getX(), URCorner.getY()))) {
+        URCornerIndex = findVertexIndex(URCorner);
+    } else {
+        addVertex(URCorner);
+        URCornerIndex = int(vertices.size() - 1);
+    }
+    
+    if (verticesSet.count(pair<float, float>(BLCorner.getX(), BLCorner.getY()))) {
+        BLCornerIndex = findVertexIndex(BLCorner);
+    } else {
+        addVertex(BLCorner);
+        BLCornerIndex = int(vertices.size() - 1);
+    }
+    
+    if (verticesSet.count(pair<float, float>(BRCorner.getX(), BRCorner.getY()))) {
+        BRCornerIndex = findVertexIndex(BRCorner);
+    } else {
+        addVertex(BRCorner);
+        BRCornerIndex = int(vertices.size() - 1);
+    }
+    
+    if (verticesSet.count(pair<float, float>(center.getX(), center.getY()))) {
+        centerIndex = findVertexIndex(center);
+    } else {
+        addVertex(center);
+        centerIndex = int(vertices.size() - 1);
+    }
+    
+    if (verticesSet.count(pair<float, float>(northMP.getX(), northMP.getY()))) {
+        northMPIndex = findVertexIndex(northMP);
+    } else {
+        addVertex(northMP);
+        northMPIndex = int(vertices.size() - 1);
+    }
+    
+    if (verticesSet.count(pair<float, float>(southMP.getX(), southMP.getY()))) {
+        southMPIndex = findVertexIndex(southMP);
+    } else {
+        addVertex(southMP);
+        southMPIndex = int(vertices.size() - 1);
+    }
+    
+    if (verticesSet.count(pair<float, float>(westMP.getX(), westMP.getY()))) {
+        westMPIndex = findVertexIndex(westMP);
+    } else {
+        addVertex(westMP);
+        westMPIndex = int(vertices.size() - 1);
+    }
+    
+    if (verticesSet.count(pair<float, float>(eastMP.getX(), eastMP.getY()))) {
+        eastMPIndex = findVertexIndex(eastMP);
+    } else {
+        addVertex(eastMP);
+        eastMPIndex = int(vertices.size() - 1);
+    }
+    
     vector<QuadtreeNode*> northNeighbours = curNode->getNeighbours(north);
     vector<QuadtreeNode*> westNeighbours = curNode->getNeighbours(west);
     vector<QuadtreeNode*> eastNeighbours = curNode->getNeighbours(east);
     vector<QuadtreeNode*> southNeighbours = curNode->getNeighbours(south);
     
-    Point northMP((ULCorner.getX() + URCorner.getX()) / 2, ULCorner.getY());
-    Point southMP((BLCorner.getX() + BRCorner.getX()) / 2, BLCorner.getY());
-    Point westMP(ULCorner.getX(), (ULCorner.getY() + BLCorner.getY()) / 2);
-    Point eastMP(URCorner.getX(), (URCorner.getY() + BRCorner.getY()) / 2);
-    
     if (eastNeighbours.size()>1) {
         if (southNeighbours.size()>1) {
             // east + south
-            Triangle t1(URCorner, southMP, BLCorner);
-            Triangle t2(URCorner, southMP, eastMP);
-            Triangle t3(eastMP, southMP, BRCorner);
+            Triangle t1(BLCorner, southMP, URCorner, BLCornerIndex, southMPIndex, BLCornerIndex);
+            Triangle t2(southMP, eastMP, URCorner, southMPIndex, eastMPIndex, URCornerIndex);
+            Triangle t3(BRCorner, southMP, eastMP, BRCornerIndex, southMPIndex, eastMPIndex);
             
             triangles.push_back(t1);
             triangles.push_back(t2);
             triangles.push_back(t3);
         } else {
             // east
-            Triangle t1(URCorner, eastMP, BLCorner);
-            Triangle t2(BRCorner, BLCorner, eastMP);
+            Triangle t1(BLCorner, eastMP, URCorner, BLCornerIndex, eastMPIndex, URCornerIndex);
+            Triangle t2(BLCorner, BRCorner, eastMP, BLCornerIndex, BRCornerIndex, eastMPIndex);
             
             triangles.push_back(t1);
             triangles.push_back(t2);
@@ -55,14 +126,14 @@ void IsoscelesSingleQuadtreeTiling::createTrianglesFromCell(QuadtreeNode *curNod
     } else {
         if (southNeighbours.size()>1) {
             // south
-            Triangle t1(URCorner, southMP, BLCorner);
-            Triangle t2(URCorner, BRCorner, southMP);
+            Triangle t1(BLCorner, southMP, URCorner, BLCornerIndex, southMPIndex, URCornerIndex);
+            Triangle t2(southMP, BRCorner, URCorner, southMPIndex, BRCornerIndex, URCornerIndex);
             
             triangles.push_back(t1);
             triangles.push_back(t2);
         } else {
             // neither
-            Triangle t1(URCorner, BRCorner, BLCorner);
+            Triangle t1(BLCorner, BRCorner, URCorner, BLCornerIndex, BRCornerIndex, URCornerIndex);
             triangles.push_back(t1);
         }
     }
@@ -70,17 +141,17 @@ void IsoscelesSingleQuadtreeTiling::createTrianglesFromCell(QuadtreeNode *curNod
     if (westNeighbours.size()>1) {
         if (northNeighbours.size()>1) {
             // west + north
-            Triangle t1(URCorner, northMP, BLCorner);
-            Triangle t2(BLCorner, northMP, westMP);
-            Triangle t3(westMP, northMP, ULCorner);
+            Triangle t1(BLCorner, URCorner, northMP, BLCornerIndex, URCornerIndex, northMPIndex);
+            Triangle t2(BLCorner, northMP, westMP, BLCornerIndex, northMPIndex, westMPIndex);
+            Triangle t3(northMP, ULCorner, westMP, northMPIndex, ULCornerIndex, westMPIndex);
             
             triangles.push_back(t1);
             triangles.push_back(t2);
             triangles.push_back(t3);
         } else {
             // west
-            Triangle t1(URCorner, westMP, BLCorner);
-            Triangle t2(URCorner, ULCorner, westMP);
+            Triangle t1(BLCorner, URCorner, westMP, BLCornerIndex, URCornerIndex, westMPIndex);
+            Triangle t2(URCorner, ULCorner, westMP, URCornerIndex, ULCornerIndex, westMPIndex);
             
             triangles.push_back(t1);
             triangles.push_back(t2);
@@ -88,128 +159,17 @@ void IsoscelesSingleQuadtreeTiling::createTrianglesFromCell(QuadtreeNode *curNod
     } else {
         if (northNeighbours.size()>1) {
             // north
-            Triangle t1(URCorner, northMP, BLCorner);
-            Triangle t2(ULCorner, BLCorner, northMP);
+            Triangle t1(BLCorner, URCorner, northMP, BLCornerIndex, URCornerIndex, northMPIndex);
+            Triangle t2(BLCorner, northMP, ULCorner, BLCornerIndex, northMPIndex, ULCornerIndex);
             
             triangles.push_back(t1);
             triangles.push_back(t2);
         } else {
             // neither
-            Triangle t1(URCorner, ULCorner, BLCorner);
+            Triangle t1(BLCorner, URCorner, ULCorner, BLCornerIndex, URCornerIndex, ULCornerIndex);
             triangles.push_back(t1);
         }
     }
     
     
-}
-
-//void IsoscelesSingleQuadtreeTiling::createTrianglesFromCell(QuadtreeNode *curNode) {
-//    Point ULCorner(curNode->getCenterX() - curNode->getDimension() / 2, curNode->getCenterY() - curNode->getDimension() / 2);
-//    Point URCorner(curNode->getCenterX() + curNode->getDimension() / 2, curNode->getCenterY() - curNode->getDimension() / 2);
-//    Point BLCorner(curNode->getCenterX() - curNode->getDimension() / 2, curNode->getCenterY() + curNode->getDimension() / 2);
-//    Point BRCorner(curNode->getCenterX() + curNode->getDimension() / 2, curNode->getCenterY() + curNode->getDimension() / 2);
-//
-//    Triangle t1(ULCorner, BLCorner, BRCorner);
-//    Triangle t2(URCorner, BRCorner, ULCorner);
-//
-//    addVertex(ULCorner);
-//    addVertex(URCorner);
-//    addVertex(BLCorner);
-//    addVertex(BRCorner);
-//
-//    triangles.push_back(t1);
-//    triangles.push_back(t2);
-//}
-
-void IsoscelesSingleQuadtreeTiling::satisfyJunctions() {
-    vector<Triangle> trianglesToProcess = triangles;
-
-    while(trianglesToProcess.size()>0) {
-        cout << trianglesToProcess.size()<<endl;
-        Triangle curTriangle = trianglesToProcess[0];
-        vector<Point> curPoints = curTriangle.getPoints();
-        float x1 = (curPoints[0].getX() + curPoints[1].getX()) / 2;
-        float y1 = (curPoints[0].getY() + curPoints[1].getY()) / 2;
-
-        float x2 = (curPoints[0].getX() + curPoints[2].getX()) / 2;
-        float y2 = (curPoints[0].getY() + curPoints[2].getY()) / 2;
-
-        float x3 = (curPoints[2].getX() + curPoints[1].getX()) / 2;
-        float y3 = (curPoints[2].getY() + curPoints[1].getY()) / 2;
-
-        Point p1(x1, y1);
-        Point p2(x2, y2);
-        Point p3(x3, y3);
-
-        vector<Point> midPointVertices = findTriangleMidpointsThatAreVertices(p1, p2, p3);
-        if (midPointVertices.size()==2) {
-            Point mpv1 = midPointVertices[0];
-            Point mpv2 = midPointVertices[1];
-
-            if ((mpv1==p1 && mpv2==p2) || (mpv1==p2 && mpv2==p1)) {
-                Triangle t1(curPoints[2], p1, curPoints[1]);
-                Triangle t2(curPoints[2], p1, p2);
-                Triangle t3(curPoints[0], p1, p2);
-                triangles = removeTriangle(triangles, curTriangle);
-                triangles.push_back(t1);
-                triangles.push_back(t2);
-                triangles.push_back(t3);
-                trianglesToProcess.push_back(t1);
-                trianglesToProcess.push_back(t2);
-                trianglesToProcess.push_back(t3);
-            } else if ((mpv1==p2 && mpv2==p3) || (mpv1==p3 && mpv2==p2)) {
-                Triangle t1(curPoints[0], p3, curPoints[1]);
-                Triangle t2(curPoints[0], p3, p2);
-                Triangle t3(curPoints[2], p3, p2);
-                triangles.push_back(t1);
-                triangles.push_back(t2);
-                triangles.push_back(t3);
-                trianglesToProcess.push_back(t1);
-                trianglesToProcess.push_back(t2);
-                trianglesToProcess.push_back(t3);
-            } else if ((mpv1==p1 && mpv2==p3) || (mpv1==p3 && mpv2==p1)) {
-                Triangle t1(curPoints[0], p3, curPoints[2]);
-                Triangle t2(curPoints[0], p3, p1);
-                Triangle t3(curPoints[1], p3, p1);
-                triangles.push_back(t1);
-                triangles.push_back(t2);
-                triangles.push_back(t3);
-                trianglesToProcess.push_back(t1);
-                trianglesToProcess.push_back(t2);
-                trianglesToProcess.push_back(t3);
-            }
-        } else if (midPointVertices.size()==1) {
-            Point mpv1 = midPointVertices[0];
-            if (mpv1==p1) {
-                Triangle t1(curPoints[0], p1, curPoints[2]);
-                Triangle t2(curPoints[1], p1, curPoints[2]);
-
-                triangles = removeTriangle(triangles, curTriangle);
-                triangles.push_back(t1);
-                triangles.push_back(t2);
-                trianglesToProcess.push_back(t1);
-                trianglesToProcess.push_back(t2);
-            } else if (mpv1==p2) {
-                Triangle t1(curPoints[0], p2, curPoints[1]);
-                Triangle t2(curPoints[2], p2, curPoints[1]);
-
-                triangles = removeTriangle(triangles, curTriangle);
-                triangles.push_back(t1);
-                triangles.push_back(t2);
-                trianglesToProcess.push_back(t1);
-                trianglesToProcess.push_back(t2);
-            } else if (mpv1==p3) {
-                Triangle t1(curPoints[1], p3, curPoints[0]);
-                Triangle t2(curPoints[2], p3, curPoints[0]);
-
-                triangles = removeTriangle(triangles, curTriangle);
-                triangles.push_back(t1);
-                triangles.push_back(t2);
-                trianglesToProcess.push_back(t1);
-                trianglesToProcess.push_back(t2);
-            }
-        }
-
-        trianglesToProcess = removeTriangle(trianglesToProcess, curTriangle);
-    }
 }
