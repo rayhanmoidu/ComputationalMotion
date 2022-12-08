@@ -18,11 +18,15 @@ using namespace std;
 
 struct pair_hash {
     inline std::size_t operator()(const std::pair<float,float> & v) const {
-        int prime = 31;
-        int result = 1;
-        result = prime * result + v.first;
-        result = prime * result + v.second;
+        double ok1 = ceil(v.first);
+        double ok2 = ceil(v.second);
+        double prime = 31;
+        double result = 1;
+        result = prime * result + ok1;
+        result = prime * result + ok2;
         return result;
+//        return std::round(result * 1000.0) / 1000.0;
+        return pow((result*v.first), v.second);
     }
 };
 
@@ -37,6 +41,7 @@ public:
     // getters
     vector<Triangle> getTriangles();
     vector<pair<float, float>> getVertices();
+    Point getVertex(int);
     
     int check_addVertex_getIndex(Point p);
     int addVertex_getIndex(Point p);
@@ -48,7 +53,8 @@ protected:
     std::unordered_set<std::pair<float, float>, pair_hash> verticesSet;
     std::unordered_map<std::pair<float, float>, int, pair_hash> verticesToIndexInList;
     int findVertexIndex(Point p);
-    void addVertex(Point);
+    void addVertex(pair<float, float> v);
+    bool doesVertexExist(Point p);
     
     int hBound;
     int vBound;

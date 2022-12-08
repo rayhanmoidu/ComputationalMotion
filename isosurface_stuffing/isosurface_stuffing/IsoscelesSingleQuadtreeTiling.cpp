@@ -21,11 +21,6 @@ void IsoscelesSingleQuadtreeTiling::createTrianglesFromCell(QuadtreeNode *curNod
     Point southMP((BLCorner.getX() + BRCorner.getX()) / 2, BLCorner.getY());
     Point westMP(ULCorner.getX(), (ULCorner.getY() + BLCorner.getY()) / 2);
     Point eastMP(URCorner.getX(), (URCorner.getY() + BRCorner.getY()) / 2);
-
-    addVertex(ULCorner);
-    addVertex(URCorner);
-    addVertex(BLCorner);
-    addVertex(BRCorner);
     
     int ULCornerIndex = check_addVertex_getIndex(ULCorner);
     int URCornerIndex = check_addVertex_getIndex(URCorner);

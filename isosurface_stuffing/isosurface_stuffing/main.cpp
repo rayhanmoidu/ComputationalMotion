@@ -32,7 +32,7 @@ const int rectangleHeight = 200;
 const float alpha = 60;
 const float isosurfaceRenderingThreshold = 2;
 const int numBars = 18; // 180 % numBars should be 0
-const int smallestQuadtreeCell = 200;
+const int smallestQuadtreeCell = 70;
 
 float sizingFunction(float x, float y) {
     if (x >= 400 && x <= 600) {
@@ -88,8 +88,8 @@ int main() {
 //    ParallelogramQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, isosurface);
 //    EquilateralQuadtreeTiling quadtreeTiling(quadtree);
     
-    SquareQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, isosurface);
-    ProvablyGoodQuadtreeTiling quadtreeTiling(quadtree);
+    ParallelogramQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, isosurface);
+    EquilateralQuadtreeTiling quadtreeTiling(quadtree);
     //
      //ALGORITHM
     Algorithm algorithmInstance(&quadtreeTiling, isosurface, alpha);
@@ -102,6 +102,35 @@ int main() {
     
     vector<pair<float, float>> vertices = algorithmInstance.getResultingVertices();
     vector<vector<int>> finalTriangles = algorithmInstance.getProcessedTriangles();
+    
+    unordered_map<int, int> mymap;
+    for (int i = 0; i < finalTriangles.size(); i++) {
+        
+        for (int j = 0; j < finalTriangles[i].size(); j++) {
+            int i1 = finalTriangles[i][j];
+            if (mymap.count(i1)) {
+                int ims = mymap.at(i1)+1;
+//                cout<<"LALA "<<ims<<endl;
+                mymap.insert_or_assign(i1, ims);
+            }
+            else mymap.insert(pair<int, int>(i1, 1));
+        }
+    }
+    
+    for (int i = 0; i < vertices.size(); i++) {
+        for (int j = 0; j < vertices.size(); j++) {
+            Point p1(vertices[i].first, vertices[i].second);
+            Point p2(vertices[j].first, vertices[j].second);
+            
+            if (i!=j && p1==p2) {
+                cout <<"DUPLICATES THAT HASHING ISNT COVERING"<<endl;
+                cout <<i<<" "<<j<<endl;
+                cout << vertices[i].first << " "<<vertices[i].second<<endl;
+                cout << vertices[j].first << " "<<vertices[j].second<<endl;
+            }
+        }
+    }
+    
     
     while (!glfwWindowShouldClose(window)) {
                 
@@ -118,8 +147,24 @@ int main() {
 //            p2.plot(1);
 //            p3.plot(1);
 //        }
+        
+
+            
+//            for(auto kv : mymap) {
+//                Point p1(vertices[kv.first].first, vertices[kv.first].second);
+//                if (kv.second>1) {cout<<kv.second<<endl;}
+////                cout <<kv.first<<" "<<kv.second<<endl;
+//                p1.plot(kv.second);
+//            }
+                    
 //
         algorithmInstance.renderProcessedTriangles();
+//        for(auto kv : mymap) {
+//            Point p1(vertices[kv.first].first, vertices[kv.first].second);
+////            if (kv.second>1) {cout<<kv.second<<endl;}
+////                cout <<kv.first<<" "<<kv.second<<endl;
+//            p1.plot(kv.second);
+//        }
 //        algorithmInstance.renderProcessedTriangleCutpoints();
 //        bargraph.drawGraph();
 //        quadtree.render();

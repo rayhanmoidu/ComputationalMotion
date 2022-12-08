@@ -11,6 +11,8 @@ using namespace std;
 Point::Point(float pointX, float pointY) {
     x = pointX;
     y = pointY;
+//    x = std::ceil(pointX * 10.0) / 10.0;
+//    y = std::ceil(pointY * 10.0) / 10.0;
 }
 
 void Point::rotate(float theta, Point center) {

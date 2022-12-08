@@ -298,7 +298,14 @@ vector<Triangle> Algorithm::getProcessedTrianglesObjects() {
 
 void Algorithm::renderProcessedTriangles() {
     for (int i = 0; i < processedTriangles.size(); i++) {
-        processedTriangles[i].render();
+        vector<int> indices = processedTriangles[i].getIndices();
+        Point p1 = baseTiling->getVertex(indices[0]);
+        Point p2 = baseTiling->getVertex(indices[1]);
+        Point p3 = baseTiling->getVertex(indices[2]);
+        
+        Triangle t1(p1, p2, p3, 0, 0, 0);
+        
+        t1.render();
     }
 }
 
