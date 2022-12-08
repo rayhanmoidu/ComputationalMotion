@@ -5,8 +5,8 @@
 #include <iostream>
 #include <cmath>
 
-Algorithm::Algorithm(Tiling &baseTiling, Isosurface &isosurface, float alphaVal) : baseTiling(baseTiling), isosurface(isosurface) {
-    allTriangles = baseTiling.getTriangles();
+Algorithm::Algorithm(Tiling *baseTiling, Isosurface &isosurface, float alphaVal) : baseTiling(baseTiling), isosurface(isosurface) {
+    allTriangles = baseTiling->getTriangles();
     alpha = alphaVal;
 }
 
@@ -125,7 +125,7 @@ void Algorithm::warpPerimeterTriangles() {
                     Cutpoint warpingDestination = cutpointsToConsider[lowestDistanceIndex];
                     
                     for (int k = 0; k < trianglesSharingVertex.size(); k++) {
-                        int warpingDestinationIndex = baseTiling.check_addVertex_getIndex(warpingDestination);
+                        int warpingDestinationIndex = baseTiling->check_addVertex_getIndex(warpingDestination);
                         trianglesSharingVertex[k]->warpVertexToCutpoint(curPoint, warpingDestination, warpingDestinationIndex);
                         // add warping destination to list of vertices and adjust triangles accordingly
                     }
@@ -162,7 +162,11 @@ void Algorithm::clipPerimeterTriangles() {
                 Point p2 = interpolateCutpoint(positiveVertices[0], negativeVertices[1]);
                 Cutpoint cp2(p2.getX(), p2.getY(), positiveVertices[0], negativeVertices[1]);
                 
-                Triangle newTriangle = Triangle(cp1, cp2, positiveVertices[0]);
+                int cp1Index = baseTiling->check_addVertex_getIndex(cp1);
+                int cp2Index = baseTiling->check_addVertex_getIndex(cp2);
+                int posV0Index = baseTiling->check_addVertex_getIndex(positiveVertices[0]);
+                
+                Triangle newTriangle = Triangle(cp1, cp2, positiveVertices[0], cp1Index, cp2Index, posV0Index);
                 processedTriangles.push_back(newTriangle);
             } else if (negativeVertices.size()==1) {
                 Point p1 = interpolateCutpoint(positiveVertices[0], negativeVertices[0]);
@@ -170,8 +174,13 @@ void Algorithm::clipPerimeterTriangles() {
                 Point p2 = interpolateCutpoint(positiveVertices[1], negativeVertices[0]);
                 Cutpoint cp2(p2.getX(), p2.getY(), positiveVertices[1], negativeVertices[0]);
                 
-                Triangle newTriangle1 = Triangle(cp1, positiveVertices[1], positiveVertices[0]);
-                Triangle newTriangle2 = Triangle(cp1, cp2, positiveVertices[1]);
+                int cp1Index = baseTiling->check_addVertex_getIndex(cp1);
+                int cp2Index = baseTiling->check_addVertex_getIndex(cp2);
+                int posV0Index = baseTiling->check_addVertex_getIndex(positiveVertices[0]);
+                int posV1Index = baseTiling->check_addVertex_getIndex(positiveVertices[1]);
+                
+                Triangle newTriangle1 = Triangle(cp1, positiveVertices[1], positiveVertices[0], cp1Index, posV1Index, posV0Index);
+                Triangle newTriangle2 = Triangle(cp1, cp2, positiveVertices[1], cp1Index, cp2Index, posV1Index);
                 
                 // find angle at posvertex0 and cp2
                 
@@ -179,8 +188,8 @@ void Algorithm::clipPerimeterTriangles() {
                     processedTriangles.push_back(newTriangle1);
                     processedTriangles.push_back(newTriangle2);
                 } else {
-                    newTriangle1 = Triangle(cp1, cp2, positiveVertices[0]);
-                    newTriangle2 = Triangle(positiveVertices[1], cp2, positiveVertices[0]);
+                    newTriangle1 = Triangle(cp1, cp2, positiveVertices[0], cp1Index, cp2Index, posV0Index);
+                    newTriangle2 = Triangle(positiveVertices[1], cp2, positiveVertices[0], posV1Index, cp2Index, posV0Index);
                     processedTriangles.push_back(newTriangle1);
                     processedTriangles.push_back(newTriangle2);
                 }

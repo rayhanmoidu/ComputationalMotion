@@ -11,7 +11,6 @@ using namespace std;
 class Triangle {
 public:
     Triangle(Point, Point, Point, int, int, int);
-    Triangle(Point, Point, Point);
     Triangle();
     bool doesContainCutpoint(Cutpoint);
     bool doesContainVertex(Point);

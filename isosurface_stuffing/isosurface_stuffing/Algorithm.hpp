@@ -7,7 +7,7 @@
 
 class Algorithm {
 public:
-    Algorithm(Tiling&, Isosurface&, float);
+    Algorithm(Tiling*, Isosurface&, float);
     void execute();
     
     void renderProcessedTriangles();
@@ -17,7 +17,7 @@ public:
     vector<Triangle> getProcessedTriangles();
     
 private:
-    Tiling &baseTiling;
+    Tiling *baseTiling;
     Isosurface &isosurface;
     float alpha;
     

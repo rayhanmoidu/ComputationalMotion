@@ -32,7 +32,7 @@ const int rectangleHeight = 200;
 const float alpha = 60;
 const float isosurfaceRenderingThreshold = 2;
 const int numBars = 18; // 180 % numBars should be 0
-const int smallestQuadtreeCell = 10;
+const int smallestQuadtreeCell = 40;
 
 float sizingFunction(float x, float y) {
     if (x >= 400 && x <= 600) {
@@ -90,10 +90,9 @@ int main() {
     
     SquareQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, isosurface);
     ProvablyGoodQuadtreeTiling quadtreeTiling(quadtree);
-
     //
      //ALGORITHM
-    Algorithm algorithmInstance(quadtreeTiling, isosurface, alpha);
+    Algorithm algorithmInstance(&quadtreeTiling, isosurface, alpha);
     algorithmInstance.execute();
     
     cout << algorithmInstance.getProcessedTriangles().size()<<endl;

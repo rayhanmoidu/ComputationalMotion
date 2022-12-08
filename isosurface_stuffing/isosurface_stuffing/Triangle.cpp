@@ -19,17 +19,6 @@ Triangle::Triangle(Point triangleP1, Point triangleP2, Point triangleP3, int ind
     setColors();
 }
 
-Triangle::Triangle(Point triangleP1, Point triangleP2, Point triangleP3) {
-    p1 = triangleP1;
-    p2 = triangleP2;
-    p3 = triangleP3;
-    i1 = 0;
-    i2 = 0;
-    i3 = 0;
-    cutpoints = vector<Cutpoint>();
-    setColors();
-}
-
 Triangle::Triangle() {
     p1 = Point();
     p2 = Point();
