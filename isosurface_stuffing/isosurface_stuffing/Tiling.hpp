@@ -36,6 +36,8 @@ public:
     
     // getters
     vector<Triangle> getTriangles();
+    vector<pair<float, float>> getVertices();
+    
     int check_addVertex_getIndex(Point p);
     int addVertex_getIndex(Point p);
     

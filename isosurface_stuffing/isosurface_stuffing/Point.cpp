@@ -36,8 +36,13 @@ void Point::setY(float yVal) {
     y = yVal;
 }
 
+inline bool isEqual(float x, float y){
+  const double epsilon = 1e-5;
+  return std::abs(x - y) <= epsilon * std::abs(x);
+}
+
 bool Point::operator == (Point &obj) {
-    return obj.x == x && obj.y == y;
+    return isEqual(obj.x, x) && isEqual(obj.y, y);
 }
 
 int getCanvasCoordinate(int coordinateToTransform) {

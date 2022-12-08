@@ -14,7 +14,7 @@ public:
     Triangle();
     bool doesContainCutpoint(Cutpoint);
     bool doesContainVertex(Point);
-    bool doesContainVertex(int);
+    bool doesContainIndex(int);
     void warpVertexToCutpoint(Point, Cutpoint, int);
     void removeCutpoint(Cutpoint);
     void removeAllCutpoints();

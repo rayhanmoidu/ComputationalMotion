@@ -32,7 +32,7 @@ const int rectangleHeight = 200;
 const float alpha = 60;
 const float isosurfaceRenderingThreshold = 2;
 const int numBars = 18; // 180 % numBars should be 0
-const int smallestQuadtreeCell = 40;
+const int smallestQuadtreeCell = 200;
 
 float sizingFunction(float x, float y) {
     if (x >= 400 && x <= 600) {
@@ -98,16 +98,30 @@ int main() {
     cout << algorithmInstance.getProcessedTriangles().size()<<endl;
 
     // BARGRAPH
-    BarGraph bargraph(algorithmInstance.getProcessedTriangles(), canvas.getWidth() / 2, canvas.getHeight(), canvas.getWidth() / 2, numBars);
+    BarGraph bargraph(algorithmInstance.getProcessedTrianglesObjects(), canvas.getWidth() / 2, canvas.getHeight(), canvas.getWidth() / 2, numBars);
     
-
+    vector<pair<float, float>> vertices = algorithmInstance.getResultingVertices();
+    vector<vector<int>> finalTriangles = algorithmInstance.getProcessedTriangles();
+    
     while (!glfwWindowShouldClose(window)) {
                 
         canvas.initCanvas();
+        
+//        for (int i = 0; i < finalTriangles.size(); i++) {
+//            pair<float, float> vertex1 = vertices[finalTriangles[i][0]];
+//            pair<float, float> vertex2 = vertices[finalTriangles[i][1]];
+//            pair<float, float> vertex3 = vertices[finalTriangles[i][2]];
+//            Point p1(vertex1.first, vertex1.second);
+//            Point p2(vertex2.first, vertex2.second);
+//            Point p3(vertex3.first, vertex3.second);
+//            p1.plot(1);
+//            p2.plot(1);
+//            p3.plot(1);
+//        }
 //
         algorithmInstance.renderProcessedTriangles();
-        algorithmInstance.renderProcessedTriangleCutpoints();
-        bargraph.drawGraph();
+//        algorithmInstance.renderProcessedTriangleCutpoints();
+//        bargraph.drawGraph();
 //        quadtree.render();
 //        quadtreeTiling.render();
         

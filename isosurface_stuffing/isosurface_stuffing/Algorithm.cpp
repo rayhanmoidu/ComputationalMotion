@@ -94,7 +94,8 @@ void Algorithm::warpPerimeterTriangles() {
                 // find all triangles sharing the negative vertex
                 vector<Triangle*> trianglesSharingVertex;
                 for (int k = 0; k < perimeterTriangles.size(); k++) {
-                    if (perimeterTriangles[k]->doesContainVertex(curPoint)) {
+                    int lala = baseTiling->check_addVertex_getIndex(curPoint); // added
+                    if (perimeterTriangles[k]->doesContainVertex(curPoint) || perimeterTriangles[k]->doesContainIndex(lala)) {
                         trianglesSharingVertex.push_back(perimeterTriangles[k]);
                     }
                 }
@@ -282,9 +283,18 @@ float Algorithm::distanceBetweenTwoPoints(Point p1, Point p2) {
     return sqrt(dx*dx + dy*dy);
 }
 
-vector<Triangle> Algorithm::getProcessedTriangles() {
+vector<vector<int>> Algorithm::getProcessedTriangles() {
+    vector<vector<int>> flatTriangles;
+    for (int i = 0; i < processedTriangles.size(); i++) {
+        flatTriangles.push_back(processedTriangles[i].getIndices());
+    }
+    return flatTriangles;
+}
+
+vector<Triangle> Algorithm::getProcessedTrianglesObjects() {
     return processedTriangles;
 }
+
 
 void Algorithm::renderProcessedTriangles() {
     for (int i = 0; i < processedTriangles.size(); i++) {
@@ -296,5 +306,9 @@ void Algorithm::renderProcessedTriangleCutpoints() {
     for (int i = 0; i < processedTriangles.size(); i++) {
         processedTriangles[i].renderCutpoints();
     }
+}
+
+vector<pair<float, float>> Algorithm::getResultingVertices() {
+    return baseTiling->getVertices();
 }
 

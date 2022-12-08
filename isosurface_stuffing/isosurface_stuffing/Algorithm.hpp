@@ -14,7 +14,9 @@ public:
     void renderProcessedTriangleCutpoints();
     
     // getters
-    vector<Triangle> getProcessedTriangles();
+    vector<vector<int>> getProcessedTriangles();
+    vector<Triangle> getProcessedTrianglesObjects();
+    vector<pair<float, float>> getResultingVertices();
     
 private:
     Tiling *baseTiling;

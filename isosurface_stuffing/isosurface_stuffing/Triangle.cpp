@@ -101,6 +101,10 @@ bool Triangle::doesContainVertex(Point p) {
     return p1==p || p2==p || p3==p;
 }
 
+bool Triangle::doesContainIndex(int i) {
+    return i1==i || i2==i || i3==i;
+}
+
 bool Triangle::doesContainCutpoint(Cutpoint cp) {
     for (int i = 0; i < cutpoints.size(); i++) {
         if (cutpoints[i]==cp) return true;

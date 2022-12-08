@@ -42,3 +42,7 @@ int Tiling::addVertex_getIndex(Point p) {
     addVertex(p);
     return int(vertices.size() - 1);
 }
+
+vector<pair<float, float>> Tiling::getVertices() {
+    return vertices;
+}
