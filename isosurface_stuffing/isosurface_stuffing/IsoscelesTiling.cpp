@@ -28,11 +28,11 @@ void IsoscelesTiling::createTiling(float xPos, float yPos, string key, string or
         Triangle t2;
         
         if (orientation=="normal") {
-            t1.setPointsAndIndices(p1, p2, p3, p1Index, p2Index, p3Index);
-            t2.setPointsAndIndices(p1, p3, p4, p1Index, p3Index, p4Index);
+            t1.setIndices(p1Index, p2Index, p3Index);
+            t2.setIndices(p1Index, p3Index, p4Index);
         } else {
-            t1.setPointsAndIndices(p1, p2, p4, p1Index, p2Index, p4Index);
-            t2.setPointsAndIndices(p2, p3, p4, p2Index, p3Index, p4Index);
+            t1.setIndices(p1Index, p2Index, p4Index);
+            t2.setIndices(p2Index, p3Index, p4Index);
         }
         
         triangles.push_back(t1);

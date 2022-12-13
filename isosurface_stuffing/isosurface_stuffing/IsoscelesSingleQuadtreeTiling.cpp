@@ -40,17 +40,17 @@ void IsoscelesSingleQuadtreeTiling::createTrianglesFromCell(QuadtreeNode *curNod
     if (eastNeighbours.size()>1) {
         if (southNeighbours.size()>1) {
             // east + south
-            Triangle t1(BLCorner, southMP, URCorner, BLCornerIndex, southMPIndex, BLCornerIndex);
-            Triangle t2(southMP, eastMP, URCorner, southMPIndex, eastMPIndex, URCornerIndex);
-            Triangle t3(BRCorner, southMP, eastMP, BRCornerIndex, southMPIndex, eastMPIndex);
+            Triangle t1(BLCornerIndex, southMPIndex, BLCornerIndex);
+            Triangle t2(southMPIndex, eastMPIndex, URCornerIndex);
+            Triangle t3(BRCornerIndex, southMPIndex, eastMPIndex);
             
             triangles.push_back(t1);
             triangles.push_back(t2);
             triangles.push_back(t3);
         } else {
             // east
-            Triangle t1(BLCorner, eastMP, URCorner, BLCornerIndex, eastMPIndex, URCornerIndex);
-            Triangle t2(BLCorner, BRCorner, eastMP, BLCornerIndex, BRCornerIndex, eastMPIndex);
+            Triangle t1(BLCornerIndex, eastMPIndex, URCornerIndex);
+            Triangle t2(BLCornerIndex, BRCornerIndex, eastMPIndex);
             
             triangles.push_back(t1);
             triangles.push_back(t2);
@@ -58,14 +58,14 @@ void IsoscelesSingleQuadtreeTiling::createTrianglesFromCell(QuadtreeNode *curNod
     } else {
         if (southNeighbours.size()>1) {
             // south
-            Triangle t1(BLCorner, southMP, URCorner, BLCornerIndex, southMPIndex, URCornerIndex);
-            Triangle t2(southMP, BRCorner, URCorner, southMPIndex, BRCornerIndex, URCornerIndex);
+            Triangle t1(BLCornerIndex, southMPIndex, URCornerIndex);
+            Triangle t2(southMPIndex, BRCornerIndex, URCornerIndex);
             
             triangles.push_back(t1);
             triangles.push_back(t2);
         } else {
             // neither
-            Triangle t1(BLCorner, BRCorner, URCorner, BLCornerIndex, BRCornerIndex, URCornerIndex);
+            Triangle t1(BLCornerIndex, BRCornerIndex, URCornerIndex);
             triangles.push_back(t1);
         }
     }
@@ -73,17 +73,17 @@ void IsoscelesSingleQuadtreeTiling::createTrianglesFromCell(QuadtreeNode *curNod
     if (westNeighbours.size()>1) {
         if (northNeighbours.size()>1) {
             // west + north
-            Triangle t1(BLCorner, URCorner, northMP, BLCornerIndex, URCornerIndex, northMPIndex);
-            Triangle t2(BLCorner, northMP, westMP, BLCornerIndex, northMPIndex, westMPIndex);
-            Triangle t3(northMP, ULCorner, westMP, northMPIndex, ULCornerIndex, westMPIndex);
+            Triangle t1(BLCornerIndex, URCornerIndex, northMPIndex);
+            Triangle t2(BLCornerIndex, northMPIndex, westMPIndex);
+            Triangle t3(northMPIndex, ULCornerIndex, westMPIndex);
             
             triangles.push_back(t1);
             triangles.push_back(t2);
             triangles.push_back(t3);
         } else {
             // west
-            Triangle t1(BLCorner, URCorner, westMP, BLCornerIndex, URCornerIndex, westMPIndex);
-            Triangle t2(URCorner, ULCorner, westMP, URCornerIndex, ULCornerIndex, westMPIndex);
+            Triangle t1(BLCornerIndex, URCornerIndex, westMPIndex);
+            Triangle t2(URCornerIndex, ULCornerIndex, westMPIndex);
             
             triangles.push_back(t1);
             triangles.push_back(t2);
@@ -91,14 +91,14 @@ void IsoscelesSingleQuadtreeTiling::createTrianglesFromCell(QuadtreeNode *curNod
     } else {
         if (northNeighbours.size()>1) {
             // north
-            Triangle t1(BLCorner, URCorner, northMP, BLCornerIndex, URCornerIndex, northMPIndex);
-            Triangle t2(BLCorner, northMP, ULCorner, BLCornerIndex, northMPIndex, ULCornerIndex);
+            Triangle t1(BLCornerIndex, URCornerIndex, northMPIndex);
+            Triangle t2(BLCornerIndex, northMPIndex, ULCornerIndex);
             
             triangles.push_back(t1);
             triangles.push_back(t2);
         } else {
             // neither
-            Triangle t1(BLCorner, URCorner, ULCorner, BLCornerIndex, URCornerIndex, ULCornerIndex);
+            Triangle t1(BLCornerIndex, URCornerIndex, ULCornerIndex);
             triangles.push_back(t1);
         }
     }

@@ -23,6 +23,7 @@
 #include "ProvablyGoodTriangleFactory.hpp"
 #include "ProvablyGoodQuadtreeTiling.hpp"
 #include "CustomIsosurface.hpp"
+#include "RenderTriangle.hpp"
 
 const GLint WIDTH = 1000, HEIGHT = 500;
 const int triangleSideLength = 80;
@@ -88,9 +89,10 @@ int main() {
 //    ParallelogramQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, isosurface);
 //    EquilateralQuadtreeTiling quadtreeTiling(quadtree);
     
-    ParallelogramQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, isosurface);
-    EquilateralQuadtreeTiling quadtreeTiling(quadtree);
+    SquareQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, isosurface);
+    ProvablyGoodQuadtreeTiling quadtreeTiling(quadtree);
     //
+    cout <<"starting algo" << endl;
      //ALGORITHM
     Algorithm algorithmInstance(&quadtreeTiling, isosurface, alpha);
     algorithmInstance.execute();
@@ -98,7 +100,7 @@ int main() {
     cout << algorithmInstance.getProcessedTriangles().size()<<endl;
 
     // BARGRAPH
-    BarGraph bargraph(algorithmInstance.getProcessedTrianglesObjects(), canvas.getWidth() / 2, canvas.getHeight(), canvas.getWidth() / 2, numBars);
+    BarGraph bargraph(algorithmInstance.getProcessedTrianglesObjects(), algorithmInstance.getResultingVertices(),canvas.getWidth() / 2, canvas.getHeight(), canvas.getWidth() / 2, numBars);
     
     vector<pair<float, float>> vertices = algorithmInstance.getResultingVertices();
     vector<vector<int>> finalTriangles = algorithmInstance.getProcessedTriangles();
@@ -110,7 +112,6 @@ int main() {
             int i1 = finalTriangles[i][j];
             if (mymap.count(i1)) {
                 int ims = mymap.at(i1)+1;
-//                cout<<"LALA "<<ims<<endl;
                 mymap.insert_or_assign(i1, ims);
             }
             else mymap.insert(pair<int, int>(i1, 1));
@@ -129,6 +130,14 @@ int main() {
                 cout << vertices[j].first << " "<<vertices[j].second<<endl;
             }
         }
+    }
+    
+    vector<RenderTriangle> trianglesToRender;
+    vector<Triangle> tris = algorithmInstance.getProcessedTrianglesObjects();
+    
+    for (int i =0; i < tris.size(); i++) {
+        RenderTriangle renderTri(algorithmInstance.getResultingVertices(), tris[i]);
+        trianglesToRender.push_back(renderTri);
     }
     
     
@@ -158,6 +167,11 @@ int main() {
 //            }
                     
 //
+//        for (int i = 0; i < trianglesToRender.size(); i++) {
+//            trianglesToRender[i].render();
+//            trianglesToRender[i].renderCutpoints();
+//
+//        }
         algorithmInstance.renderProcessedTriangles();
 //        for(auto kv : mymap) {
 //            Point p1(vertices[kv.first].first, vertices[kv.first].second);
@@ -171,7 +185,6 @@ int main() {
 //        quadtreeTiling.render();
         
 
-        isosurface.render();
         
 
         glfwSwapBuffers(window);

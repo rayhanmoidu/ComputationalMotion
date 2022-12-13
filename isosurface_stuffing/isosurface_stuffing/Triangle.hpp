@@ -10,39 +10,30 @@ using namespace std;
 
 class Triangle {
 public:
-    Triangle(Point, Point, Point, int, int, int);
+    Triangle(int, int, int);
     Triangle();
+    
     bool doesContainCutpoint(Cutpoint);
-    bool doesContainVertex(Point);
     bool doesContainIndex(int);
-    void warpVertexToCutpoint(Point, Cutpoint, int);
+    
+    void warpVertexToCutpoint(int, int);
+    
     void removeCutpoint(Cutpoint);
     void removeAllCutpoints();
     void addCutpoint(Cutpoint);
-    vector<float> computeAngles();
     
-    void render();
-    void renderCutpoints();
-    
-    void setPointsAndIndices(Point, Point, Point, int, int, int);
-    vector<Point> getPoints();
-    vector<Cutpoint> getCutpoints();
+    void setIndices(int, int, int);
     vector<int> getIndices();
+
+    vector<Cutpoint> getCutpoints();
+    
+    vector<Point> getPoints(vector<pair<float, float>> vertices);
     
     bool operator == (Triangle &obj);
+    bool doIndicesMatch(Triangle obj);
     
 private:
-    void setColors();
-    float applyCosineLaw(float, float, float);
-    
-    Point p1;
-    Point p2;
-    Point p3;
     vector<Cutpoint> cutpoints;
-    float colorkey1;
-    float colorkey2;
-    float colorkey3;
-    
     int i1;
     int i2;
     int i3;

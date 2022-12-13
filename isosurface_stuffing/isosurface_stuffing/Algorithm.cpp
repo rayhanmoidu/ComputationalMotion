@@ -4,6 +4,7 @@
 #include "Point.hpp"
 #include <iostream>
 #include <cmath>
+#include "RenderTriangle.hpp"
 
 Algorithm::Algorithm(Tiling *baseTiling, Isosurface &isosurface, float alphaVal) : baseTiling(baseTiling), isosurface(isosurface) {
     allTriangles = baseTiling->getTriangles();
@@ -11,16 +12,20 @@ Algorithm::Algorithm(Tiling *baseTiling, Isosurface &isosurface, float alphaVal)
 }
 
 void Algorithm::execute() {
+    cout <<" 1" << endl;
     findTrianglesOverlayingIsosurface();
+//    cout <<" 2" << endl;
     findCutPoints();
+//    cout <<" 3" << endl;
     warpPerimeterTriangles();
+//    cout <<" 4" << endl;
     clipPerimeterTriangles();
 }
 
 void Algorithm::findTrianglesOverlayingIsosurface() {
     for (int i = 0; i < allTriangles.size(); i++) {
         Triangle curTriangle = allTriangles[i];
-        vector<Point> trianglePoints = curTriangle.getPoints();
+        vector<Point> trianglePoints = curTriangle.getPoints(baseTiling->getVertices());
         int point1Value = isosurface.evaluatePoint(trianglePoints[0]);
         int point2Value = isosurface.evaluatePoint(trianglePoints[1]);
         int point3Value = isosurface.evaluatePoint(trianglePoints[2]);
@@ -33,8 +38,13 @@ void Algorithm::findTrianglesOverlayingIsosurface() {
 
 Point Algorithm::interpolateCutpoint(Point positiveVertex, Point negativeVertex) {
     Point potentialCutpoint = positiveVertex;
+//    cout <<"positive"<<endl;
+//    cout <<positiveVertex.getX()<<" "<<positiveVertex.getY()<<endl;
+//    cout <<"negative"<<endl;
+//    cout <<negativeVertex.getX()<<" "<<negativeVertex.getY()<<endl;
     while (1) {
         potentialCutpoint = findCutpointLocationBetweenPolarPoints(potentialCutpoint, negativeVertex);
+//        cout<<isosurface.signedDistanceFunction(positiveVertex)<<" "<<isosurface.signedDistanceFunction(negativeVertex)<<endl;
         if (abs(isosurface.signedDistanceFunction(potentialCutpoint)) < 0.5) break;
     }
     return potentialCutpoint;
@@ -60,7 +70,7 @@ void Algorithm::findCutPoints() {
     
     for (int i = 0; i < perimeterTriangles.size(); i++) {
         Triangle *curTriangle = perimeterTriangles[i];
-        vector<Point> trianglePoints = curTriangle->getPoints();
+        vector<Point> trianglePoints = curTriangle->getPoints(baseTiling->getVertices());
         vector<vector<Point>> slicedPoints = sliceTrianglePointsBySign(trianglePoints);
         
         vector<Point> positiveVertices = slicedPoints[0];
@@ -83,7 +93,7 @@ void Algorithm::warpPerimeterTriangles() {
     
     for (int i = 0; i < perimeterTriangles.size(); i++) {
         Triangle *curTriangle = perimeterTriangles[i];
-        vector<Point> trianglePoints = curTriangle->getPoints();
+        vector<Point> trianglePoints = curTriangle->getPoints(baseTiling->getVertices());
         
         for (int j = 0; j < trianglePoints.size(); j++) {
             Point curPoint = trianglePoints[j];
@@ -94,8 +104,8 @@ void Algorithm::warpPerimeterTriangles() {
                 // find all triangles sharing the negative vertex
                 vector<Triangle*> trianglesSharingVertex;
                 for (int k = 0; k < perimeterTriangles.size(); k++) {
-                    int lala = baseTiling->check_addVertex_getIndex(curPoint); // added
-                    if (perimeterTriangles[k]->doesContainVertex(curPoint) || perimeterTriangles[k]->doesContainIndex(lala)) {
+                    int curPointIndex = baseTiling->check_addVertex_getIndex(curPoint); // added
+                    if (perimeterTriangles[k]->doesContainIndex(curPointIndex)) {
                         trianglesSharingVertex.push_back(perimeterTriangles[k]);
                     }
                 }
@@ -127,7 +137,8 @@ void Algorithm::warpPerimeterTriangles() {
                     
                     for (int k = 0; k < trianglesSharingVertex.size(); k++) {
                         int warpingDestinationIndex = baseTiling->check_addVertex_getIndex(warpingDestination);
-                        trianglesSharingVertex[k]->warpVertexToCutpoint(curPoint, warpingDestination, warpingDestinationIndex);
+                        int curPointIndex = baseTiling->findVertexIndex(curPoint);
+                        trianglesSharingVertex[k]->warpVertexToCutpoint(curPointIndex, warpingDestinationIndex);
                         // add warping destination to list of vertices and adjust triangles accordingly
                     }
                     
@@ -147,17 +158,24 @@ void Algorithm::warpPerimeterTriangles() {
 
 void Algorithm::clipPerimeterTriangles() {
     vector<Triangle*> perimeterTriangles = getPerimeterTrianglesForProcessing();
-    
+    vector<Triangle*> trianglesToRemove;
     for (int i = 0; i < perimeterTriangles.size(); i++) {
         Triangle *curTriangle = perimeterTriangles[i];
-        vector<Point> trianglePoints = curTriangle->getPoints();
+        vector<Point> trianglePoints = curTriangle->getPoints(baseTiling->getVertices());
+//        cout<<"triangle points"<<endl;
+//        cout << trianglePoints[0].getX()<<" "<<trianglePoints[0].getY()<<endl;
+//        cout << trianglePoints[1].getX()<<" "<<trianglePoints[1].getY()<<endl;
+//        cout << trianglePoints[2].getX()<<" "<<trianglePoints[2].getY()<<endl;
         vector<vector<Point>> slicedPoints = sliceTrianglePointsBySign(trianglePoints);
         
         vector<Point> positiveVertices = slicedPoints[0];
         vector<Point> negativeVertices = slicedPoints[1];
         
+//        cout<<positiveVertices.size()<<" "<<negativeVertices.size()<<endl;
+        
         if (negativeVertices.size()>=1) {
             if (negativeVertices.size()==2) {
+//                cout<<"about to interpolate 1"<<endl;
                 Point p1 = interpolateCutpoint(positiveVertices[0], negativeVertices[0]);
                 Cutpoint cp1(p1.getX(), p1.getY(), positiveVertices[0], negativeVertices[0]);
                 Point p2 = interpolateCutpoint(positiveVertices[0], negativeVertices[1]);
@@ -167,9 +185,11 @@ void Algorithm::clipPerimeterTriangles() {
                 int cp2Index = baseTiling->check_addVertex_getIndex(cp2);
                 int posV0Index = baseTiling->check_addVertex_getIndex(positiveVertices[0]);
                 
-                Triangle newTriangle = Triangle(cp1, cp2, positiveVertices[0], cp1Index, cp2Index, posV0Index);
+                Triangle newTriangle = Triangle(cp1Index, cp2Index, posV0Index);
                 processedTriangles.push_back(newTriangle);
+                
             } else if (negativeVertices.size()==1) {
+//                cout<<"about to interpolate 2"<<positiveVertices.size()<<endl;
                 Point p1 = interpolateCutpoint(positiveVertices[0], negativeVertices[0]);
                 Cutpoint cp1(p1.getX(), p1.getY(), positiveVertices[0], negativeVertices[0]);
                 Point p2 = interpolateCutpoint(positiveVertices[1], negativeVertices[0]);
@@ -180,8 +200,8 @@ void Algorithm::clipPerimeterTriangles() {
                 int posV0Index = baseTiling->check_addVertex_getIndex(positiveVertices[0]);
                 int posV1Index = baseTiling->check_addVertex_getIndex(positiveVertices[1]);
                 
-                Triangle newTriangle1 = Triangle(cp1, positiveVertices[1], positiveVertices[0], cp1Index, posV1Index, posV0Index);
-                Triangle newTriangle2 = Triangle(cp1, cp2, positiveVertices[1], cp1Index, cp2Index, posV1Index);
+                Triangle newTriangle1 = Triangle(cp1Index, posV1Index, posV0Index);
+                Triangle newTriangle2 = Triangle(cp1Index, cp2Index, posV1Index);
                 
                 // find angle at posvertex0 and cp2
                 
@@ -189,15 +209,19 @@ void Algorithm::clipPerimeterTriangles() {
                     processedTriangles.push_back(newTriangle1);
                     processedTriangles.push_back(newTriangle2);
                 } else {
-                    newTriangle1 = Triangle(cp1, cp2, positiveVertices[0], cp1Index, cp2Index, posV0Index);
-                    newTriangle2 = Triangle(positiveVertices[1], cp2, positiveVertices[0], posV1Index, cp2Index, posV0Index);
+                    newTriangle1 = Triangle(cp1Index, cp2Index, posV0Index);
+                    newTriangle2 = Triangle(posV1Index, cp2Index, posV0Index);
                     processedTriangles.push_back(newTriangle1);
                     processedTriangles.push_back(newTriangle2);
                 }
             }
         }
+        trianglesToRemove.push_back(curTriangle);
     }
-    filterOutNegativeTriangles();
+    for (int i = 0; i < trianglesToRemove.size(); i++) {
+        removeTriangleWithIndices(trianglesToRemove[i]->getIndices());
+    }
+//    filterOutNegativeTriangles();
 }
 
 bool Algorithm::doesPassDelaunaysCondition(Point cp1, Point cp2, Point pos1, Point pos2) {
@@ -230,8 +254,18 @@ bool Algorithm::doesPassDelaunaysCondition(Point cp1, Point cp2, Point pos1, Poi
 void Algorithm::filterOutNegativeTriangles() {
     vector<Triangle> newProcessedTriangles;
     for (int i = 0; i < processedTriangles.size(); i++) {
-        vector<Point> trianglePoints = processedTriangles[i].getPoints();
+        vector<Point> trianglePoints = processedTriangles[i].getPoints(baseTiling->getVertices());
         if (isosurface.evaluatePoint(trianglePoints[0])!=-1 && isosurface.evaluatePoint(trianglePoints[1])!=-1 && isosurface.evaluatePoint(trianglePoints[2])!=-1) {
+            newProcessedTriangles.push_back(processedTriangles[i]);
+        }
+    }
+    processedTriangles = newProcessedTriangles;
+}
+
+void Algorithm::removeTriangleWithIndices(vector<int> indices) {
+    vector<Triangle> newProcessedTriangles;
+    for (int i = 0; i < processedTriangles.size(); i++) {
+        if (!processedTriangles[i].doIndicesMatch(Triangle(indices[0], indices[1], indices[2]))) {
             newProcessedTriangles.push_back(processedTriangles[i]);
         }
     }
@@ -246,12 +280,14 @@ vector<vector<Point>> Algorithm::sliceTrianglePointsBySign(vector<Point> triangl
     vector<Point> positiveVertices;
     vector<Point> negativeVertices;
     
+//    cout << point1Value << " "<< point2Value<<" " << point3Value<<endl;
+    
     if (point1Value == -1) negativeVertices.push_back(trianglePoints[0]);
-    if (point1Value == 1) positiveVertices.push_back(trianglePoints[0]);
+    if (point1Value == 1 || point1Value == 0) positiveVertices.push_back(trianglePoints[0]);
     if (point2Value == -1) negativeVertices.push_back(trianglePoints[1]);
-    if (point2Value == 1) positiveVertices.push_back(trianglePoints[1]);
+    if (point2Value == 1 || point2Value == 0) positiveVertices.push_back(trianglePoints[1]);
     if (point3Value == -1) negativeVertices.push_back(trianglePoints[2]);
-    if (point3Value == 1) positiveVertices.push_back(trianglePoints[2]);
+    if (point3Value == 1 || point3Value == 0) positiveVertices.push_back(trianglePoints[2]);
     
     vector<vector<Point>> slicedPoints;
     slicedPoints.push_back(positiveVertices);
@@ -264,7 +300,7 @@ vector<Triangle*> Algorithm::getPerimeterTrianglesForProcessing() {
     vector<Triangle*> perimeterTriangles;
     for (int i = 0; i < processedTriangles.size(); i++) {
         Triangle *curTriangle = &processedTriangles[i];
-        vector<Point> trianglePoints = curTriangle->getPoints();
+        vector<Point> trianglePoints = curTriangle->getPoints(baseTiling->getVertices());
         int point1Value = isosurface.evaluatePoint(trianglePoints[0]);
         int point2Value = isosurface.evaluatePoint(trianglePoints[1]);
         int point3Value = isosurface.evaluatePoint(trianglePoints[2]);
@@ -298,20 +334,15 @@ vector<Triangle> Algorithm::getProcessedTrianglesObjects() {
 
 void Algorithm::renderProcessedTriangles() {
     for (int i = 0; i < processedTriangles.size(); i++) {
-        vector<int> indices = processedTriangles[i].getIndices();
-        Point p1 = baseTiling->getVertex(indices[0]);
-        Point p2 = baseTiling->getVertex(indices[1]);
-        Point p3 = baseTiling->getVertex(indices[2]);
-        
-        Triangle t1(p1, p2, p3, 0, 0, 0);
-        
-        t1.render();
+        RenderTriangle renderTri(baseTiling->getVertices(), processedTriangles[i]);
+        renderTri.render();
     }
 }
 
 void Algorithm::renderProcessedTriangleCutpoints() {
     for (int i = 0; i < processedTriangles.size(); i++) {
-        processedTriangles[i].renderCutpoints();
+        RenderTriangle renderTri(baseTiling->getVertices(), processedTriangles[i]);
+        renderTri.renderCutpoints();
     }
 }
 

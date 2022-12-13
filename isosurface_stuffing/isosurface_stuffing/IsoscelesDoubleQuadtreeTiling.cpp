@@ -38,42 +38,42 @@ void IsoscelesDoubleQuadtreeTiling::createTrianglesFromCell(QuadtreeNode *curNod
     vector<QuadtreeNode*> southNeighbours = curNode->getNeighbours(south);
     
     if (northNeighbours.size()>1) {
-        Triangle t1(center, northMP, ULCorner, centerIndex, northMPIndex, ULCornerIndex);
-        Triangle t2(center, URCorner, northMP, centerIndex, URCornerIndex, northMPIndex);
+        Triangle t1(centerIndex, northMPIndex, ULCornerIndex);
+        Triangle t2(centerIndex, URCornerIndex, northMPIndex);
         triangles.push_back(t1);
         triangles.push_back(t2);
     } else {
-        Triangle t1(center, URCorner, ULCorner, centerIndex, URCornerIndex, ULCornerIndex);
+        Triangle t1(centerIndex, URCornerIndex, ULCornerIndex);
         triangles.push_back(t1);
     }
     
     if (southNeighbours.size()>1) {
-        Triangle t1(BLCorner, southMP, center, BLCornerIndex, southMPIndex, centerIndex);
-        Triangle t2(southMP, BRCorner, center, southMPIndex, BRCornerIndex, centerIndex);
+        Triangle t1(BLCornerIndex, southMPIndex, centerIndex);
+        Triangle t2(southMPIndex, BRCornerIndex, centerIndex);
         triangles.push_back(t1);
         triangles.push_back(t2);
     } else {
-        Triangle t1(BLCorner, BRCorner, center, BLCornerIndex, BRCornerIndex, centerIndex);
+        Triangle t1(BLCornerIndex, BRCornerIndex, centerIndex);
         triangles.push_back(t1);
     }
     
     if (westNeighbours.size()>1) {
-        Triangle t1(westMP, center, ULCorner, westMPIndex, centerIndex, ULCornerIndex);
-        Triangle t2(BLCorner, center, westMP, BLCornerIndex, centerIndex, westMPIndex);
+        Triangle t1(westMPIndex, centerIndex, ULCornerIndex);
+        Triangle t2(BLCornerIndex, centerIndex, westMPIndex);
         triangles.push_back(t1);
         triangles.push_back(t2);
     } else {
-        Triangle t1(BLCorner, center, ULCorner, BLCornerIndex, centerIndex, ULCornerIndex);
+        Triangle t1(BLCornerIndex, centerIndex, ULCornerIndex);
         triangles.push_back(t1);
     }
     
     if (eastNeighbours.size()>1) {
-        Triangle t1(center, eastMP, URCorner, centerIndex, eastMPIndex, URCornerIndex);
-        Triangle t2(BRCorner, eastMP, center, BRCornerIndex, eastMPIndex, centerIndex);
+        Triangle t1(centerIndex, eastMPIndex, URCornerIndex);
+        Triangle t2(BRCornerIndex, eastMPIndex, centerIndex);
         triangles.push_back(t1);
         triangles.push_back(t2);
     } else {
-        Triangle t1(BRCorner, URCorner, center, BRCornerIndex, URCornerIndex, centerIndex);
+        Triangle t1(BRCornerIndex, URCornerIndex, centerIndex);
         triangles.push_back(t1);
     }
     

@@ -25,6 +25,7 @@ private:
     
     vector<Triangle> allTriangles;
     vector<Triangle> processedTriangles;
+    void removeTriangleWithIndices(vector<int>);
     
     // ALGORITHM STEPS
     // step 1
@@ -44,6 +45,7 @@ private:
     vector<vector<Point>> sliceTrianglePointsBySign(vector<Point>);
     void filterOutNegativeTriangles();
     bool doesPassDelaunaysCondition(Point, Point, Point, Point);
+    
 };
 
 #endif /* Algorithm_hpp */

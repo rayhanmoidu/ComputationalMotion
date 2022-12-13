@@ -5,14 +5,16 @@
 #include <GLFW/glfw3.h>
 #include <cmath>
 #include <iostream>
+#include "RenderTriangle.hpp"
 
-BarGraph::BarGraph(vector<Triangle> curTriangles, int width, int height, int xOffset, int barCount) {
+BarGraph::BarGraph(vector<Triangle> curTriangles, vector<pair<float, float>> vertexList, int width, int height, int xOffset, int barCount) {
     triangles = curTriangles;
     screenWidth = width;
     screenHeight = height;
     xStartPos = xOffset;
     numBars = barCount;
     angleWindowPerBar = 180 / barCount;
+    vertices = vertexList;
     
     computeAngles();
     distributeGraphValues();
@@ -20,8 +22,8 @@ BarGraph::BarGraph(vector<Triangle> curTriangles, int width, int height, int xOf
 
 void BarGraph::computeAngles() {
     for (int i = 0; i < triangles.size(); i++) {
-        Triangle curTriangle = triangles[i];
-        vector<float> triangleAngles = curTriangle.computeAngles();
+        RenderTriangle renderTri(vertices, triangles[i]);
+        vector<float> triangleAngles = renderTri.computeAngles();
                 
         angles.push_back(triangleAngles[0]);
         angles.push_back(triangleAngles[1]);

@@ -45,6 +45,7 @@ public:
     
     int check_addVertex_getIndex(Point p);
     int addVertex_getIndex(Point p);
+    int findVertexIndex(Point p);
     
 protected:
     vector<Triangle> triangles;
@@ -52,7 +53,6 @@ protected:
     vector<pair<float, float>> vertices;
     std::unordered_set<std::pair<float, float>, pair_hash> verticesSet;
     std::unordered_map<std::pair<float, float>, int, pair_hash> verticesToIndexInList;
-    int findVertexIndex(Point p);
     void addVertex(pair<float, float> v);
     bool doesVertexExist(Point p);
     

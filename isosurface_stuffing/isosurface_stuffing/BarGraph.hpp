@@ -6,7 +6,7 @@
 
 class BarGraph {
 public:
-    BarGraph(vector<Triangle>, int, int, int, int);
+    BarGraph(vector<Triangle>, vector<pair<float, float>>, int, int, int, int);
     void drawGraph();
     
 private:
@@ -16,6 +16,7 @@ private:
     void distributeGraphValues();
     
     vector<Triangle> triangles;
+    vector<pair<float, float>> vertices;
     vector<float> angles;
     map<int, int> graphValues;
     
