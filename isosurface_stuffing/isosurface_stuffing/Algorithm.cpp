@@ -247,11 +247,11 @@ vector<vector<Point>> Algorithm::sliceTrianglePointsBySign(vector<Point> triangl
     vector<Point> negativeVertices;
     
     if (point1Value == -1) negativeVertices.push_back(trianglePoints[0]);
-    if (point1Value == 1) positiveVertices.push_back(trianglePoints[0]);
+    if (point1Value == 1 || point1Value == 0) positiveVertices.push_back(trianglePoints[0]);
     if (point2Value == -1) negativeVertices.push_back(trianglePoints[1]);
-    if (point2Value == 1) positiveVertices.push_back(trianglePoints[1]);
+    if (point2Value == 1 || point2Value == 0) positiveVertices.push_back(trianglePoints[1]);
     if (point3Value == -1) negativeVertices.push_back(trianglePoints[2]);
-    if (point3Value == 1) positiveVertices.push_back(trianglePoints[2]);
+    if (point3Value == 1 || point3Value == 0) positiveVertices.push_back(trianglePoints[2]);
     
     vector<vector<Point>> slicedPoints;
     slicedPoints.push_back(positiveVertices);

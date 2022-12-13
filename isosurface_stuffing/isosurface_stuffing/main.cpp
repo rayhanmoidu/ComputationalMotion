@@ -88,8 +88,9 @@ int main() {
 //    ParallelogramQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, isosurface);
 //    EquilateralQuadtreeTiling quadtreeTiling(quadtree);
     
-    ParallelogramQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, isosurface);
-    EquilateralQuadtreeTiling quadtreeTiling(quadtree);
+    SquareQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, isosurface);
+//    IsoscelesSingleQuadtreeTiling quadtreeTiling(quadtree);
+    IsoscelesTiling quadtreeTiling(canvas.getWidth() / 2, canvas.getHeight(), triangleSideLength);
     //
      //ALGORITHM
     Algorithm algorithmInstance(&quadtreeTiling, isosurface, alpha);

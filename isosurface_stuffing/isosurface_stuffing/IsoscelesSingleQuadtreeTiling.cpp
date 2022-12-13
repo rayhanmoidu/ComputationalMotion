@@ -40,7 +40,7 @@ void IsoscelesSingleQuadtreeTiling::createTrianglesFromCell(QuadtreeNode *curNod
     if (eastNeighbours.size()>1) {
         if (southNeighbours.size()>1) {
             // east + south
-            Triangle t1(BLCorner, southMP, URCorner, BLCornerIndex, southMPIndex, BLCornerIndex);
+            Triangle t1(BLCorner, southMP, URCorner, BLCornerIndex, southMPIndex, URCornerIndex);
             Triangle t2(southMP, eastMP, URCorner, southMPIndex, eastMPIndex, URCornerIndex);
             Triangle t3(BRCorner, southMP, eastMP, BRCornerIndex, southMPIndex, eastMPIndex);
             
