@@ -18,9 +18,11 @@ void Tiling::render() {
 }
 
 void Tiling::addVertex(pair<float, float> p) {
-    verticesSet.insert(p);
+    pair<float, float> p1(std::ceil(p.first * 10.0) / 10.0, std::ceil(p.second * 10.0) / 10.0);
+//    Point p1(std::ceil(p.first * 10.0) / 10.0, std::ceil(p.second * 10.0) / 10.0);
+    verticesSet.insert(p1);
     vertices.push_back(p);
-    pair<pair<float, float>, int> mapInsertion(p, vertices.size()-1);
+    pair<pair<float, float>, int> mapInsertion(p1, vertices.size()-1);
 //    cout <<"inserted"<<endl;
     verticesToIndexInList.insert(mapInsertion);
 }
@@ -44,7 +46,7 @@ int Tiling::check_addVertex_getIndex(Point p) {
     if (doesVertexExist(p1)) {
         return findVertexIndex(p1);
     } else {
-        addVertex(pair<float, float>(p1.getX(), p1.getY()));
+        addVertex(pair<float, float>(p.getX(), p.getY()));
 //        if (p==lala) cout <<"inserted"<<endl;
         return int(vertices.size() - 1);
     }

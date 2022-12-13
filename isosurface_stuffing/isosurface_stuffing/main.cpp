@@ -89,8 +89,8 @@ int main() {
 //    EquilateralQuadtreeTiling quadtreeTiling(quadtree);
     
     SquareQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, isosurface);
-//    IsoscelesSingleQuadtreeTiling quadtreeTiling(quadtree);
-    IsoscelesTiling quadtreeTiling(canvas.getWidth() / 2, canvas.getHeight(), triangleSideLength);
+    ProvablyGoodQuadtreeTiling quadtreeTiling(quadtree);
+//    IsoscelesTiling quadtreeTiling(canvas.getWidth() / 2, canvas.getHeight(), triangleSideLength);
     //
      //ALGORITHM
     Algorithm algorithmInstance(&quadtreeTiling, isosurface, alpha);
@@ -116,6 +116,10 @@ int main() {
             }
             else mymap.insert(pair<int, int>(i1, 1));
         }
+    }
+    
+    for (int i = 0; i < vertices.size(); i++) {
+        cout << "vertex "<<vertices[i].first << " "<<vertices[i].second<<endl;
     }
     
     for (int i = 0; i < vertices.size(); i++) {
@@ -167,7 +171,7 @@ int main() {
 //            p1.plot(kv.second);
 //        }
 //        algorithmInstance.renderProcessedTriangleCutpoints();
-//        bargraph.drawGraph();
+        bargraph.drawGraph();
 //        quadtree.render();
 //        quadtreeTiling.render();
         
