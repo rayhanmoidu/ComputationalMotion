@@ -19,6 +19,8 @@ SquareQuadtree::SquareQuadtree(int screenWidth, int screenHeight, int smallestGr
     vBound = screenHeight;
     gridSizeLimit = smallestGridSize;
     refineAroundIsosurface = true;
+    originX = 0;
+    originY = 0;
 
     root = new QuadtreeNode(hBound / 2, vBound / 2, hBound, NULL);
 
@@ -34,7 +36,7 @@ SquareQuadtree::SquareQuadtree(int screenWidth, int screenHeight, int smallestGr
     }
 }
 
-SquareQuadtree::SquareQuadtree(int screenWidth, int screenHeight, int smallestGridSize, int cellToTraingleSizeRatio, float (*func)(float, float), int probingValue, float orX, float orY) : Quadtree() {
+SquareQuadtree::SquareQuadtree(int screenWidth, int screenHeight, int smallestGridSize, int cellToTraingleSizeRatio, float (*func)(float, float), int probingValue, float oX, float oY) : Quadtree() {
     hBound = screenWidth;
     vBound = screenHeight;
     gridSizeLimit = smallestGridSize;
@@ -42,8 +44,8 @@ SquareQuadtree::SquareQuadtree(int screenWidth, int screenHeight, int smallestGr
     tilingCellSizeToMaxTriangleSizeRatio = cellToTraingleSizeRatio;
     sizingFunction = func;
     probingDistance = probingValue;
-    originX = orX;
-    originY = orY;
+    originX = oX;
+    originY = oY;
 
     root = new QuadtreeNode(hBound / 2, vBound / 2, hBound, NULL);
 
@@ -98,7 +100,7 @@ bool SquareQuadtree::shouldRefine(QuadtreeNode* node) {
         bool shouldRefine = false;
         while (curProbePoint.getY() >= node->getCenterY() - (node->getDimension() / 2)) {
             // TEST PROBE POINT
-            float maxTriangleSideLength = sizingFunction(curProbePoint.getX() - originX, curProbePoint.getY() - originY);
+            float maxTriangleSideLength = sizingFunction(curProbePoint.getX() + originX, curProbePoint.getY() + originY);
             
             if (maxTriangleSideLength < node->getDimension()/tilingCellSizeToMaxTriangleSizeRatio) {
                 shouldRefine = true;

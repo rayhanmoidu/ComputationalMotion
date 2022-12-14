@@ -34,12 +34,12 @@ const float isosurfaceRenderingThreshold = 2;
 const int numBars = 18; // 180 % numBars should be 0
 const int smallestQuadtreeCell = 10;
 
-const float originX = 500;
-const float originY = 500;
+const float originX = -500;
+const float originY = -500;
 
 float sizingFunction(float x, float y) {
-    if (x >= 0 && x <= 100) {
-        if (y >= 100 && y <= 200) {
+    if (x >= -100 && x <= 100) {
+        if (y >= -100 && y <= 100) {
             return 1;
         }
     }
@@ -87,11 +87,11 @@ int main() {
     RectangleIsosurface rectangle(rectangleWidth, rectangleHeight, canvas.getWidth() / 2, canvas.getHeight(), isosurfaceRenderingThreshold);
     
     // QUADTREE
-//    SquareQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, 10, &sizingFunction, 10, originX, originY);
+    SquareQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, 10, &sizingFunction, 10, originX, originY);
 //    ParallelogramQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, isosurface);
 //    EquilateralQuadtreeTiling quadtreeTiling(quadtree);
     
-    SquareQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, isosurface);
+//    SquareQuadtree quadtree(canvas.getWidth() / 2, canvas.getHeight(), smallestQuadtreeCell, isosurface);
     ProvablyGoodQuadtreeTiling quadtreeTiling(quadtree);
 //    IsoscelesTiling quadtreeTiling(canvas.getWidth() / 2, canvas.getHeight(), triangleSideLength);
     //
@@ -124,7 +124,7 @@ int main() {
                 newTriangleIndices.push_back(oldIndexToNewIndex.at(oldTriangleIndices[j]));
             } else {
                 pair<float, float> oldVertex = vertices[oldTriangleIndices[j]];
-                pair<float, float> newVertex(oldVertex.first - originX, oldVertex.second - originY);
+                pair<float, float> newVertex(oldVertex.first + originX, oldVertex.second + originY);
                 
                 retVertices.push_back(newVertex);
                 coveredIndices.insert(oldTriangleIndices[j]);
@@ -140,6 +140,11 @@ int main() {
             retTriangles.push_back(newTriangleIndices);
         }
     }
+    
+    for (int i = 0; i < retVertices.size(); i++) {
+        cout << retVertices[i].first<<" "<<retVertices[i].second<<endl;
+    }
+    
     
 //    unordered_map<int, int> mymap;
 //    for (int i = 0; i < finalTriangles.size(); i++) {
@@ -172,55 +177,25 @@ int main() {
 //            }
 //        }
 //    }
-    
+    float offset = 500;
     
     while (!glfwWindowShouldClose(window)) {
                 
         canvas.initCanvas();
-        
-//        for (int i = 0; i < finalTriangles.size(); i++) {
-//            pair<float, float> vertex1 = vertices[finalTriangles[i][0]];
-//            pair<float, float> vertex2 = vertices[finalTriangles[i][1]];
-//            pair<float, float> vertex3 = vertices[finalTriangles[i][2]];
-//            Point p1(vertex1.first, vertex1.second);
-//            Point p2(vertex2.first, vertex2.second);
-//            Point p3(vertex3.first, vertex3.second);
-//            p1.plot(1);
-//            p2.plot(1);
-//            p3.plot(1);
-//        }
-        
 
-            
-//            for(auto kv : mymap) {
-//                Point p1(vertices[kv.first].first, vertices[kv.first].second);
-//                if (kv.second>1) {cout<<kv.second<<endl;}
-////                cout <<kv.first<<" "<<kv.second<<endl;
-//                p1.plot(kv.second);
-//            }
         
         for (int i = 0; i < retTriangles.size(); i++) {
             vector<int> curTriangle = retTriangles[i];
-            Point p1(retVertices[curTriangle[0]].first+originX, retVertices[curTriangle[0]].second+originY);
-            Point p2(retVertices[curTriangle[1]].first+originX, retVertices[curTriangle[1]].second+originY);
-            Point p3(retVertices[curTriangle[2]].first+originX, retVertices[curTriangle[2]].second+originY);
+            Point p1(retVertices[curTriangle[0]].first+offset, retVertices[curTriangle[0]].second+offset);
+            Point p2(retVertices[curTriangle[1]].first+offset, retVertices[curTriangle[1]].second+offset);
+            Point p3(retVertices[curTriangle[2]].first+offset, retVertices[curTriangle[2]].second+offset);
             
             Triangle newTri(p1, p2, p3, 0, 0, 0);
             newTri.render();
         }
                     
-//
-//        algorithmInstance.renderProcessedTriangles();
-//        for(auto kv : mymap) {
-//            Point p1(vertices[kv.first].first, vertices[kv.first].second);
-////            if (kv.second>1) {cout<<kv.second<<endl;}
-////                cout <<kv.first<<" "<<kv.second<<endl;
-//            p1.plot(kv.second);
-//        }
-//        algorithmInstance.renderProcessedTriangleCutpoints();
-        bargraph.drawGraph();
-//        quadtree.render();
-//        quadtreeTiling.render();
+
+//        bargraph.drawGraph();
         
 
         isosurface.render();
@@ -240,3 +215,8 @@ int main() {
 
 
 // ask about inputs / outputs
+
+
+
+
+// ASK PROFESSOR BATTY ABOUT HOW THE USER WILL DEFINT THE SDF AND THE SIZING FUNCTION WITH RESPECT TO THE ORIGIN!

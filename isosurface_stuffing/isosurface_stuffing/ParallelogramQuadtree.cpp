@@ -19,6 +19,8 @@ ParallelogramQuadtree::ParallelogramQuadtree(int screenWidth, int screenHeight, 
     vBound = screenHeight;
     gridSizeLimit = smallestGridSize;
     refineAroundIsosurface = true;
+    originX = 0;
+    originY = 0;
     
     float newH = 4*hBound/3;
     
@@ -40,7 +42,7 @@ ParallelogramQuadtree::ParallelogramQuadtree(int screenWidth, int screenHeight, 
     }
 }
 
-ParallelogramQuadtree::ParallelogramQuadtree(int screenWidth, int screenHeight, int smallestGridSize, int cellToTraingleSizeRatio, float (*func)(float, float), int probingValue, float orX, float orY) : Quadtree() {
+ParallelogramQuadtree::ParallelogramQuadtree(int screenWidth, int screenHeight, int smallestGridSize, int cellToTraingleSizeRatio, float (*func)(float, float), int probingValue, float oX, float oY) : Quadtree() {
     hBound = screenWidth;
     vBound = screenHeight;
     gridSizeLimit = smallestGridSize;
@@ -48,8 +50,8 @@ ParallelogramQuadtree::ParallelogramQuadtree(int screenWidth, int screenHeight, 
     tilingCellSizeToMaxTriangleSizeRatio = cellToTraingleSizeRatio;
     sizingFunction = func;
     probingDistance = probingValue;
-    originX = orX;
-    originY = orY;
+    originX = oX;
+    originY = oY;
 
     root = new QuadtreeNode(hBound / 2, vBound / 2, hBound, NULL);
 
@@ -113,7 +115,7 @@ bool ParallelogramQuadtree::shouldRefine(QuadtreeNode* node) {
         bool shouldRefine = false;
         while (curProbePoint.getY() >= node->getCenterY() - (node->getDimension() / 2)) {
             // TEST PROBE POINT
-            float maxTriangleSideLength = sizingFunction(curProbePoint.getX() - originX, curProbePoint.getY() - originY);
+            float maxTriangleSideLength = sizingFunction(curProbePoint.getX() + originX, curProbePoint.getY() + originY);
             
             if (maxTriangleSideLength < node->getDimension()/tilingCellSizeToMaxTriangleSizeRatio) {
                 shouldRefine = true;
