@@ -19,11 +19,9 @@ void Tiling::render() {
 
 void Tiling::addVertex(pair<float, float> p) {
     pair<float, float> p1(std::ceil(p.first * 10.0) / 10.0, std::ceil(p.second * 10.0) / 10.0);
-//    Point p1(std::ceil(p.first * 10.0) / 10.0, std::ceil(p.second * 10.0) / 10.0);
     verticesSet.insert(p1);
     vertices.push_back(p);
     pair<pair<float, float>, int> mapInsertion(p1, vertices.size()-1);
-//    cout <<"inserted"<<endl;
     verticesToIndexInList.insert(mapInsertion);
 }
 
@@ -33,30 +31,15 @@ int Tiling::findVertexIndex(Point p) {
 }
 
 int Tiling::check_addVertex_getIndex(Point p) {
-//    Point lala(55.0704, 520.828);
-//    if (p==lala) cout<<"roar "<<verticesSet.count(pair<float, float>(p.getX(), p.getY()))<<endl;
-//    for (int i = 0; i < vertices.size(); i++) {
-//        Point test(vertices[i].first, vertices[i].second);
-//        if (test==p) {
-//            if (p==lala) cout<<"TRULY IS CONTAINED"<<endl;
-//            break;
-//        }
-//    }
     Point p1(std::ceil(p.getX() * 10.0) / 10.0, std::ceil(p.getY() * 10.0) / 10.0);
     if (doesVertexExist(p1)) {
         return findVertexIndex(p1);
     } else {
         addVertex(pair<float, float>(p.getX(), p.getY()));
-//        if (p==lala) cout <<"inserted"<<endl;
         return int(vertices.size() - 1);
     }
 }
 bool Tiling::doesVertexExist(Point p) {
-//    for (int i = 0; i < vertices.size(); i++) {
-//        Point test(vertices[i].first, vertices[i].second);
-//        if (test==p) return true;
-//    }
-//    return false;
     return verticesSet.count(pair<float, float>(p.getX(), p.getY()));
 }
 

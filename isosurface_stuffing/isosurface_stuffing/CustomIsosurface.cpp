@@ -7,10 +7,12 @@
 
 #include "CustomIsosurface.hpp"
 
-CustomIsosurface::CustomIsosurface(float (*func)(float, float)) {
+CustomIsosurface::CustomIsosurface(float (*func)(float, float), float x, float y) {
     customSignedDistanceFunction = func;
+    originX = x;
+    originY = y;
 }
 
 float CustomIsosurface::signedDistanceFunction(Point p) {
-    return customSignedDistanceFunction(p.getX(), p.getY());
+    return customSignedDistanceFunction(p.getX() - originX, p.getY() - originY);
 }

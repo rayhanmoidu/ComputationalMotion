@@ -54,6 +54,8 @@ protected:
     int tilingCellSizeToMaxTriangleSizeRatio = 0;
     float (*sizingFunction)(float, float);
     int probingDistance;
+    float originX;
+    float originY;
         
     Isosurface &isosurface;
     QuadtreeNode* root;

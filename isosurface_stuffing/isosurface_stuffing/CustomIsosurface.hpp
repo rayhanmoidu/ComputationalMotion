@@ -14,10 +14,12 @@
 
 class CustomIsosurface : public Isosurface {
 public:
-    CustomIsosurface(float (*)(float, float));
+    CustomIsosurface(float (*)(float, float), float, float);
     float signedDistanceFunction(Point) override;
 private:
     float (*customSignedDistanceFunction)(float, float);
+    float originX;
+    float originY;
 };
 
 

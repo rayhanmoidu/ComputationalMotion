@@ -14,7 +14,7 @@
 class SquareQuadtree: public Quadtree {
 public:
     SquareQuadtree(int, int, int, Isosurface&);
-    SquareQuadtree(int, int, int, int, float (*)(float, float), int);
+    SquareQuadtree(int, int, int, int, float (*)(float, float), int, float, float);
     
     void render() override;
     bool shouldRefine(QuadtreeNode*) override;

@@ -17,7 +17,7 @@
 class ParallelogramQuadtree: public Quadtree {
 public:
     ParallelogramQuadtree(int, int, int, Isosurface&);
-    ParallelogramQuadtree(int, int, int, int, float (*)(float, float), int);
+    ParallelogramQuadtree(int, int, int, int, float (*)(float, float), int, float, float);
     
     void render() override;
     bool shouldRefine(QuadtreeNode*) override;
