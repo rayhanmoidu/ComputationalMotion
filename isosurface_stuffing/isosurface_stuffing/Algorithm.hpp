@@ -17,6 +17,7 @@ public:
     vector<vector<int>> getProcessedTriangles();
     vector<Triangle> getProcessedTrianglesObjects();
     vector<pair<float, float>> getResultingVertices();
+    pair<vector<pair<float, float>>, vector<vector<int>>> getOutput(float, float);
     
 private:
     Tiling *baseTiling;

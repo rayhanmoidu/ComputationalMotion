@@ -104,46 +104,50 @@ int main() {
     // BARGRAPH
     BarGraph bargraph(algorithmInstance.getProcessedTrianglesObjects(), canvas.getWidth() / 2, canvas.getHeight(), canvas.getWidth() / 2, numBars);
     
-    vector<pair<float, float>> vertices = algorithmInstance.getResultingVertices();
-    vector<vector<int>> triangles = algorithmInstance.getProcessedTriangles();
+    pair<vector<pair<float, float>>, vector<vector<int>>> output = algorithmInstance.getOutput(originX, originY);
     
-    
-    // ORGANIZING USER OUTPUT - this is actually working well, nice.
-    std::unordered_map<int, int> oldIndexToNewIndex;
-    std::unordered_set<int> coveredIndices;
-    
-    vector<pair<float, float>> retVertices;
-    vector<vector<int>> retTriangles;
-    
-    for (int i = 0; i < triangles.size(); i++) {
-        vector<int> oldTriangleIndices = triangles[i];
-        vector<int> newTriangleIndices;
-        
-        for (int j = 0; j < oldTriangleIndices.size(); j++) {
-            if (coveredIndices.count(oldTriangleIndices[j])) {
-                newTriangleIndices.push_back(oldIndexToNewIndex.at(oldTriangleIndices[j]));
-            } else {
-                pair<float, float> oldVertex = vertices[oldTriangleIndices[j]];
-                pair<float, float> newVertex(oldVertex.first + originX, oldVertex.second + originY);
-                
-                retVertices.push_back(newVertex);
-                coveredIndices.insert(oldTriangleIndices[j]);
-                
-                pair<int, int> mapInsertion(oldTriangleIndices[j], retVertices.size()-1);
-                oldIndexToNewIndex.insert(mapInsertion);
-                
-                newTriangleIndices.push_back(retVertices.size()-1);
-            }
-        }
-        
-        if (newTriangleIndices[0]!=newTriangleIndices[1] && newTriangleIndices[1]!=newTriangleIndices[2] && newTriangleIndices[2]!=newTriangleIndices[0]) {
-            retTriangles.push_back(newTriangleIndices);
-        }
-    }
-    
-    for (int i = 0; i < retVertices.size(); i++) {
-        cout << retVertices[i].first<<" "<<retVertices[i].second<<endl;
-    }
+    vector<pair<float, float>> retVertices = output.first;
+    vector<vector<int>> retTriangles = output.second;
+//    vector<pair<float, float>> vertices = algorithmInstance.getResultingVertices();
+//    vector<vector<int>> triangles = algorithmInstance.getProcessedTriangles();
+//
+//
+//    // ORGANIZING USER OUTPUT - this is actually working well, nice.
+//    std::unordered_map<int, int> oldIndexToNewIndex;
+//    std::unordered_set<int> coveredIndices;
+//
+//    vector<pair<float, float>> retVertices;
+//    vector<vector<int>> retTriangles;
+//
+//    for (int i = 0; i < triangles.size(); i++) {
+//        vector<int> oldTriangleIndices = triangles[i];
+//        vector<int> newTriangleIndices;
+//
+//        for (int j = 0; j < oldTriangleIndices.size(); j++) {
+//            if (coveredIndices.count(oldTriangleIndices[j])) {
+//                newTriangleIndices.push_back(oldIndexToNewIndex.at(oldTriangleIndices[j]));
+//            } else {
+//                pair<float, float> oldVertex = vertices[oldTriangleIndices[j]];
+//                pair<float, float> newVertex(oldVertex.first + originX, oldVertex.second + originY);
+//
+//                retVertices.push_back(newVertex);
+//                coveredIndices.insert(oldTriangleIndices[j]);
+//
+//                pair<int, int> mapInsertion(oldTriangleIndices[j], retVertices.size()-1);
+//                oldIndexToNewIndex.insert(mapInsertion);
+//
+//                newTriangleIndices.push_back(retVertices.size()-1);
+//            }
+//        }
+//
+//        if (newTriangleIndices[0]!=newTriangleIndices[1] && newTriangleIndices[1]!=newTriangleIndices[2] && newTriangleIndices[2]!=newTriangleIndices[0]) {
+//            retTriangles.push_back(newTriangleIndices);
+//        }
+//    }
+//
+//    for (int i = 0; i < retVertices.size(); i++) {
+//        cout << retVertices[i].first<<" "<<retVertices[i].second<<endl;
+//    }
     
     
 //    unordered_map<int, int> mymap;
