@@ -121,21 +121,29 @@ void Algorithm::warpPerimeterTriangles() {
                     }
                 }
                 
+                
                 // if the distance is less than alpha, warp negative vertex to cutpoint
-                if (lowestDistanceIndex != -1 && lowestDistance < alpha) {
+                if (lowestDistanceIndex != -1) {
                     Cutpoint warpingDestination = cutpointsToConsider[lowestDistanceIndex];
                     
-                    for (int k = 0; k < trianglesSharingVertex.size(); k++) {
-                        int warpingDestinationIndex = baseTiling->check_addVertex_getIndex(warpingDestination);
-                        trianglesSharingVertex[k]->warpVertexToCutpoint(curPoint, warpingDestination, warpingDestinationIndex);
-                        // add warping destination to list of vertices and adjust triangles accordingly
-                    }
+                    // get distance between curPoint (negative vertex) and warpingDestination
+                    float warpingDistance = sqrt(((warpingDestination.getX() - curPoint.getX())*(warpingDestination.getX() - curPoint.getX())) + ((warpingDestination.getY() - curPoint.getY())*(warpingDestination.getY() - curPoint.getY())));
+                    std::pair<Point, Point> cutpointBounds = warpingDestination.getBounds();
+                    float edgeLength = sqrt(((cutpointBounds.first.getX() - cutpointBounds.second.getX())*(cutpointBounds.first.getX() - cutpointBounds.second.getX())) + ((cutpointBounds.first.getY() - cutpointBounds.second.getY())*(cutpointBounds.first.getY() - cutpointBounds.second.getY())));
                     
-                    // get rid of all cutpoints bound by the negative vertex
-                    for (int k = 0; k < cutpointsToConsider.size(); k++) {
-                        for (int l = 0; l < perimeterTriangles.size(); l++) {
-                            if (perimeterTriangles[l]->doesContainCutpoint(cutpointsToConsider[k])) {
-                                perimeterTriangles[l]->removeCutpoint(cutpointsToConsider[k]);
+                    if (warpingDistance < alpha*edgeLength) {
+                        for (int k = 0; k < trianglesSharingVertex.size(); k++) {
+                            int warpingDestinationIndex = baseTiling->check_addVertex_getIndex(warpingDestination);
+                            trianglesSharingVertex[k]->warpVertexToCutpoint(curPoint, warpingDestination, warpingDestinationIndex);
+                            // add warping destination to list of vertices and adjust triangles accordingly
+                        }
+                        
+                        // get rid of all cutpoints bound by the negative vertex
+                        for (int k = 0; k < cutpointsToConsider.size(); k++) {
+                            for (int l = 0; l < perimeterTriangles.size(); l++) {
+                                if (perimeterTriangles[l]->doesContainCutpoint(cutpointsToConsider[k])) {
+                                    perimeterTriangles[l]->removeCutpoint(cutpointsToConsider[k]);
+                                }
                             }
                         }
                     }

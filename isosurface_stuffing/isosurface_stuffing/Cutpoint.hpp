@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include "Point.hpp"
+#include <utility>
 
 class Cutpoint : public Point {
 public:
@@ -10,6 +11,7 @@ public:
     bool operator == (Cutpoint &obj);
     
     bool isContainedByVertex(Point);
+    std::pair<Point, Point> getBounds();
     
 private:
     Point bound1;

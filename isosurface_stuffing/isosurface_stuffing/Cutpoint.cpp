@@ -16,4 +16,8 @@ bool Cutpoint::isContainedByVertex(Point p) {
     return bound1==p || bound2==p;
 }
 
+std::pair<Point, Point> Cutpoint::getBounds() {
+    return std::pair<Point, Point>(bound1, bound2);
+}
+
 
